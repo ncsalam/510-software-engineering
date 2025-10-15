@@ -41,142 +41,20 @@
 <body>
   <h2>🎤 Voice to Text</h2>
 
-  <!-- Control Buttons -->
   <button id="start">Start Listening</button>
   <button id="done">Done / Save Transcript</button>
 
   <p id="output"></p>
 
+  <!-- Load the app (UMD). This defines window.voiceApp in the browser. -->
+  <script src="./speech-to-text.js"></script>
   <script>
-    // === DOM ELEMENTS ===
-    const startBtn = document.getElementById("start");
-    const doneBtn = document.getElementById("done");
-    const output = document.getElementById("output");
-
-    // === SETUP SPEECH RECOGNITION ===
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      output.textContent = "Sorry, your browser does not support Speech Recognition.";
-    } else {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = "en-US";
-
-      // === STATE VARIABLES ===
-      let isListening = false; // Whether the mic is active
-      let silenceTimer = null; // Timer to detect silence
-      let fullTranscript = ""; // Holds the entire recognized text
-
-      /**
-       * Resets silence detection timer (10 seconds of inactivity stops listening)
-       */
-      function resetSilenceTimer() {
-        if (silenceTimer) clearTimeout(silenceTimer);
-        silenceTimer = setTimeout(() => {
-          console.log("No speech for 10 seconds — stopping...");
-          stopListening();
-        }, 10000);
+    // Wire up once the DOM is ready
+    window.addEventListener('load', () => {
+      if (window.voiceApp && typeof window.voiceApp.wirePage === 'function') {
+        window.voiceApp.wirePage(window, document);
       }
-
-      /**
-       * Starts the speech recognition process
-       */
-      function startListening() {
-        recognition.start();
-        isListening = true;
-        startBtn.textContent = "Stop Listening";
-        output.textContent = "Listening...";
-        resetSilenceTimer();
-      }
-
-      /**
-       * Stops the speech recognition process
-       */
-      function stopListening() {
-        recognition.stop();
-        isListening = false;
-        startBtn.textContent = "Start Listening";
-        clearTimeout(silenceTimer);
-      }
-
-      /**
-       * Handles recognized speech input (both interim and final)
-       */
-      recognition.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map(result => result[0].transcript)
-          .join(" ")
-          .trim();
-
-        fullTranscript = transcript;
-        output.textContent = fullTranscript;
-
-        resetSilenceTimer();
-
-        // If user says "done", stop automatically
-        if (/\bdone\b/i.test(transcript)) {
-          console.log("Heard 'done' — stopping...");
-          stopListening();
-        }
-      };
-
-      /**
-       * Called when recognition ends (manually or automatically)
-       */
-      recognition.onend = () => {
-        if (isListening) {
-          // Restart if ended unexpectedly
-          recognition.start();
-        } else {
-          console.log("Stopped listening.");
-          output.textContent += " [Stopped]";
-        }
-      };
-
-      recognition.onerror = (event) => {
-        console.error("Speech recognition error:", event.error);
-      };
-
-      /**
-       * Downloads the transcript as a text (.txt) file
-       */
-      function downloadTranscript() {
-        if (!fullTranscript.trim()) {
-          alert("No transcript to save yet!");
-          return;
-        }
-
-        const blob = new Blob([fullTranscript], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-
-        // Create a hidden download link and trigger it
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "transcript.txt";
-        document.body.appendChild(a);
-        a.click();
-
-        // Clean up temporary link
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }
-
-      // === EVENT LISTENERS ===
-      startBtn.addEventListener("click", () => {
-        if (isListening) {
-          stopListening();
-        } else {
-          startListening();
-        }
-      });
-
-      doneBtn.addEventListener("click", () => {
-        stopListening();
-        downloadTranscript();
-      });
-    }
+    });
   </script>
 </body>
 </html>
