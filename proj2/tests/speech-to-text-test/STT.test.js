@@ -8,7 +8,9 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 global.crypto = require("node:crypto").webcrypto;
 
-const { wirePage } = require("../../src/speech-to-text/speech-to-text.js"); // <-- adjust path if speech.js is elsewhere
+const {
+  wirePage,
+} = require("../../src/public/speech-to-text/speech-to-text.js"); // <-- adjust path if speech.js is elsewhere
 expect(wirePage).toBeDefined();
 
 describe("Voice-to-Text DOM Tests (speech.js module)", () => {
