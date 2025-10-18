@@ -1,13 +1,20 @@
 import dotenv from "dotenv";
 import express from "express";
 import { startOllama } from "./server/ollama-interface.js";
-import { COLORS, color } from "./server/terminal-helper.js";
+import {
+  COLORS,
+  color,
+  hideCursor,
+  showCursor,
+} from "./server/terminal-helper.js";
 
 dotenv.config({ quiet: true });
+hideCursor();
 const ollamaStatus = await startOllama(
   process.env.OLLAMA_MODEL,
   process.env.OLLAMA_KEEP_ALIVE,
 );
+showCursor();
 if (!ollamaStatus) process.exit(1);
 
 const PORT = process.env.PORT;

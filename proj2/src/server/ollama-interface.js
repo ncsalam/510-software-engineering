@@ -3,13 +3,7 @@ A set of functions for interfacing with Ollama.
 */
 
 import { Ollama } from "ollama";
-import {
-  COLORS,
-  color,
-  hideCursor,
-  showCursor,
-  moveUp,
-} from "./terminal-helper.js";
+import { COLORS, color, moveUp } from "./terminal-helper.js";
 
 const ollama = new Ollama();
 /**
@@ -21,7 +15,6 @@ const ollama = new Ollama();
  * @returns {boolean}
  */
 export async function startOllama(model, minutes = 15) {
-  hideCursor();
   console.log("Starting Ollama...");
   const info = await getInstalledModels();
   if (info.error) return false;
@@ -32,7 +25,6 @@ export async function startOllama(model, minutes = 15) {
   }
   await warmUp(model, minutes);
   console.log("Done!\n");
-  showCursor();
   return true;
 }
 
@@ -48,7 +40,12 @@ async function getInstalledModels() {
       models: (await ollama.list()).models.map((info) => info.name),
     };
   } catch {
-    console.error("Fatal error: Ollama is not installed.");
+    console.error(
+      color(
+        "Fatal error: Ollama is not installed. See https://ollama.com/download",
+        { fg: COLORS.RED },
+      ),
+    );
   }
   return {
     error: true,
@@ -85,7 +82,7 @@ function writeProgress(msg) {
     console.log(
       color(" ".repeat(progress), { bg: COLORS.BLUE }) +
         color(" ".repeat(barSize - progress), { bg: COLORS.WHITE }) +
-        `(${scale_round(pct, 100)}%)`,
+        ` (${scale_round(pct, 100)}%)`,
     );
   }
 }
@@ -108,7 +105,11 @@ async function installModel(model) {
     }
     return true;
   } catch (e) {
-    console.error(`Fatal error: failed to install model. (reason: ${e.error})`);
+    console.error(
+      color(`Fatal error: failed to install model. (reason: ${e.error})`, {
+        fg: COLORS.RED,
+      }),
+    );
   }
   return false;
 }
