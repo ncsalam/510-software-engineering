@@ -11,17 +11,24 @@ button {
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   border: none;
-  border-radius: 8px;
-  background-color: #0078d7;
-  color: white;
+  border-radius: 20px;             /* rounded edges */
+  background-color: #fce2cb;       /* light peach */
+  color: #FF0000;                  /* red text */
   cursor: pointer;
-  transition: background 0.3s ease;
-  margin-right: 0.5rem;
+  transition: all 0.2s ease;
+
+  /* 3D pop-out effect */
+  box-shadow: 0 6px 0 #FF0000;     /* red underside */
+  position: relative;
 }
 
 button:hover {
-  background-color: #005fa3;
+  background-color: rgba(255, 203, 164, 0.81);       /* slightly darker peach */
+  color: #B30000;                  /* darker red text */
+  transform: translateY(-3px);     /* lift the button on hover */
+  box-shadow: 0 3px 0 #B30000;     /* red underside shrinks slightly */
 }
+
 
 /* ========== OUTPUT BOX ========== */
 #output {
@@ -34,6 +41,17 @@ button:hover {
   min-height: 80px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+h1 {
+  font-family: "Brush Script MT", "Brush Script Std", cursive; /* fallback fonts */
+  font-size: 8rem;          /* make it large for emphasis */
+  color: red;           /* deep red color */
+  text-align: center;       /* center the heading */
+  letter-spacing: 1px;      /* space between letters */
+  margin-top: 1rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* optional subtle shadow */
+}
+
 
 /* ========== CHECKERED BORDER (2 rows, alternating colors) ========== */
 .checkered-border {
@@ -73,3 +91,29 @@ main {
   padding-bottom: 50px;
   text-align: center;
 }
+
+.response-container {
+  width: 80%;
+  max-width: 600px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.response-label {
+  font-family: "Brush Script MT", "Brush Script Std", cursive;
+  font-size: 2rem;
+  color: red;
+  margin-bottom: 0.8rem;
+}
+
+.word-box {
+  padding: 1rem 1.5rem;
+  border: 2px solid #FF0000;     /* red border */
+  border-radius: 12px;
+  background-color: #FFDAB9;     /* light peach background */
+  color: #b30000;                /* dark red text */
+  font-family: "Brush Script MT", "Brush Script Std", cursive;
+  font-size: 1.5rem;
+  min-height: 50px;
+}
+

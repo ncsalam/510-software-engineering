@@ -39,6 +39,7 @@
     let isListening = false; // Whether the mic is active
     let silenceTimer = null; // Timer to detect silence
     let fullTranscript = ""; // Holds the entire recognized text
+    
 
     /**
      * Resets silence detection timer (10 seconds of inactivity stops listening)
@@ -93,6 +94,7 @@
 
       fullTranscript = transcript;
       if (output) output.textContent = fullTranscript;
+      
 
       resetSilenceTimer();
 
@@ -101,6 +103,8 @@
         // console.log("Heard 'done' — stopping...");
         stopListening();
       }
+      // Display word by word in your box
+      displayWordsWordByWord(fullTranscript);
     };
 
     /**
@@ -165,6 +169,25 @@
       getTranscript: () => fullTranscript,
       _getRecognition: () => recognition // for advanced tests/mocking
     };
+
+
+    function displayWordsWordByWord(sentence, delay = 400) {
+        const wordBox = doc.getElementById("word-box");
+        if (!wordBox) return;
+            wordBox.textContent = ""; // Clear previous content
+            const words = sentence.split(" ");
+            let index = 0;
+
+            function showNextWord() {
+                if (index < words.length) {
+                wordBox.textContent += (index === 0 ? "" : " ") + words[index];
+                index++;
+                setTimeout(showNextWord, delay);
+                }
+            }
+        showNextWord();
+    }
+
   }
 
   return { wirePage };
