@@ -1,60 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Voice to Text with Export</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 2rem;
-      background: #f5f5f5;
-    }
-
-    button {
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #0078d7;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      margin-right: 0.5rem;
-    }
-
-    button:hover {
-      background-color: #005fa3;
-    }
-
-    #output {
-      margin-top: 1.2rem;
-      font-size: 1.2rem;
-      white-space: pre-wrap;
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-      min-height: 80px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <title>Uncle Tony S2T</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>🎤 Voice to Text</h2>
+    <header class="checkered-border top"></header>
+    <h1>Uncle Tony</h1>
 
-  <button id="start">Start Listening</button>
-  <button id="done">Done / Save Transcript</button>
+    <button id="start">Start Listening</button>
+    <button id="done">Done / Save Transcript</button>
 
-  <p id="output"></p>
+    <p id="output"></p>
 
-  <!-- Load the app (UMD). This defines window.voiceApp in the browser. -->
-  <script src="./speech-to-text.js"></script>
-  <script>
-    // Wire up once the DOM is ready
-    window.addEventListener('load', () => {
-      if (window.voiceApp && typeof window.voiceApp.wirePage === 'function') {
-        window.voiceApp.wirePage(window, document);
-      }
-    });
-  </script>
+    <!-- Load the app (UMD). This defines window.voiceApp in the browser. -->
+    <script src="./speech-to-text.js"></script>
+    <script>
+        // Wire up once the DOM is ready
+        window.addEventListener('load', () => {
+        if (window.voiceApp && typeof window.voiceApp.wirePage === 'function') {
+            window.voiceApp.wirePage(window, document);
+        }
+        });
+    </script>
+    <footer class="checkered-border bottom"></footer>
 </body>
 </html>
