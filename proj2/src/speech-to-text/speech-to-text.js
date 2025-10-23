@@ -3,7 +3,7 @@
   if (typeof module === "object" && module.exports) {
     module.exports = factory();           // CommonJS (Node/Jest)
   } else {
-    root.voiceApp = factory();            // Browser global: window.voiceApp
+    root.voiceAppSTT = factory();            // Browser global: window.voiceApp
   }
 })(typeof self !== "undefined" ? self : this, function () {
   /**
@@ -103,8 +103,6 @@
         // console.log("Heard 'done' — stopping...");
         stopListening();
       }
-      // Display word by word in your box
-      displayWordsWordByWord(fullTranscript);
     };
 
     /**
@@ -169,24 +167,6 @@
       getTranscript: () => fullTranscript,
       _getRecognition: () => recognition // for advanced tests/mocking
     };
-
-
-    function displayWordsWordByWord(sentence, delay = 400) {
-        const wordBox = doc.getElementById("word-box");
-        if (!wordBox) return;
-            wordBox.textContent = ""; // Clear previous content
-            const words = sentence.split(" ");
-            let index = 0;
-
-            function showNextWord() {
-                if (index < words.length) {
-                wordBox.textContent += (index === 0 ? "" : " ") + words[index];
-                index++;
-                setTimeout(showNextWord, delay);
-                }
-            }
-        showNextWord();
-    }
 
   }
 
