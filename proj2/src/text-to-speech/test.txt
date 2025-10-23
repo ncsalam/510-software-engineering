@@ -1,0 +1,51 @@
+Nearby Restaurants and Menu Suggestions
+
+1. Trattoria Roma (Italian - 0.8 mi)
+   Warm atmosphere with homemade pasta and wine.
+   Menu Items:
+     - Spaghetti Carbonara ............. $14.99
+     - Margherita Pizza ................ $11.50
+     - Tiramisu ........................ $6.25
+   Rating: 4.7 (860 reviews)
+   Hours: Open until 10:00 PM
+
+2. Sakura Bento House (Japanese - 1.2 mi)
+   Cozy sushi spot with great lunch combos.
+   Menu Items:
+     - Chicken Teriyaki Bento .......... $12.75
+     - Salmon Roll (8 pcs) ............. $9.50
+     - Miso Soup ....................... $2.25
+   Rating: 4.5 (540 reviews)
+   Hours: Open until 9:30 PM
+
+3. The Burger Loft (American - 0.6 mi)
+   Gourmet burgers, shakes, and late-night fries.
+   Menu Items:
+     - Loft Classic Burger ............. $10.99
+     - Truffle Fries ................... $4.50
+     - Chocolate Shake ................. $5.25
+   Rating: 4.6 (1,200 reviews)
+   Hours: Open until 12:00 AM
+
+4. Green Bowl Café (Vegan - 1.5 mi)
+   Fresh, healthy bowls and smoothies made to order.
+   Menu Items:
+     - Thai Peanut Bowl ................ $13.25
+     - Mango Smoothie .................. $5.75
+     - Avocado Toast ................... $8.00
+   Rating: 4.8 (390 reviews)
+   Hours: Open until 8:00 PM
+
+
+Ribeye Steak..............................   $19.99
+
+This is a test file with some speech on it. See how long it takes with some usual punctuation - it may not take that long.
+How about a single new line character. This should hopefully not have gaps, we will see.
+
+
+Check how it sounds with odd whitespace --- and characters.
+
+923784888. &&6,3...234.
+
+Ribeye   $19.99
+43
