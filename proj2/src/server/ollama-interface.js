@@ -80,7 +80,7 @@ function writeProgress(msg) {
     }
     console.log("Progress:");
     console.log(
-      color(" ".repeat(progress), { bg: COLORS.BLUE }) +
+      color(" ".repeat(progress), { bg: COLORS.GREEN }) +
         color(" ".repeat(barSize - progress), { bg: COLORS.WHITE }) +
         ` (${scale_round(pct, 100)}%)`,
     );
@@ -123,9 +123,9 @@ async function installModel(model) {
  */
 async function warmUp(model, minutes) {
   console.log(`Loading model into memory...`);
-  const res = await ollama.chat({
-    model: model,
-    messages: [
+  const res = await send(
+    model,
+    [
       {
         role: "system",
         content: "echo back whatever the user says to you.",
@@ -135,6 +135,14 @@ async function warmUp(model, minutes) {
         content: "echo",
       },
     ],
+    minutes,
+  );
+}
+
+export async function send(model, messages, minutes) {
+  return await ollama.chat({
+    model: model,
+    messages: messages,
     stream: false,
     keep_alive: `${minutes}m`,
   });
