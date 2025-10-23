@@ -2,8 +2,9 @@
   "name": "src",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest",
-    "test:cov": "jest --coverage"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:cov": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "start": "node src/server.mjs"
   },
   "devDependencies": {
     "jest": "^30.2.0",
@@ -14,11 +15,15 @@
     "testEnvironment": "jsdom",
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "<rootDir>/src/**/*.{js,ts,tsx}",
+      "<rootDir>/src/**/*.{js,ts,tsx,mjs,cjs}",
       "!<rootDir>/src/.venv/**",
       "!**/*.d.ts"
     ],
-    "coverageReporters": ["text", "html", "lcov"],
+    "coverageReporters": [
+      "text",
+      "html",
+      "lcov"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 0,
@@ -27,5 +32,11 @@
         "statements": 0
       }
     }
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-validator": "^7.3.0",
+    "ollama": "^0.6.0"
   }
 }
