@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
 import { body, checkSchema, validationResult } from "express-validator";
-import { startOllama, send } from "./server/ollama-interface.js";
-import { COLORS, color } from "./server/terminal-helper.js";
+import { startOllama, send } from "./server/ollama-interface.mjs";
+import { COLORS, color } from "./server/terminal-helper.mjs";
 
 dotenv.config({ quiet: true });
 const ollamaStatus = await startOllama(

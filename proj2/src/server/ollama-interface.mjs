@@ -3,7 +3,7 @@ A set of functions for interfacing with Ollama.
 */
 
 import { Ollama } from "ollama";
-import { COLORS, color, moveUp } from "./terminal-helper.js";
+import { COLORS, color, moveUp } from "./terminal-helper.mjs";
 
 const ollama = new Ollama();
 /**

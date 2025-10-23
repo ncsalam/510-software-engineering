@@ -23,10 +23,14 @@ export const COLORS = {
  * use ANSI codes to alter the color of a string for printing to the terminal.
  * for a list of codes, see https://gist.github.com/ConnerWill/d4b6c776b509add763e17f9f113fd25b
  * @param {string} s - string to apply color to
- * @param {{fg: number, bg: number, bold: bool}} [options] - colors to apply
+ * @param {{fg?: number = 9, bg?: number = 9, bold?: bool = true}} [options] - colors to apply
  * @returns {string}
  */
-export function color(s, { fg = 9, bg = 9, bold = true }) {
+export function color(s, options = {}) {
+  let { fg, bg, bold } = options;
+  if (fg === undefined) fg = 9;
+  if (bg === undefined) bg = 9;
+  if (bold === undefined) bold = true;
   return `\x1b[${2 - bold};${fg + 30};${bg + 40}m${s}\x1b[0m`;
 }
 
