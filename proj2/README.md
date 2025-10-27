@@ -10,11 +10,8 @@ A web application that allows users to speak, transcribes their speech to text, 
 2. [Architecture](#architecture)
 3. [Setup & Installation](#setup--installation)
 4. [Usage](#usage)
-5. [API](#api)
-6. [Testing](#testing)
-7. [Troubleshooting](#troubleshooting)
-8. [Future Improvements](#future-improvements)
-9. [License](#license)
+5. [Testing](#testing)
+6. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -88,7 +85,7 @@ npm run start
 4. **Open Browser**
    Navigate to http://localhost:3000
 
-### Usage
+## Usage
 
 **Frontend**
 
@@ -96,7 +93,7 @@ npm run start
 - Done / Save Trascript: Stop Listening and optionally download trascript
 - Read Text: Temporarily upload a .txt file for Text-To-Speech
 
-### Flow Diagram
+**Flow Diagram**
 
 flowchart LR
 A[User speaks] --> B[STT Module (speech-to-text.js)]
@@ -127,7 +124,8 @@ tests/
 ├─ voice.test.js
 └─ stt.test.js
 
-**Testing**
+## Testing
+
 Run all tests with Jest:
 
 ```bash
@@ -141,7 +139,7 @@ Test coverage includes:
 - Button state changes and silence timer behavior
 - DOM integration for speech recognition
 
-**Troubleshooting**
+## Troubleshooting
 
 - Ollama errors: Ensure Ollama is installed and the specified model is available.
 - No voices for TTS: Confirm browser supports Web Speech API.
