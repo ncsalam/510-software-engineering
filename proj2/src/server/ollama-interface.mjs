@@ -7,10 +7,11 @@ import { COLORS, color, moveUp } from "./terminal-helper.mjs";
 
 const ollama = new Ollama();
 /**
- * @param {string} model - name of the model to use
- * @param {number} [minutes] - how long to keep the model loaded in memory between requests
  * ensure that ollama is installed,
  * and that the correct model is installed and loaded into memory.
+ *
+ * @param {string} model - name of the model to use
+ * @param {number} [minutes] - how long to keep the model loaded in memory between requests
  *
  * @returns {boolean}
  */
@@ -64,7 +65,6 @@ let installStarted = false;
  * draws a progress bar to the console.
  *
  * @param {*} msg
- * @returns
  */
 function writeProgress(msg) {
   const scale_round = (n, s) => Math.floor(n * s);
@@ -139,6 +139,14 @@ async function warmUp(model, minutes) {
   );
 }
 
+/**
+ * send a set of messages to the LLM to generate a new chat completion
+ *
+ * @param {string} model - name of the model to use
+ * @param {ollama.Message[]} messages - messages to send. can include system prompts, multiple chats, etc.
+ * @param {number} minutes - time to keep model loaded in memory after this message.
+ * @returns {ollama.ChatResponse} - llm response
+ */
 export async function send(model, messages, minutes) {
   return await ollama.chat({
     model: model,

@@ -1,8 +1,7 @@
 import dotenv from "dotenv";
-import express from "express";
-import { body, checkSchema, validationResult } from "express-validator";
 import { startOllama, send } from "./server/ollama-interface.mjs";
 import { COLORS, color } from "./server/terminal-helper.mjs";
+import { validateField, handleValidationErrors } from "./server/validation.mjs";
 
 dotenv.config({ quiet: true });
 const ollamaStatus = await startOllama(
@@ -38,31 +37,81 @@ fetch("/api/send", {
 }).then(async (res) => console.log(await res.json()));
 */
 
+/*
+generate a one-off llm response.
+required headers:
+content-type: application/json
+
+body format:
+{
+  message: "your message content"
+}
+*/
 app.post(
-  // endpoint path
-  "/api/send",
-  // input validation
-  body("message").notEmpty().withMessage("'message' field is missing."),
-  // response handler
+  "/api/send", // endpoint path
+  validateField("message"),
+  handleValidationErrors,
   async (req, res) => {
-    // check for validation errors
-    const result = validationResult(req);
-    if (!result.isEmpty()) {
-      res.status(422).json({ errors: result.array() });
-      return;
-    }
+    const llm_res = await send(
+      process.env.OLLAMA_MODEL,
+      [{ role: "user", content: req.body.message }],
+      process.env.OLLAMA_KEEP_ALIVE,
+    );
     // return response from LLM
     res.json({
-      response: (
-        await send(
-          process.env.OLLAMA_MODEL,
-          [{ role: "user", content: req.body.message }],
-          process.env.OLLAMA_KEEP_ALIVE,
-        )
-      ).message.content,
+      response: llm_res.message.content,
     });
   },
 );
+
+/*
+create a new chat with the LLM.
+
+required headers:
+none
+
+*/
+app.post(
+  "/api/chat",
+  validateField("message"),
+  handleValidationErrors,
+  async (req, res) => {
+    res.json({
+      response: "not implemented",
+    });
+  },
+);
+
+/*
+generate a chat response from the llm. (aware of previous messages sent to this endpoint)
+
+required headers:
+content-type: application/json
+
+body format:
+{
+  message: "your message content"
+}
+*/
+app.post(
+  "/api/chat/{id}",
+  validateField("message"),
+  handleValidationErrors,
+  async (req, res) => {
+    res.json({
+      response: "not implemented",
+    });
+  },
+);
+
+/*
+delete an existing chat from the LLM history.
+*/
+app.delete("/api/chat/{id}", async (req, res) => {
+  res.json({
+    response: "not implemented",
+  });
+});
 
 app.listen(PORT, () => {
   console.log(
