@@ -87,3 +87,62 @@ npm run start
 
 4. **Open Browser**
    Navigate to http://localhost:3000
+
+### Usage
+
+**Frontend**
+
+- Start Listening: Begin capturing voice input
+- Done / Save Trascript: Stop Listening and optionally download trascript
+- Read Text: Temporarily upload a .txt file for Text-To-Speech
+
+### Flow Diagram
+
+flowchart LR
+A[User speaks] --> B[STT Module (speech-to-text.js)]
+B --> C[Server /api/send]
+C --> D[Ollama LLM]
+D --> C
+C --> E[Browser UI: display response]
+E --> F[TTS Module (text-to-speech.js)]
+F --> A
+
+### Development
+
+**File Structure**
+
+src/
+└─ public/
+├─ index.html
+├─ style.css
+├─ speech-to-text/
+│ └─ speech-to-text.js
+└─ text-to-speech/
+└─ text-to-speech.js
+server/
+├─ server.js
+├─ ollama-interface.mjs
+└─ terminal-helper.mjs
+tests/
+├─ voice.test.js
+└─ stt.test.js
+
+**Testing**
+Run all tests with Jest:
+
+```bash
+npm test
+```
+
+Test coverage includes:
+
+- STT module behavior (start/stop listening, updating transcript)
+- Transcript download
+- Button state changes and silence timer behavior
+- DOM integration for speech recognition
+
+**Troubleshooting**
+
+- Ollama errors: Ensure Ollama is installed and the specified model is available.
+- No voices for TTS: Confirm browser supports Web Speech API.
+- Transcript download fails: Ensure the transcript is not empty.
