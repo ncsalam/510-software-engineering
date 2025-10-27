@@ -9,7 +9,7 @@ A web application that allows users to speak, transcribes their speech to text, 
 1. [Project Overview](#project-overview)
 2. [Architecture](#architecture)
 3. [Setup & Installation](#setup--installation)
-4. [Usage](#usage)
+4. [Quick Start](#quick-start)
 5. [Testing](#testing)
 6. [Troubleshooting](#troubleshooting)
 
@@ -85,7 +85,7 @@ npm run start
 4. **Open Browser**
    Navigate to http://localhost:3000
 
-## Usage
+## Quick Start
 
 **Frontend**
 
@@ -144,3 +144,5 @@ Test coverage includes:
 - Ollama errors: Ensure Ollama is installed and the specified model is available.
 - No voices for TTS: Confirm browser supports Web Speech API.
 - Transcript download fails: Ensure the transcript is not empty.
+
+Please fill out form to request help or report a bug https://forms.gle/UN1Nj76CAN9gSitY6
