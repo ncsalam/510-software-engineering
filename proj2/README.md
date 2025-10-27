@@ -55,35 +55,7 @@ User → Browser UI → STT Module → Server → Ollama LLM → Server → Brow
 
 ## Setup & Installation
 
-### Prerequisites
-
-- Node.js (v18+ recommended)
-- [Ollama](https://ollama.com/download)
-- Optional: SQLite (if extending for database storage)
-
-### Steps
-
-1. **Clone the repository**
-
-```bash
-git clone <repo-url>
-cd <repo-folder>
-```
-
-2. **Install Dependencies**
-
-```bash
-npm install
-```
-
-3. **Start Server**
-
-```bash
-npm run start
-```
-
-4. **Open Browser**
-   Navigate to http://localhost:3000
+See `INSTALL.md` for detailed installation steps.
 
 ## Quick Start
 
