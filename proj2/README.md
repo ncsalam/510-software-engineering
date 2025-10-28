@@ -1,4 +1,5 @@
-[![ESLint Style](https://img.shields.io/badge/Style-ESLint-4B32C3?logo=eslint&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badges/proj2/.github/workflows/lint.yml)
+[![ESLint Style/Syntax](https://img.shields.io/badge/Style-ESLint-4B32C3?logo=eslint&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badges/proj2/eslint.config.js)
+[![Prettier Format](https://img.shields.io/badge/Format-Prettier-F7B93E?logo=prettier&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badges/proj2/prettier.config.js)
 
 # Uncle Tony Voice App
 

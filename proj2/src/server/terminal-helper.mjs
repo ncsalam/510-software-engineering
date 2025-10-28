@@ -8,15 +8,15 @@ this is entirely unnecessary, but I like pretty terminal output :)
  * enum for color codes.
  */
 export const COLORS = {
-  BLACK: 0,
-  RED: 1,
-  GREEN: 2,
-  YELLOW: 3,
-  BLUE: 4,
-  MAGENTA: 5,
-  CYAN: 6,
-  WHITE: 7,
-  DEFAULT: 9,
+    BLACK: 0,
+    RED: 1,
+    GREEN: 2,
+    YELLOW: 3,
+    BLUE: 4,
+    MAGENTA: 5,
+    CYAN: 6,
+    WHITE: 7,
+    DEFAULT: 9,
 };
 
 /**
@@ -27,25 +27,25 @@ export const COLORS = {
  * @returns {string}
  */
 export function color(s, options = {}) {
-  let { fg, bg, bold } = options;
-  if (fg === undefined) fg = 9;
-  if (bg === undefined) bg = 9;
-  if (bold === undefined) bold = true;
-  return `\x1b[${2 - bold};${fg + 30};${bg + 40}m${s}\x1b[0m`;
+    let { fg, bg, bold } = options;
+    if (fg === undefined) fg = 9;
+    if (bg === undefined) bg = 9;
+    if (bold === undefined) bold = true;
+    return `\x1b[${2 - bold};${fg + 30};${bg + 40}m${s}\x1b[0m`;
 }
 
 /**
  * hides the cursor.
  */
 export function hideCursor() {
-  process.stdout.write("\x1b[?25l");
+    process.stdout.write("\x1b[?25l");
 }
 
 /**
  * shows the cursor.
  */
 export function showCursor() {
-  process.stdout.write("\x1b[?25h");
+    process.stdout.write("\x1b[?25h");
 }
 
 /**
@@ -53,5 +53,5 @@ export function showCursor() {
  * @param {number} lines
  */
 export function moveUp(lines) {
-  process.stdout.write(`\x1b[${lines}F`);
+    process.stdout.write(`\x1b[${lines}F`);
 }

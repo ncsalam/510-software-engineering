@@ -8,17 +8,18 @@
 ### Steps
 
 1. Clone the repository:
-   ```bash
-   git clone <repo-url>
-   cd <repo-directory>
-   ```
+    ```bash
+    git clone <repo-url>
+    cd <repo-directory>
+    ```
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+
+    ```bash
+    npm install
+    ```
 
 3. Start the server:
-   ```bash
-   npm run start
-   ```
+    ```bash
+    npm run start
+    ```
 4. Open browser at `http://localhost:8000`.
