@@ -6,7 +6,7 @@ import json
 # Step one. 
 # Needs a list of strings containing cuisines and string of a location name
 # Example: ["Chinese", "Indian", "American", "South American"] "Raleigh"
-def generate_restaurant_list(cuisine_list, location):
+def restaurant_search(cuisine_list, location):
   restaurant_list = []
   file_name = "Restaurant_List.txt"
 
@@ -29,4 +29,26 @@ def generate_restaurant_list(cuisine_list, location):
         restaurant_list.append(place['displayName']['text'])
 
   with open(file_name, "w", encoding="utf-8") as file:
-    file.write(str(restaurant_list))
+    file.write(",".join(restaurant_list))
+
+def build_payload(query, start=1, num=1, **params):
+    API_KEY = os.getenv('SEARCH_API_KEY')
+    CX = os.getenv('CX_ID')
+    
+    payload = {
+        'key':API_KEY,
+        'q':query,
+        'cx':CX,
+        'num':num
+    }
+    payload.update(params)
+    return payload
+
+def send_payload(payload):
+    response = requests.get('https://www.googleapis.com/customsearch/v1', params=payload)
+    if response.status_code != 200:
+        print(response.status_code)
+        raise Exception('Request Failed')
+    result = response.json()
+    link = result['items'][0]['link']
+    return link
