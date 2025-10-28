@@ -1,4 +1,4 @@
-![ESLint](https://github.com/ejrezek/510-software-engineering/workflows/lint.yml/badge.svg)
+![ESLint](https://github.com/ejrezek/510-software-engineering/proj2/.github/workflows/lint.ymlbadge.svg)
 
 # Uncle Tony Voice App
 
