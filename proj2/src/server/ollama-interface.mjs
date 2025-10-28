@@ -122,7 +122,7 @@ async function installModel(model) {
  * @param {number} [minutes] - how long to keep the model loaded in memory between requests
  */
 async function warmUp(model, minutes) {
-  console.log(`Loading model into memory...`);
+  console.log("Loading model into memory...");
   const res = await send(
     model,
     [

@@ -62,7 +62,7 @@
         if (startBtn) startBtn.textContent = "Stop Listening";
         if (output) output.textContent = "Listening...";
         resetSilenceTimer();
-      } catch (e) {
+      } catch {
         // Some engines throw if already started; ignore for idempotence.
       }
     }
@@ -111,17 +111,13 @@
     recognition.onend = () => {
       if (isListening) {
         // Restart if ended unexpectedly
-        try { recognition.start(); } catch {}
+        recognition.start(); 
       } else {
         // console.log("Stopped listening.");
         if (output) output.textContent += " [Stopped]";
       }
     };
-
-    recognition.onerror = (event) => {
-      // console.error("Speech recognition error:", event.error);
-    };
-
+    
     /**
      * Downloads the transcript as a text (.txt) file
      */

@@ -1,6 +1,11 @@
+![Node.js CI](https://github.com/<user>/<repo>/actions/workflows/node.js.yml/badge.svg)
+![Tests](https://img.shields.io/github/actions/workflow/status/<user>/<repo>/test.yml?label=Tests)
+![License](https://img.shields.io/github/license/<user>/<repo>)
+![Code Style: ESLint](https://img.shields.io/badge/code%20style-eslint-blue)
+
 # Uncle Tony Voice App
 
-A web application that allows users to speak, transcribes their speech to text, sends prompts to an Ollama LLM, and optionally reads text aloud using Text-to-Speech (TTS). 
+A web application that allows users to speak, transcribes their speech to text, sends prompts to an Ollama LLM, and optionally reads text aloud using Text-to-Speech (TTS).
 
 ---
 

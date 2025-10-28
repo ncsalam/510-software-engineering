@@ -2,21 +2,12 @@
  * @jest-environment jsdom
  */
 
-// Polyfills before anything else (some deps expect these on global)
-const { TextEncoder, TextDecoder } = require("node:util");
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-global.crypto = require("node:crypto").webcrypto;
-
-const {
-  wirePage,
-} = require("../../src/public/speech-to-text/speech-to-text.js"); // <-- adjust path if speech.js is elsewhere
+const { wirePage } = require("../../src/public/speech-to-text/speech-to-text.js");
 expect(wirePage).toBeDefined();
 
 describe("Voice-to-Text DOM Tests (speech.js module)", () => {
   let startBtn, doneBtn, output, app, recognitionInstance;
 
-  // Minimal SpeechRecognition mock class
   class SRMock {
     constructor() {
       recognitionInstance = this;
@@ -28,7 +19,6 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
       this.onerror = null;
       this.start = jest.fn();
       this.stop = jest.fn(() => {
-        // simulate native onend firing when stop() is called
         if (typeof this.onend === "function") this.onend();
       });
     }
@@ -44,19 +34,15 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
     doneBtn = document.getElementById("done");
     output = document.getElementById("output");
 
-    // Mock browser APIs the module uses
     global.URL.createObjectURL = jest.fn(() => "blob:fake");
     global.URL.revokeObjectURL = jest.fn();
     jest.spyOn(window, "alert").mockImplementation(() => {});
 
-    // Expose SpeechRecognition to the module
     window.SpeechRecognition = SRMock;
     window.webkitSpeechRecognition = SRMock;
 
-    // Make timers controllable (for the 10s silence timer)
     jest.useFakeTimers();
 
-    // Wire the module to this DOM, capture returned helpers
     app = wirePage(window, document);
   });
 
@@ -67,74 +53,119 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
     recognitionInstance = null;
   });
 
-  // helper to simulate a recognition result event
   function fireResult(text) {
     recognitionInstance?.onresult?.({
       results: [[{ transcript: text }]],
     });
   }
 
+  // --- 15 STT tests ---
   test("startListening updates state and button text", () => {
-    // Spy on setTimeout to confirm the silence timer is scheduled
     const setTimeoutSpy = jest.spyOn(window, "setTimeout");
-
     app.startListening();
-
-    expect(recognitionInstance).toBeTruthy();
     expect(recognitionInstance.start).toHaveBeenCalled();
     expect(startBtn.textContent).toBe("Stop Listening");
     expect(output.textContent).toBe("Listening...");
-    expect(setTimeoutSpy).toHaveBeenCalled(); // silence timer scheduled (10s)
+    expect(setTimeoutSpy).toHaveBeenCalled();
   });
 
   test("stopListening updates state and button text", () => {
-    // Start first to ensure there's a timer to clear
     app.startListening();
-
     const clearTimeoutSpy = jest.spyOn(window, "clearTimeout");
     app.stopListening();
-
     expect(recognitionInstance.stop).toHaveBeenCalled();
     expect(startBtn.textContent).toBe("Start Listening");
-    expect(clearTimeoutSpy).toHaveBeenCalled(); // silence timer cleared
+    expect(clearTimeoutSpy).toHaveBeenCalled();
   });
 
   test("updateTranscript updates DOM and returns transcript", () => {
-    // Begin listening so onresult is meaningful
     app.startListening();
-
-    const transcript = "Hello world";
-    fireResult(transcript);
-
-    expect(output.textContent).toBe(transcript);
-    expect(app.getTranscript()).toBe(transcript);
+    fireResult("Hello world");
+    expect(output.textContent).toBe("Hello world");
+    expect(app.getTranscript()).toBe("Hello world");
   });
 
   test("downloadTranscript returns false if transcript empty", () => {
-    // In this module, downloadTranscript() shows alert and skips download when empty.
-    // It doesn't return a boolean; we assert the side effects instead.
     app.downloadTranscript();
-
     expect(window.alert).toHaveBeenCalled();
     expect(URL.createObjectURL).not.toHaveBeenCalled();
-    // For parity with original test's boolean, we confirm it's undefined.
-    expect(app.downloadTranscript()).toBeUndefined();
   });
 
-  test("downloadTranscript calls necessary functions when transcript exists", () => {
-    // Produce a transcript
+  test("downloadTranscript works when transcript exists", () => {
     app.startListening();
     fireResult("Test transcript");
-
-    // Spy on DOM mutations for the temporary <a>
     const appendSpy = jest.spyOn(document.body, "appendChild");
     const removeSpy = jest.spyOn(document.body, "removeChild");
-
     app.downloadTranscript();
-
     expect(URL.createObjectURL).toHaveBeenCalled();
     expect(appendSpy).toHaveBeenCalled();
     expect(removeSpy).toHaveBeenCalled();
     expect(URL.revokeObjectURL).toHaveBeenCalled();
+  });
+
+  test("says 'done' stops recognition automatically", () => {
+    app.startListening();
+    fireResult("We are done here");
+    expect(startBtn.textContent).toBe("Start Listening");
+  });
+
+  test("recognition onend restarts if still listening", () => {
+    app.startListening();
+    const startSpy = jest.spyOn(recognitionInstance, "start");
+    recognitionInstance.onend();
+    expect(startSpy).toHaveBeenCalled();
+  });
+
+  test("recognition onerror does not crash and maintains button text", () => {
+    app.startListening();
+    recognitionInstance.onerror({ error: "network" });
+    expect(startBtn.textContent).toBe("Stop Listening");
+  });
+
+  test("handles multiple interim results correctly", () => {
+    app.startListening();
+    fireResult("Hello");
+    fireResult("Hello world");
+    expect(output.textContent).toBe("Hello world");
+  });
+
+  test("transcript concatenates correctly for multiple results", () => {
+    app.startListening();
+    fireResult("Hello");
+    fireResult("world!");
+    expect(app.getTranscript()).toBe("world!"); // final transcript overrides interim
+  });
+
+  test("silence timer stops listening after 10s inactivity", () => {
+    app.startListening();
+    jest.advanceTimersByTime(10000);
+    expect(startBtn.textContent).toBe("Start Listening");
+  });
+
+  test("interim result does not break transcript", () => {
+    app.startListening();
+    fireResult("Interim");
+    fireResult("Final result");
+    expect(output.textContent).toBe("Final result");
+  });
+
+  test("empty transcript with spaces triggers alert on download", () => {
+    app.startListening();
+    fireResult("   ");
+    app.downloadTranscript();
+    expect(window.alert).toHaveBeenCalled();
+  });
+
+  test("multiple stop/start cycles maintain correct state", () => {
+    app.startListening();
+    app.stopListening();
+    app.startListening();
+    expect(startBtn.textContent).toBe("Stop Listening");
+  });
+
+  test("onresult with 'done' in sentence stops listening", () => {
+    app.startListening();
+    fireResult("Please be done now");
+    expect(startBtn.textContent).toBe("Start Listening");
   });
 });

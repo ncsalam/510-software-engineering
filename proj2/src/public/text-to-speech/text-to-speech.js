@@ -150,7 +150,7 @@
 
           // start speaking
           startSpeaking(spoken, original);
-        } catch (err) {
+        } catch {
           say("Failed to read file.");
         }
       });
@@ -158,7 +158,7 @@
 
     // --- Speaking pipeline ---
     function startSpeaking(spokenText, originalText) {
-      try { win.speechSynthesis.cancel(); } catch {}
+      try { win.speechSynthesis.cancel(); } catch {say("speechSynthesis failure.");}
       isSpeaking = true;
       spokenSoFar = "";
       chunks = chunkText(spokenText,   CONFIG.CHUNK_LEN);        // audio paragraphs
@@ -228,7 +228,7 @@
 
     function cancel() {
       isSpeaking = false;
-      try { win.speechSynthesis.cancel(); } catch {}
+      try { win.speechSynthesis.cancel(); } catch {say("speechSythesis error.");}
       appendStatus("\n\n[Canceled]");
       stopPulseLoop();
       iconIdle();
@@ -246,8 +246,8 @@
 
     function normalizeWhitespace(s) {
       return s.replace(/\r\n/g, "\n")
-              .replace(/[ \t]+\n/g, "\n")
-              .replace(/[ \t]{2,}/g, " ");
+        .replace(/[ \t]+\n/g, "\n")
+        .replace(/[ \t]{2,}/g, " ");
     }
 
     // === Times -> words (audio only) ===
@@ -272,7 +272,7 @@
     function timeToWords(hStr, mStr, apLetter) {
       let h = Number(hStr);
       let m = mStr == null ? null : Number(mStr);
-      const ap = String(apLetter).toLowerCase() === 'p' ? 'pm' : 'am';
+      const ap = String(apLetter).toLowerCase() === "p" ? "pm" : "am";
 
       // Normalize hour to 12-hour clock for speech
       h = ((h % 12) || 12);
@@ -325,7 +325,7 @@
       });
 
       // 3) Remaining numbers (integers/decimals)
-      out = out.replace(/(?<![A-Za-z])\d[\d,\.]*\d|\b\d\b/g, (numStr) => {
+      out = out.replace(/(?<![A-Za-z])\d[\d,]*\d|\b\d\b/g, (numStr) => {
         const hasDot = numStr.includes(".");
         const hasComma = numStr.includes(",");
         let cleaned = numStr;
