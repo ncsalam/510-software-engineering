@@ -1,4 +1,4 @@
-[![ESLint Style](https://img.shields.io/badge/Style-ESLint-4B32C3?logo=eslint&logoColor=white)](https://github.com/ejrezek/510-software-engineering/actions/workflows/lint.yml)
+[![ESLint Style](https://img.shields.io/badge/Style-ESLint-4B32C3?logo=eslint&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badges/proj2/.github/workflows/lint.yml)
 
 # Uncle Tony Voice App
 
