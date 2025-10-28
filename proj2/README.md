@@ -1,7 +1,4 @@
-![Node.js CI](https://github.com/<user>/<repo>/actions/workflows/node.js.yml/badge.svg)
-![Tests](https://img.shields.io/github/actions/workflow/status/<user>/<repo>/test.yml?label=Tests)
-![License](https://img.shields.io/github/license/<user>/<repo>)
-![Code Style: ESLint](https://img.shields.io/badge/code%20style-eslint-blue)
+![ESLint](https://github.com/ncsalam/<your-repo>/actions/workflows/lint.yml/badge.svg)
 
 # Uncle Tony Voice App
 
