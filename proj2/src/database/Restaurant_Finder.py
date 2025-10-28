@@ -1,0 +1,32 @@
+import os
+import requests
+import json
+
+
+# Step one. 
+# Needs a list of strings containing cuisines and string of a location name
+# Example: ["Chinese", "Indian", "American", "South American"] "Raleigh"
+def generate_restaurant_list(cuisine_list, location):
+  restaurant_list = []
+  file_name = "Restaurant_List.txt"
+
+  url = "https://places.googleapis.com/v1/places:searchText"
+  headers = {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": os.environ['PLACES_API_KEY'],
+      "X-Goog-FieldMask": "places.id,places.displayName"
+  }
+
+  for cuisine in cuisine_list:
+    payload = {
+        "textQuery": f"{cuisine} Restaurants in {location}"
+    }
+    r = requests.post(url, headers=headers, data=json.dumps(payload))
+    r = r.json()
+
+    for place in r['places']:
+      if place['displayName']['text'] not in restaurant_list:
+        restaurant_list.append(place['displayName']['text'])
+
+  with open(file_name, "w", encoding="utf-8") as file:
+    file.write(str(restaurant_list))
