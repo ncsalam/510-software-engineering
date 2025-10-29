@@ -13,7 +13,7 @@ const ollama = new Ollama();
  * @param {string} model - name of the model to use
  * @param {number} [minutes] - how long to keep the model loaded in memory between requests
  *
- * @returns {boolean}
+ * @returns {Promise<boolean>}
  */
 export async function startOllama(model, minutes = 15) {
   console.log("Starting Ollama...");
@@ -32,7 +32,7 @@ export async function startOllama(model, minutes = 15) {
 /**
  * get a list of all currently installed models
  *
- * @returns {{error: boolean, models: [string]}}
+ * @returns {Promise<{error: boolean, models: [string]}>}
  */
 async function getInstalledModels() {
   try {
@@ -91,7 +91,7 @@ function writeProgress(msg) {
  * install a model to Ollama.
  *
  * @param {string} model - model name
- * @returns {bool} true on success, false on failure
+ * @returns {Promise<bool>} true on success, false on failure
  */
 async function installModel(model) {
   console.log(`Installing model ${color(model, { fg: COLORS.BLUE })}`);
@@ -145,7 +145,7 @@ async function warmUp(model, minutes) {
  * @param {string} model - name of the model to use
  * @param {ollama.Message[]} messages - messages to send. can include system prompts, multiple chats, etc.
  * @param {number} minutes - time to keep model loaded in memory after this message.
- * @returns {ollama.ChatResponse} - llm response
+ * @returns {Promise<ollama.ChatResponse>} - llm response
  */
 export async function send(model, messages, minutes) {
   return await ollama.chat({

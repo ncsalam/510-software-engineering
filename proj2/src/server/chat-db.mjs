@@ -1,19 +1,30 @@
 import sqlite3 from "sqlite3";
+import { allAsync, getAsync, execAsync } from "./sqlite3-async.mjs";
 
 const db = new sqlite3.Database(":memory:");
 
+// we have to synchronously track chat ID creation
+// to enable concurrent chat creation requests
+var idCounter = 1;
+
+// unfortunately, foreign key constraints don't seem to be
+// working correctly, so we have to enforce them manually.
 const INIT_SQL_SCRIPT = `
-CREATE TABLE IF NOT EXISTS chats (
+DROP TABLE IF EXISTS chats;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS messages;
+
+CREATE TABLE chats (
   id INTEGER PRIMARY KEY,
   created_at TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS roles (
+CREATE TABLE roles (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS messages (
+CREATE TABLE messages (
   id INTEGER PRIMARY KEY,
   chat_id INTEGER NOT NULL,
   role_id INTEGER NOT NULL,
@@ -35,53 +46,36 @@ VALUES
 (3, "system");
 `;
 
-async function execAsync(db, sql) {
-  return new Promise((resolve, reject) => {
-    db.exec(sql, (err) => {
-      if (err) reject(err);
-      resolve();
-    });
-  });
+/**
+ * initializes (or resets) the chat database.
+ */
+export async function init() {
+  idCounter = 1;
+  await execAsync(db, INIT_SQL_SCRIPT);
 }
-
-async function getAsync(db, sql) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, (err, row) => {
-      if (err) reject(err);
-      resolve(row);
-    });
-  });
-}
-
-async function allAsync(db, sql) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, (err, res) => {
-      if (err) reject(err);
-      resolve(res);
-    });
-  });
-}
-
-await execAsync(db, INIT_SQL_SCRIPT);
 
 /**
  * creates a new chat.
  *
- * @returns {Number} the id of the new chat.
+ * @returns {Promise<Number>} the id of the new chat.
  */
 export async function newChat() {
+  const id = idCounter;
+  idCounter++;
   await execAsync(
     db,
-    `INSERT INTO chats (created_at) VALUES (datetime("now"));`,
+    `INSERT INTO chats (id, created_at) VALUES (${id}, datetime("now"));`,
   );
-  return (await getAsync(db, `SELECT id FROM chats ORDER BY id DESC;`)).id;
+  return id;
 }
 
 /**
- * delete a chat by id number.
+ * delete a chat by id number (if it exists).
+ *
  * @param {Number} id - chat id number
  */
 export async function deleteChat(id) {
+  await validateId(id);
   await execAsync(db, `DELETE FROM chats WHERE id=${id}`);
 }
 
@@ -91,6 +85,7 @@ export async function deleteChat(id) {
  * @param {Number} id - chat id number
  */
 export async function getHistory(id) {
+  await validateId(id);
   return await allAsync(
     db,
     `SELECT roles.name AS role, content FROM messages INNER JOIN roles on roles.id = messages.role_id WHERE chat_id=${id}`,
@@ -98,17 +93,43 @@ export async function getHistory(id) {
 }
 
 /**
- * logs a message to the chat history database
+ * logs a message to the chat history database.
+ *
  * @param {Number} id - chat id number
  * @param {string} role - role of the message (system, user, or assistant)
  * @param {string} content - text contents of the message.
  */
 export async function logMessage(id, role, content) {
-  const role_id = (
-    await getAsync(db, `SELECT id from roles WHERE name="${role}"`)
-  ).id;
+  const role_info = await getAsync(
+    db,
+    `SELECT id from roles WHERE name="${role}"`,
+  );
+  if (role_info === undefined)
+    throw new RangeError(
+      `"${role}" is not a valid role (must be one of "system", "user", or "assistant")`,
+    );
+  await validateId(id);
+
   await execAsync(
     db,
-    `INSERT INTO messages (chat_id, role_id, content) VALUES (${id}, ${role_id}, "${content}")`,
+    `INSERT INTO messages (chat_id, role_id, content) VALUES (${id}, ${role_info.id}, "${content}")`,
   );
+}
+
+/**
+ * determines whether or not a chat with the given id exists.
+ *
+ * @param {Number} id- chat id number
+ * @returns {Promise<bool>} whether or not the chat exists
+ */
+export async function chatExists(id) {
+  return (
+    (await getAsync(db, `SELECT * from chats WHERE id="${id}"`)) !== undefined
+  );
+}
+
+async function validateId(id) {
+  if (!(await chatExists(id))) {
+    throw new RangeError(`no chat with id "${id}" exists.`);
+  }
 }
