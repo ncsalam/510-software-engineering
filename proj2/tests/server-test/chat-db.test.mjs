@@ -1,5 +1,6 @@
 import { beforeEach, expect, jest, test } from "@jest/globals";
 import * as db from "../../src/server/chat-db.mjs";
+import { allAsync } from "../../src/server/sqlite3-async.mjs";
 
 beforeEach(db.init);
 
@@ -36,6 +37,16 @@ test("deleteChat throws an error when deleting nonexistent chats", async () => {
   await expect(() => db.deleteChat(9999)).rejects.toThrow(
     'no chat with id "9999" exists.',
   );
+});
+
+test("deleteChat also deletes messages", async () => {
+  const id = await db.newChat();
+  await db.logMessage(id, "user", "test");
+  expect((await db.getHistory(id)).length).toBe(1);
+  await db.deleteChat(id);
+  expect(
+    (await allAsync(db.db, `SELECT * FROM messages WHERE id=${id}`)).length,
+  ).toBe(0);
 });
 
 test("chatExists works correctly", async () => {

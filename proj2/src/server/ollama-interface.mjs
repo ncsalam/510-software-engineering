@@ -2,8 +2,10 @@
 A set of functions for interfacing with Ollama.
 */
 
-import { Ollama } from "ollama";
 import { COLORS, color, moveUp } from "./terminal-helper.mjs";
+
+// have to dynamic import in order to be able to mock ollama for testing
+const { Ollama } = await import("ollama");
 
 const ollama = new Ollama();
 /**

@@ -1,7 +1,7 @@
 import sqlite3 from "sqlite3";
 import { allAsync, getAsync, execAsync } from "./sqlite3-async.mjs";
 
-const db = new sqlite3.Database(":memory:");
+export const db = new sqlite3.Database(":memory:");
 
 // we have to synchronously track chat ID creation
 // to enable concurrent chat creation requests
@@ -77,6 +77,7 @@ export async function newChat() {
 export async function deleteChat(id) {
   await validateId(id);
   await execAsync(db, `DELETE FROM chats WHERE id=${id}`);
+  await execAsync(db, `DELETE FROM messages WHERE chat_id=${id}`);
 }
 
 /**
