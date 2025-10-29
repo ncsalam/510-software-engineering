@@ -1,7 +1,10 @@
 [![ESLint Style/Syntax](https://img.shields.io/badge/Style-ESLint-4B32C3?logo=eslint&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badgesV2/proj2/eslint.config.js)
 [![Prettier Format](https://img.shields.io/badge/Format-Prettier-F7B93E?logo=prettier&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badgesV2/proj2/prettier.config.js)
+[![Code Coverage](https://codecov.io/gh/ejrezek/510-software-engineering/branch/main/graph/badge.svg)](https://codecov.io/gh/ejrezek/510-software-engineering)
 
+![Uncle Tony Logo](https://github.com/ejrezek/510-software-engineering/blob/main/proj2/src/public/uncle_tony_logo.png)
 # Uncle Tony Voice App
+
 
 A web application that allows users to speak, transcribes their speech to text, sends prompts to an Ollama LLM, and optionally reads text aloud using Text-to-Speech (TTS).
 
