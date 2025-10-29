@@ -1,6 +1,8 @@
 [![ESLint Style/Syntax](https://img.shields.io/badge/Style-ESLint-4B32C3?logo=eslint&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badgesV2/proj2/eslint.config.js)
 [![Prettier Format](https://img.shields.io/badge/Format-Prettier-F7B93E?logo=prettier&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badgesV2/proj2/prettier.config.js)
 [![Code Coverage](https://codecov.io/gh/ejrezek/510-software-engineering/branch/main/graph/badge.svg)](https://codecov.io/gh/ejrezek/510-software-engineering)
+[![License: MIT](https://img.shields.io/badge/License-MIT-4B32C3?logo=open-source-initiative&logoColor=white)](LICENSE.md)
+
 
 ![Uncle Tony Logo](https://github.com/ejrezek/510-software-engineering/blob/main/proj2/src/public/uncle_tony_logo.png)
 # Uncle Tony Voice App
