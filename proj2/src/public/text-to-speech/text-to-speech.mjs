@@ -16,7 +16,7 @@
     • A minimal public API: { speakText, cancel }
   ──────────────────────────────────────────────────────────────────────────────
 */
-import * as preprocess from "./preprocess.js";
+import * as preprocess from "./preprocess.mjs";
 
 // Runtime configuration for TTS behaviour and voice preference ordering.
 const CONFIG = {
@@ -45,62 +45,6 @@ export function wirePage(win = window, doc = document) {
   const output    = doc.getElementById("word-box");
   const audioIcon = doc.getElementById("audioIcon");
   if (output) output.style.whiteSpace = "pre-wrap"; // preserve line breaks in output
-
-
-  // This helper attempts to guarantee `preprocess` exists and, if not,
-  // to load it dynamically or fall back to identity transforms.
-  async function ensurePreprocess() {
-    // If preprocess is already supplied and has the expected API, use it.
-    if (preprocess && typeof preprocess.englishifyTimes === "function") return preprocess;
-
-    // If the browser has already loaded it on `window`, adopt that instance.
-    if (win.voicePreprocess && typeof win.voicePreprocess.englishifyTimes === "function") {
-      preprocess = win.voicePreprocess;
-      return preprocess;
-    }
-
-    // Attempt to load preprocess.js dynamically from a known relative path.
-    // This is useful if the HTML forgot to include it first.
-    const src = "./text-to-speech/preprocess.js";
-    await new Promise((resolve, reject) => {
-      const s = doc.createElement("script");
-      s.src = src;
-      s.async = true;
-      s.onload = resolve;
-      s.onerror = reject;
-      doc.head.appendChild(s);
-    }).catch(() => { /* swallow; we fall back below */ });
-
-    // If dynamic load succeeded and populated window.voicePreprocess, use it.
-    if (win.voicePreprocess && typeof win.voicePreprocess.englishifyTimes === "function") {
-      preprocess = win.voicePreprocess;
-      return preprocess;
-    }
-
-    // Final fallback: identity ops (no transforms) and a simple paragraph chunker.
-    // This lets the app still function (speak the raw text) even without preprocess.
-    return {
-      englishifyTimes: (x) => x,
-      englishifyNumbers: (x) => x,
-      chunkText: (text, maxLen = 2000) => {
-        const paras = String(text).replace(/\r\n/g, "\n").split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
-        const out = [];
-        for (const p of paras) {
-          if (p.length <= maxLen) out.push(p);
-          else {
-            let cur = "";
-            for (const t of p.split(/(\s+|,|;|:)/)) {
-              if ((cur + t).length > maxLen) { if (cur.trim()) out.push(cur.trim()); cur = t.trimStart(); }
-              else cur += t;
-            }
-            if (cur.trim()) out.push(cur.trim());
-          }
-        }
-        return out;
-      }
-    };
-  }
-  // -----------------------------------------------------------------------
 
   // Visual state helper: set the icon/logo to "idle" (not speaking).
   function iconIdle(){
@@ -179,37 +123,6 @@ export function wirePage(win = window, doc = document) {
   }
   populateVoices();                     // initial grab
   win.speechSynthesis.onvoiceschanged = populateVoices; // refresh when voices change (e.g., async load)
-
-  // Handle user selecting a .txt file: read it, preprocess, display, and speak.
-  if (fileInput) {
-    fileInput.addEventListener("change", async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-
-      // Be lenient on MIME type (some browsers leave it empty); block obvious non-text.
-      if (file.type && file.type !== "text/plain") {
-        if (output) output.textContent = `"${file.name}" is not plain text. Please choose a .txt file.`;
-        return;
-      }
-
-      cancel(); // stop any current reading session
-
-      // Read file contents; if reading fails, report and bail.
-      let original;
-      try {
-        original = normalizeWhitespace(await readFileText(file));
-      } catch {
-        if (output) output.textContent = "Failed to read file.";
-        return;
-      }
-
-      // Ensure we have preprocess helpers, then apply: times → numbers.
-      const transformed = preprocess.englishifyNumbers(preprocess.englishifyTimes(original));
-
-      // Speak the transformed text while printing the original text.
-      startSpeaking(transformed, original);
-    });
-  }
 
   // Prepare a new speaking session: reset state and compute paragraph chunks.
   function startSpeaking(spokenText, originalText) {
