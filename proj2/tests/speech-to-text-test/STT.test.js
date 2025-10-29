@@ -1,16 +1,17 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
+import { TextEncoder, TextDecoder } from "node:util";
+import { webcrypto as crypto } from "node:crypto";
 
 // Polyfills before anything else (some deps expect these on global)
-const { TextEncoder, TextDecoder } = require("node:util");
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
-global.crypto = require("node:crypto").webcrypto;
+global.crypto = crypto;
 
-const {
-  wirePage,
-} = require("../../src/public/speech-to-text/speech-to-text.js"); // <-- adjust path if speech.js is elsewhere
+import { wirePage } from "../../src/public/speech-to-text/speech-to-text.js";
+
 expect(wirePage).toBeDefined();
 
 describe("Voice-to-Text DOM Tests (speech.js module)", () => {
