@@ -16,18 +16,15 @@
 
     <p id="output"></p>
 
-    <!-- Load the app (UMD). This defines window.voiceAppSTT and window.voiceAPPTTS in the browser respectively. -->
-    <script src="./speech-to-text/speech-to-text.js"></script>
-    <script src="./text-to-speech/text-to-speech.js"></script>
-    <script>
+    <!-- Load the app. This defines window.voiceAppSTT and window.voiceAPPTTS in the browser respectively. -->
+    <script type="module">
         // Wire up once the DOM is ready
+        import { wirePage as wirePageSTT } from './speech-to-text/speech-to-text.js';
+        import { wirePage as wirePageTTS } from './text-to-speech/text-to-speech.js';
+
         window.addEventListener('load', () => {
-        if (window.voiceAppSTT && typeof window.voiceAppSTT.wirePage === 'function') {
-            window.voiceAppSTT.wirePage(window, document);
-        }
-        if (window.voiceAppTTS && typeof window.voiceAppTTS.wirePage === 'function') {
-            window.voiceAppTTS.wirePage(window, document);
-        }
+        wirePageSTT?.(window, document);
+        wirePageTTS?.(window, document);
         });
     </script>
 
