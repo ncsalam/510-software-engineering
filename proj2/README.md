@@ -4,7 +4,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-4B32C3?logo=open-source-initiative&logoColor=white)](LICENSE.md)
 
 
-![Uncle Tony Logo](https://github.com/ejrezek/510-software-engineering/blob/main/proj2/src/public/uncle_tony_logo.png)
+<p align="center">
+  <img src="./src/public/uncle_tony_logo.png" alt="Uncle Tony Logo" width="400"/>
+</p>
+
+
 # Uncle Tony Voice App
 
 
