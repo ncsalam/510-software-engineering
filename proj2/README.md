@@ -3,6 +3,12 @@
 [![Code Coverage](https://codecov.io/gh/ejrezek/510-software-engineering/branch/main/graph/badge.svg)](https://codecov.io/gh/ejrezek/510-software-engineering)
 
 ![Uncle Tony Logo](https://github.com/ejrezek/510-software-engineering/blob/main/proj2/src/public/uncle_tony_logo.png)
+<p align="center">
+  <img src="./src/public/uncle_tony_logo.png" alt="Uncle Tony Logo" width="200"/>
+</p>
+
+# Uncle Tony Voice App
+
 # Uncle Tony Voice App
 
 
