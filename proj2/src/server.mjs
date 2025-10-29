@@ -36,31 +36,31 @@ fetch("/api/send", {
 */
 
 app.post(
-    // endpoint path
-    "/api/send",
-    // input validation
-    body("message").notEmpty().withMessage("'message' field is missing."),
-    // response handler
-    async (req, res) => {
-        // check for validation errors
-        const result = validationResult(req);
-        if (!result.isEmpty()) {
-            res.status(422).json({ errors: result.array() });
-            return;
-        }
-        // return response from LLM
-        res.json({
-            response: (
-                await send(
-                    process.env.OLLAMA_MODEL,
-                    [{ role: "user", content: req.body.message }],
-                    process.env.OLLAMA_KEEP_ALIVE
-                )
-            ).message.content,
-        });
+  // endpoint path
+  "/api/send",
+  // input validation
+  body("message").notEmpty().withMessage("'message' field is missing."),
+  // response handler
+  async (req, res) => {
+    // check for validation errors
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      res.status(422).json({ errors: result.array() });
+      return;
     }
+    // return response from LLM
+    res.json({
+      response: (
+        await send(
+          process.env.OLLAMA_MODEL,
+          [{ role: "user", content: req.body.message }],
+          process.env.OLLAMA_KEEP_ALIVE
+        )
+      ).message.content,
+    });
+  }
 );
 
 app.listen(PORT, () => {
-    console.log("Started server at " + color(`http://localhost:${PORT}`, { fg: COLORS.YELLOW }));
+  console.log("Started server at " + color(`http://localhost:${PORT}`, { fg: COLORS.YELLOW }));
 });

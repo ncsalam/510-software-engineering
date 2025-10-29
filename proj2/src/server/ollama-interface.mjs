@@ -15,17 +15,17 @@ const ollama = new Ollama();
  * @returns {boolean}
  */
 export async function startOllama(model, minutes = 15) {
-    console.log("Starting Ollama...");
-    const info = await getInstalledModels();
-    if (info.error) return false;
-    if (info.models.includes(model)) {
-        console.log(`Found model ${color(model, { fg: COLORS.BLUE })}`);
-    } else {
-        if (!(await installModel(model))) return false;
-    }
-    await warmUp(model, minutes);
-    console.log("Done!\n");
-    return true;
+  console.log("Starting Ollama...");
+  const info = await getInstalledModels();
+  if (info.error) return false;
+  if (info.models.includes(model)) {
+    console.log(`Found model ${color(model, { fg: COLORS.BLUE })}`);
+  } else {
+    if (!(await installModel(model))) return false;
+  }
+  await warmUp(model, minutes);
+  console.log("Done!\n");
+  return true;
 }
 
 /**
@@ -34,20 +34,18 @@ export async function startOllama(model, minutes = 15) {
  * @returns {{error: boolean, models: [string]}}
  */
 async function getInstalledModels() {
-    try {
-        return {
-            error: false,
-            models: (await ollama.list()).models.map((info) => info.name),
-        };
-    } catch {
-        console.error(
-            color("Fatal error: Ollama is not installed. See https://ollama.com/download", { fg: COLORS.RED })
-        );
-    }
+  try {
     return {
-        error: true,
-        models: [],
+      error: false,
+      models: (await ollama.list()).models.map((info) => info.name),
     };
+  } catch {
+    console.error(color("Fatal error: Ollama is not installed. See https://ollama.com/download", { fg: COLORS.RED }));
+  }
+  return {
+    error: true,
+    models: [],
+  };
 }
 
 /**
@@ -64,24 +62,24 @@ let installStarted = false;
  * @returns
  */
 function writeProgress(msg) {
-    const scale_round = (n, s) => Math.floor(n * s);
-    const barSize = 25;
-    if (msg.total) {
-        const pct = msg.completed / msg.total;
-        if (!pct) return;
-        const progress = scale_round(pct, barSize);
-        if (installStarted) {
-            moveUp(2);
-        } else {
-            installStarted = true;
-        }
-        console.log("Progress:");
-        console.log(
-            color(" ".repeat(progress), { bg: COLORS.GREEN }) +
-                color(" ".repeat(barSize - progress), { bg: COLORS.WHITE }) +
-                ` (${scale_round(pct, 100)}%)`
-        );
+  const scale_round = (n, s) => Math.floor(n * s);
+  const barSize = 25;
+  if (msg.total) {
+    const pct = msg.completed / msg.total;
+    if (!pct) return;
+    const progress = scale_round(pct, barSize);
+    if (installStarted) {
+      moveUp(2);
+    } else {
+      installStarted = true;
     }
+    console.log("Progress:");
+    console.log(
+      color(" ".repeat(progress), { bg: COLORS.GREEN }) +
+        color(" ".repeat(barSize - progress), { bg: COLORS.WHITE }) +
+        ` (${scale_round(pct, 100)}%)`
+    );
+  }
 }
 
 /**
@@ -91,24 +89,24 @@ function writeProgress(msg) {
  * @returns {bool} true on success, false on failure
  */
 async function installModel(model) {
-    console.log(`Installing model ${color(model, { fg: COLORS.BLUE })}`);
-    try {
-        const response = await ollama.pull({
-            model: model,
-            stream: true,
-        });
-        for await (const msg of response) {
-            writeProgress(msg);
-        }
-        return true;
-    } catch (e) {
-        console.error(
-            color(`Fatal error: failed to install model. (reason: ${e.error})`, {
-                fg: COLORS.RED,
-            })
-        );
+  console.log(`Installing model ${color(model, { fg: COLORS.BLUE })}`);
+  try {
+    const response = await ollama.pull({
+      model: model,
+      stream: true,
+    });
+    for await (const msg of response) {
+      writeProgress(msg);
     }
-    return false;
+    return true;
+  } catch (e) {
+    console.error(
+      color(`Fatal error: failed to install model. (reason: ${e.error})`, {
+        fg: COLORS.RED,
+      })
+    );
+  }
+  return false;
 }
 
 /**
@@ -119,28 +117,28 @@ async function installModel(model) {
  * @param {number} [minutes] - how long to keep the model loaded in memory between requests
  */
 async function warmUp(model, minutes) {
-    console.log("Loading model into memory...");
-    const res = await send(
-        model,
-        [
-            {
-                role: "system",
-                content: "echo back whatever the user says to you.",
-            },
-            {
-                role: "user",
-                content: "echo",
-            },
-        ],
-        minutes
-    );
+  console.log("Loading model into memory...");
+  const res = await send(
+    model,
+    [
+      {
+        role: "system",
+        content: "echo back whatever the user says to you.",
+      },
+      {
+        role: "user",
+        content: "echo",
+      },
+    ],
+    minutes
+  );
 }
 
 export async function send(model, messages, minutes) {
-    return await ollama.chat({
-        model: model,
-        messages: messages,
-        stream: false,
-        keep_alive: `${minutes}m`,
-    });
+  return await ollama.chat({
+    model: model,
+    messages: messages,
+    stream: false,
+    keep_alive: `${minutes}m`,
+  });
 }
