@@ -3,11 +3,11 @@
  */
 
 /* --------------
- * Fixed imports 
+ * Fixed imports
  * --------------*/
-import { jest } from '@jest/globals';
+import { jest } from "@jest/globals";
 import * as preprocess from "../../src/public/text-to-speech/preprocess.js";
-import { wirePage }  from "../../src/public/text-to-speech/text-to-speech.js";
+import { wirePage } from "../../src/public/text-to-speech/text-to-speech.js";
 
 /* ============================================================
  * Unit tests: helper functions in preprocess.js (no DOM / no speech)
@@ -24,17 +24,14 @@ describe("preprocess helpers (unit)", () => {
   test("englishifyNumbers: $19.99 and 12.5%", () => {
     const input = "Price is $19.99 and discount is 12.5%.";
     const out = preprocess.englishifyNumbers(input);
-    expect(out).toContain(
-      "Price is nineteen dollars and ninety-nine cents and discount is twelve point five percent."
-    );
+    expect(out).toContain("Price is nineteen dollars and ninety-nine cents and discount is twelve point five percent.");
   });
 
   // Check edge cases around dollar amounts
   test("dollarsToWords edge cases", () => {
     expect(preprocess.dollarsToWords("0.01")).toBe("one cent");
     expect(preprocess.dollarsToWords("1")).toBe("one dollar");
-    expect(preprocess.dollarsToWords("1234.50"))
-      .toBe("one thousand two hundred thirty-four dollars and fifty cents");
+    expect(preprocess.dollarsToWords("1234.50")).toBe("one thousand two hundred thirty-four dollars and fifty cents");
   });
 
   // Huge integers: we fall back to digit-by-digit to avoid heavy logic
@@ -48,11 +45,7 @@ describe("preprocess helpers (unit)", () => {
   test("chunkText: paragraph-only splits", () => {
     const input = "Para one.\n\nPara two line 1.\nPara two line 2.\n\nPara three.";
     const chunks = preprocess.chunkText(input, 2000);
-    expect(chunks).toEqual([
-      "Para one.",
-      "Para two line 1.\nPara two line 2.",
-      "Para three."
-    ]);
+    expect(chunks).toEqual(["Para one.", "Para two line 1.\nPara two line 2.", "Para three."]);
   });
 });
 
@@ -82,10 +75,18 @@ describe("wirePage integration (minimal)", () => {
 
     // ---- Web Speech API mocks ----
     // Clean any prior definitions to avoid "Cannot redefine property" errors.
-    try { delete win.speechSynthesis; } catch {}
-    try { delete global.speechSynthesis; } catch {}
-    try { delete win.SpeechSynthesisUtterance; } catch {}
-    try { delete global.SpeechSynthesisUtterance; } catch {}
+    try {
+      delete win.speechSynthesis;
+    } catch {}
+    try {
+      delete global.speechSynthesis;
+    } catch {}
+    try {
+      delete win.SpeechSynthesisUtterance;
+    } catch {}
+    try {
+      delete global.SpeechSynthesisUtterance;
+    } catch {}
 
     // Simulate speak() life cycle: trigger onstart/onend so handlers run
     const speakMock = jest.fn((utt) => {
@@ -101,15 +102,15 @@ describe("wirePage integration (minimal)", () => {
         speak: speakMock,
         cancel: cancelMock,
         getVoices: getVoicesMock,
-        onvoiceschanged: null
+        onvoiceschanged: null,
       },
       configurable: true,
-      writable: true
+      writable: true,
     });
     Object.defineProperty(win, "speechSynthesis", {
       value: global.speechSynthesis,
       configurable: true,
-      writable: true
+      writable: true,
     });
 
     // Minimal utterance shim used by the module
@@ -127,12 +128,12 @@ describe("wirePage integration (minimal)", () => {
     Object.defineProperty(global, "SpeechSynthesisUtterance", {
       value: SSU,
       configurable: true,
-      writable: true
+      writable: true,
     });
     Object.defineProperty(win, "SpeechSynthesisUtterance", {
       value: SSU,
       configurable: true,
-      writable: true
+      writable: true,
     });
   });
 
@@ -168,7 +169,7 @@ describe("wirePage integration (minimal)", () => {
 
     // Prepare original/processed text like the app would
     const original = "Hello world.\n\nSecond paragraph.";
-    const spoken   = preprocess.englishifyNumbers(preprocess.englishifyTimes(original));
+    const spoken = preprocess.englishifyNumbers(preprocess.englishifyTimes(original));
 
     // Invoke the public API (no file input needed for this test)
     api.speakText(spoken, original);

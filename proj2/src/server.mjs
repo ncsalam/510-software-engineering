@@ -5,10 +5,7 @@ import { startOllama, send } from "./server/ollama-interface.mjs";
 import { COLORS, color } from "./server/terminal-helper.mjs";
 
 dotenv.config({ quiet: true });
-const ollamaStatus = await startOllama(
-  process.env.OLLAMA_MODEL,
-  process.env.OLLAMA_KEEP_ALIVE,
-);
+const ollamaStatus = await startOllama(process.env.OLLAMA_MODEL, process.env.OLLAMA_KEEP_ALIVE);
 if (!ollamaStatus) process.exit(1);
 
 const PORT = process.env.PORT;
@@ -57,16 +54,13 @@ app.post(
         await send(
           process.env.OLLAMA_MODEL,
           [{ role: "user", content: req.body.message }],
-          process.env.OLLAMA_KEEP_ALIVE,
+          process.env.OLLAMA_KEEP_ALIVE
         )
       ).message.content,
     });
-  },
+  }
 );
 
 app.listen(PORT, () => {
-  console.log(
-    "Started server at " +
-      color(`http://localhost:${PORT}`, { fg: COLORS.YELLOW }),
-  );
+  console.log("Started server at " + color(`http://localhost:${PORT}`, { fg: COLORS.YELLOW }));
 });

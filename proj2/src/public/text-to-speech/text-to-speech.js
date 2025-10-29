@@ -20,9 +20,9 @@ import * as preprocess from "./preprocess.js";
 
 // Runtime configuration for TTS behaviour and voice preference ordering.
 const CONFIG = {
-  LANG:   "it-IT",
-  RATE:   1.1,
-  PITCH:  1.0,
+  LANG: "it-IT",
+  RATE: 1.1,
+  PITCH: 1.0,
   VOLUME: 1.0,
   CHUNK_LEN: 2000,
   VOICE_PREFER: [
@@ -33,19 +33,18 @@ const CONFIG = {
     "Microsoft Cosimo - Italian (Italy)",
     "Microsoft Diego - Italian (Italy)",
     "Microsoft Matteo - Italian (Italy)",
-    "Google italiano"
+    "Google italiano",
   ],
-  MALE_ITALIAN_NAME_HINTS: ["luca","cosimo","diego","matteo","marco","giorgio","andrea","paolo","giovanni"]
+  MALE_ITALIAN_NAME_HINTS: ["luca", "cosimo", "diego", "matteo", "marco", "giorgio", "andrea", "paolo", "giovanni"],
 };
 
 // Main entry point that wires the page and starts handling user interactions.
 export function wirePage(win = window, doc = document) {
   // Cache the required DOM elements. These IDs must exist in the HTML.
   const fileInput = doc.getElementById("txtfile");
-  const output    = doc.getElementById("word-box");
+  const output = doc.getElementById("word-box");
   const audioIcon = doc.getElementById("audioIcon");
   if (output) output.style.whiteSpace = "pre-wrap"; // preserve line breaks in output
-
 
   // This helper attempts to guarantee `preprocess` exists and, if not,
   // to load it dynamically or fall back to identity transforms.
@@ -69,7 +68,9 @@ export function wirePage(win = window, doc = document) {
       s.onload = resolve;
       s.onerror = reject;
       doc.head.appendChild(s);
-    }).catch(() => { /* swallow; we fall back below */ });
+    }).catch(() => {
+      /* swallow; we fall back below */
+    });
 
     // If dynamic load succeeded and populated window.voicePreprocess, use it.
     if (win.voicePreprocess && typeof win.voicePreprocess.englishifyTimes === "function") {
@@ -83,33 +84,39 @@ export function wirePage(win = window, doc = document) {
       englishifyTimes: (x) => x,
       englishifyNumbers: (x) => x,
       chunkText: (text, maxLen = 2000) => {
-        const paras = String(text).replace(/\r\n/g, "\n").split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
+        const paras = String(text)
+          .replace(/\r\n/g, "\n")
+          .split(/\n{2,}/)
+          .map((s) => s.trim())
+          .filter(Boolean);
         const out = [];
         for (const p of paras) {
           if (p.length <= maxLen) out.push(p);
           else {
             let cur = "";
             for (const t of p.split(/(\s+|,|;|:)/)) {
-              if ((cur + t).length > maxLen) { if (cur.trim()) out.push(cur.trim()); cur = t.trimStart(); }
-              else cur += t;
+              if ((cur + t).length > maxLen) {
+                if (cur.trim()) out.push(cur.trim());
+                cur = t.trimStart();
+              } else cur += t;
             }
             if (cur.trim()) out.push(cur.trim());
           }
         }
         return out;
-      }
+      },
     };
   }
   // -----------------------------------------------------------------------
 
   // Visual state helper: set the icon/logo to "idle" (not speaking).
-  function iconIdle(){
+  function iconIdle() {
     if (!audioIcon) return;
     audioIcon.classList.remove("speaking");
     audioIcon.style.transform = "";
   }
   // Visual state helper: mark the icon/logo as "speaking".
-  function iconSpeaking(){
+  function iconSpeaking() {
     if (!audioIcon) return;
     audioIcon.classList.add("speaking");
   }
@@ -128,7 +135,7 @@ export function wirePage(win = window, doc = document) {
   function startPulseLoop() {
     stopPulseLoop();
     const loop = () => {
-      const now = (win.performance && win.performance.now) ? win.performance.now() : Date.now();
+      const now = win.performance && win.performance.now ? win.performance.now() : Date.now();
       const boosted = now < boundaryBoostUntil;
       const minDelay = boosted ? 120 : 220;
       const maxDelay = boosted ? 360 : 520;
@@ -140,7 +147,10 @@ export function wirePage(win = window, doc = document) {
   }
   // Stop the pulse loop cleanly.
   function stopPulseLoop() {
-    if (pulseTimer) { clearTimeout(pulseTimer); pulseTimer = null; }
+    if (pulseTimer) {
+      clearTimeout(pulseTimer);
+      pulseTimer = null;
+    }
   }
 
   // Detect Web Speech API.
@@ -167,17 +177,17 @@ export function wirePage(win = window, doc = document) {
   // Try preferred names first, then Italian male-ish names, then any Italian, then any voice at all.
   function pickVoice(list, preferred) {
     for (const name of preferred) {
-      const v = list.find(v => v.name === name);
+      const v = list.find((v) => v.name === name);
       if (v) return v;
     }
     const maleRe = new RegExp(`\\b(${CONFIG.MALE_ITALIAN_NAME_HINTS.join("|")})\\b`, "i");
-    const maleIt = list.find(v => v.lang && v.lang.toLowerCase().startsWith("it") && maleRe.test(v.name));
+    const maleIt = list.find((v) => v.lang && v.lang.toLowerCase().startsWith("it") && maleRe.test(v.name));
     if (maleIt) return maleIt;
-    const anyIt = list.find(v => v.lang && v.lang.toLowerCase().startsWith("it"));
+    const anyIt = list.find((v) => v.lang && v.lang.toLowerCase().startsWith("it"));
     if (anyIt) return anyIt;
     return list[0] || null;
   }
-  populateVoices();                     // initial grab
+  populateVoices(); // initial grab
   win.speechSynthesis.onvoiceschanged = populateVoices; // refresh when voices change (e.g., async load)
 
   // Handle user selecting a .txt file: read it, preprocess, display, and speak.
@@ -213,11 +223,13 @@ export function wirePage(win = window, doc = document) {
 
   // Prepare a new speaking session: reset state and compute paragraph chunks.
   function startSpeaking(spokenText, originalText) {
-    try { win.speechSynthesis.cancel(); } catch {}
+    try {
+      win.speechSynthesis.cancel();
+    } catch {}
     isSpeaking = true;
     printedSoFar = "";
 
-    chunks = preprocess.chunkText(spokenText,   CONFIG.CHUNK_LEN);
+    chunks = preprocess.chunkText(spokenText, CONFIG.CHUNK_LEN);
     originalChunks = preprocess.chunkText(originalText, CONFIG.CHUNK_LEN);
     idx = 0;
     iconSpeaking();
@@ -239,12 +251,12 @@ export function wirePage(win = window, doc = document) {
     const utter = new SpeechSynthesisUtterance(chunks[idx]);
     if (selectedVoice) {
       utter.voice = selectedVoice;
-      utter.lang  = selectedVoice.lang || CONFIG.LANG;
+      utter.lang = selectedVoice.lang || CONFIG.LANG;
     } else {
       utter.lang = CONFIG.LANG;
     }
-    utter.rate   = CONFIG.RATE;
-    utter.pitch  = CONFIG.PITCH;
+    utter.rate = CONFIG.RATE;
+    utter.pitch = CONFIG.PITCH;
     utter.volume = CONFIG.VOLUME;
 
     // On start: show as speaking, begin pulsing, and print the original paragraph.
@@ -259,12 +271,20 @@ export function wirePage(win = window, doc = document) {
     // On boundaries: add a quick pulse burst and momentarily speed up the pulse loop.
     utter.onboundary = () => {
       pulseOnce();
-      const now = (win.performance && win.performance.now) ? win.performance.now() : Date.now();
+      const now = win.performance && win.performance.now ? win.performance.now() : Date.now();
       boundaryBoostUntil = now + 350;
     };
     // On finish or error: stop pulsing and move on to the next paragraph.
-    utter.onend = () => { stopPulseLoop(); idx += 1; speakNext(); };
-    utter.onerror = () => { stopPulseLoop(); idx += 1; speakNext(); };
+    utter.onend = () => {
+      stopPulseLoop();
+      idx += 1;
+      speakNext();
+    };
+    utter.onerror = () => {
+      stopPulseLoop();
+      idx += 1;
+      speakNext();
+    };
 
     // Queue the utterance with the browser TTS engine.
     win.speechSynthesis.speak(utter);
@@ -273,7 +293,9 @@ export function wirePage(win = window, doc = document) {
   // Immediately cancel any ongoing speech and reset visual state.
   function cancel() {
     isSpeaking = false;
-    try { win.speechSynthesis.cancel(); } catch {}
+    try {
+      win.speechSynthesis.cancel();
+    } catch {}
     stopPulseLoop();
     iconIdle();
   }
@@ -283,13 +305,16 @@ export function wirePage(win = window, doc = document) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onerror = () => reject(reader.error);
-      reader.onload  = () => resolve(String(reader.result || ""));
+      reader.onload = () => resolve(String(reader.result || ""));
       reader.readAsText(file);
     });
   }
   // Normalize line endings and collapse excessive whitespace while preserving paragraphs.
   function normalizeWhitespace(s) {
-    return s.replace(/\r\n/g, "\n").replace(/[ \t]+\n/g, "\n").replace(/[ \t]{2,}/g, " ");
+    return s
+      .replace(/\r\n/g, "\n")
+      .replace(/[ \t]+\n/g, "\n")
+      .replace(/[ \t]{2,}/g, " ");
   }
   // Append plain text to the printed output buffer and reflect it in the DOM.
   function appendToOutput(s) {

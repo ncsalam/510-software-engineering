@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { jest } from '@jest/globals';
+import { jest } from "@jest/globals";
 import { TextEncoder, TextDecoder } from "node:util";
 import { webcrypto as crypto } from "node:crypto";
 

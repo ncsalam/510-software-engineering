@@ -23,8 +23,8 @@
 export function wirePage(win = window, doc = document) {
   // === DOM ELEMENTS ===
   const startBtn = doc.getElementById("start");
-  const doneBtn  = doc.getElementById("done");
-  const output   = doc.getElementById("output");
+  const doneBtn = doc.getElementById("done");
+  const output = doc.getElementById("output");
 
   // === SETUP SPEECH RECOGNITION ===
   const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition;
@@ -35,7 +35,7 @@ export function wirePage(win = window, doc = document) {
       startListening: () => {},
       stopListening: () => {},
       downloadTranscript: () => {},
-      getTranscript: () => ""
+      getTranscript: () => "",
     };
   }
 
@@ -48,7 +48,6 @@ export function wirePage(win = window, doc = document) {
   let isListening = false; // Whether the mic is active
   let silenceTimer = null; // Timer to detect silence
   let fullTranscript = ""; // Holds the entire recognized text
-  
 
   /**
    * Resets silence detection timer (10 seconds of inactivity stops listening)
@@ -97,13 +96,12 @@ export function wirePage(win = window, doc = document) {
    */
   recognition.onresult = (event) => {
     const transcript = Array.from(event.results)
-      .map(result => result[0].transcript)
+      .map((result) => result[0].transcript)
       .join(" ")
       .trim();
 
     fullTranscript = transcript;
     if (output) output.textContent = fullTranscript;
-    
 
     resetSilenceTimer();
 
@@ -120,7 +118,9 @@ export function wirePage(win = window, doc = document) {
   recognition.onend = () => {
     if (isListening) {
       // Restart if ended unexpectedly
-      try { recognition.start(); } catch {}
+      try {
+        recognition.start();
+      } catch {}
     } else {
       // console.log("Stopped listening.");
       if (output) output.textContent += " [Stopped]";
@@ -174,7 +174,6 @@ export function wirePage(win = window, doc = document) {
     stopListening,
     downloadTranscript,
     getTranscript: () => fullTranscript,
-    _getRecognition: () => recognition // for advanced tests/mocking
+    _getRecognition: () => recognition, // for advanced tests/mocking
   };
-
 }
