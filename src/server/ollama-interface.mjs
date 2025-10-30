@@ -2,17 +2,20 @@
 A set of functions for interfacing with Ollama.
 */
 
-import { Ollama } from "ollama";
 import { COLORS, color, moveUp } from "./terminal-helper.mjs";
+
+// have to dynamic import in order to be able to mock ollama for testing
+const { Ollama } = await import("ollama");
 
 const ollama = new Ollama();
 /**
- * @param {string} model - name of the model to use
- * @param {number} [minutes] - how long to keep the model loaded in memory between requests
  * ensure that ollama is installed,
  * and that the correct model is installed and loaded into memory.
  *
- * @returns {boolean}
+ * @param {string} model - name of the model to use
+ * @param {number} [minutes] - how long to keep the model loaded in memory between requests
+ *
+ * @returns {Promise<boolean>}
  */
 export async function startOllama(model, minutes = 15) {
   console.log("Starting Ollama...");
@@ -31,7 +34,7 @@ export async function startOllama(model, minutes = 15) {
 /**
  * get a list of all currently installed models
  *
- * @returns {{error: boolean, models: [string]}}
+ * @returns {Promise<{error: boolean, models: [string]}>}
  */
 async function getInstalledModels() {
   try {
@@ -59,7 +62,6 @@ let installStarted = false;
  * draws a progress bar to the console.
  *
  * @param {*} msg
- * @returns
  */
 function writeProgress(msg) {
   const scale_round = (n, s) => Math.floor(n * s);
@@ -86,7 +88,7 @@ function writeProgress(msg) {
  * install a model to Ollama.
  *
  * @param {string} model - model name
- * @returns {bool} true on success, false on failure
+ * @returns {Promise<bool>} true on success, false on failure
  */
 async function installModel(model) {
   console.log(`Installing model ${color(model, { fg: COLORS.BLUE })}`);
@@ -134,6 +136,14 @@ async function warmUp(model, minutes) {
   );
 }
 
+/**
+ * send a set of messages to the LLM to generate a new chat completion
+ *
+ * @param {string} model - name of the model to use
+ * @param {ollama.Message[]} messages - messages to send. can include system prompts, multiple chats, etc.
+ * @param {number} minutes - time to keep model loaded in memory after this message.
+ * @returns {Promise<ollama.ChatResponse>} - llm response
+ */
 export async function send(model, messages, minutes) {
   return await ollama.chat({
     model: model,
