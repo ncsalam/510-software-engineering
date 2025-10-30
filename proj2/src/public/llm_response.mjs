@@ -46,9 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     doneBtn.addEventListener("click", async () => {
       // Prefer API from STT; otherwise, fall back to the #output element
       const transcript =
-        (stt && typeof stt.getTranscript === "function"
-          ? stt.getTranscript()
-          : getTranscriptFromDOM(document)) || "";
+        (stt && typeof stt.getTranscript === "function" ? stt.getTranscript() : getTranscriptFromDOM(document)) || "";
 
       if (!transcript) return;
 

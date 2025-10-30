@@ -7,7 +7,7 @@
  * --------------*/
 import { jest } from "@jest/globals";
 import * as preprocess from "../../src/public/text-to-speech/preprocess.mjs";
-import { wirePage }  from "../../src/public/text-to-speech/text-to-speech.mjs";
+import { wirePage } from "../../src/public/text-to-speech/text-to-speech.mjs";
 
 /* ============================================================
  * Unit tests: helper functions in preprocess.mjs (no DOM / no speech)
@@ -77,16 +77,16 @@ describe("wirePage integration (minimal)", () => {
     // Clean any prior definitions to avoid "Cannot redefine property" errors.
     try {
       delete win.speechSynthesis;
-    } catch {;}
+    } catch {}
     try {
       delete global.speechSynthesis;
-    } catch {;}
+    } catch {}
     try {
       delete win.SpeechSynthesisUtterance;
-    } catch {;}
+    } catch {}
     try {
       delete global.SpeechSynthesisUtterance;
-    } catch {;}
+    } catch {}
 
     // Simulate speak() life cycle: trigger onstart/onend so handlers run
     const speakMock = jest.fn((utt) => {

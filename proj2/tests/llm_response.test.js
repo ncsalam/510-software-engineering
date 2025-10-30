@@ -41,19 +41,11 @@ describe("llm_response (ESM) – STT → LLM → preprocess → TTS", () => {
       cancel: cancelMock,
     }));
 
-    jest.unstable_mockModule(
-      "../src/public/speech-to-text/speech-to-text.mjs",
-      () => ({ wirePage: wirePageSTTMock })
-    );
-    jest.unstable_mockModule(
-      "../src/public/text-to-speech/text-to-speech.mjs",
-      () => ({ wirePage: wirePageTTSMock })
-    );
+    jest.unstable_mockModule("../src/public/speech-to-text/speech-to-text.mjs", () => ({ wirePage: wirePageSTTMock }));
+    jest.unstable_mockModule("../src/public/text-to-speech/text-to-speech.mjs", () => ({ wirePage: wirePageTTSMock }));
 
     // Use the real preprocess to verify actual transformations
-    const preprocess = await import(
-      "../src/public/text-to-speech/preprocess.mjs"
-    );
+    const preprocess = await import("../src/public/text-to-speech/preprocess.mjs");
 
     await import("../src/public/llm_response.mjs");
 
@@ -80,9 +72,7 @@ describe("llm_response (ESM) – STT → LLM → preprocess → TTS", () => {
     expect(wordBox.textContent).toBe(rawReply);
 
     // TTS should have been called with the preprocessed spoken string + raw reply
-    const expectedSpoken = preprocess.englishifyNumbers(
-      preprocess.englishifyTimes(rawReply)
-    );
+    const expectedSpoken = preprocess.englishifyNumbers(preprocess.englishifyTimes(rawReply));
     expect(speakTextMock).toHaveBeenCalledWith(expectedSpoken, rawReply);
 
     // STT/TTS wired once

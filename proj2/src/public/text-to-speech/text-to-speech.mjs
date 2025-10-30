@@ -131,7 +131,7 @@ export function wirePage(win = window, doc = document) {
   function startSpeaking(spokenText, originalText) {
     try {
       win.speechSynthesis.cancel();
-    } catch {;}
+    } catch {}
     isSpeaking = true;
     printedSoFar = "";
 
@@ -201,7 +201,7 @@ export function wirePage(win = window, doc = document) {
     isSpeaking = false;
     try {
       win.speechSynthesis.cancel();
-    } catch {;}
+    } catch {}
     stopPulseLoop();
     iconIdle();
   }
