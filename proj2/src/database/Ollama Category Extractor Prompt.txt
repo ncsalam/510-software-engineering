@@ -1,0 +1,1 @@
+Identify the cuisine, flavor profile, or characteristic mentioned in the following sentence: 'I was looking to get some spicy fast food.' Is it a specific fast food chain, comfort food, street food, spicy dish, sweet treat, etc.? Provide the only the category
