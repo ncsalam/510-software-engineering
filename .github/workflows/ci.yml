@@ -1,9 +1,10 @@
-name: CI
+name: CI Tests and Coverage
 
 on:
-  pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   test:
@@ -14,25 +15,24 @@ jobs:
         working-directory: proj2
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
           cache: 'npm'
           cache-dependency-path: proj2/package-lock.json
 
-      - name: Install
+      - name: Install dependencies
         run: npm ci
 
       - name: Run tests with coverage
         run: npm run test:cov
 
-      - name: Upload HTML coverage as artifact
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
         with:
           name: coverage-html
           path: proj2/coverage

@@ -27,10 +27,6 @@ test("moveUp prints the correct ANSI code", () => {
 test("color prints the correct ANSI code", () => {
   expect(t.color("hello")).toBe("\x1b[1;39;49mhello\x1b[0m");
   expect(t.color("hello", { bold: false })).toBe("\x1b[2;39;49mhello\x1b[0m");
-  expect(t.color("hello", { bold: false, fg: t.COLORS.BLUE })).toBe(
-    "\x1b[2;34;49mhello\x1b[0m",
-  );
-  expect(t.color("hello", { bg: t.COLORS.MAGENTA })).toBe(
-    "\x1b[1;39;45mhello\x1b[0m",
-  );
+  expect(t.color("hello", { bold: false, fg: t.COLORS.BLUE })).toBe("\x1b[2;34;49mhello\x1b[0m");
+  expect(t.color("hello", { bg: t.COLORS.MAGENTA })).toBe("\x1b[1;39;45mhello\x1b[0m");
 });

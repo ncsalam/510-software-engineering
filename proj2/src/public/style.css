@@ -11,22 +11,22 @@ button {
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   border: none;
-  border-radius: 20px;             /* rounded edges */
-  background-color: #fce2cb;       /* light peach */
-  color: #FF0000;                  /* red text */
+  border-radius: 20px; /* rounded edges */
+  background-color: #fce2cb; /* light peach */
+  color: #ff0000; /* red text */
   cursor: pointer;
   transition: all 0.2s ease;
 
   /* 3D pop-out effect */
-  box-shadow: 0 6px 0 #FF0000;     /* red underside */
+  box-shadow: 0 6px 0 #ff0000; /* red underside */
   position: relative;
 }
 
 button:hover {
-  background-color: rgba(255, 203, 164, 0.81);       /* slightly darker peach */
-  color: #B30000;                  /* darker red text */
-  transform: translateY(-3px);     /* lift the button on hover */
-  box-shadow: 0 3px 0 #B30000;     /* red underside shrinks slightly */
+  background-color: rgba(255, 203, 164, 0.81); /* slightly darker peach */
+  color: #b30000; /* darker red text */
+  transform: translateY(-3px); /* lift the button on hover */
+  box-shadow: 0 3px 0 #b30000; /* red underside shrinks slightly */
 }
 
 /* Text file (.txt) select */
@@ -43,30 +43,37 @@ input[type="file"] {
   border-radius: 8px;
 }
 
-
 /* AUDIO ICON */
-#audioIcon{
-  width:220px;height:220px;border-radius:50%;
-  background-image:url('./uncle_tony_logo.png'); /* path is relative to THIS css file */
-  background-size:cover;background-position:center;
-  background-repeat:no-repeat;
-  transition:transform .12s, box-shadow .2s, opacity .2s;
-  box-shadow:0 0 20px rgba(178, 29, 26, 0.35); opacity:.95;
+#audioIcon {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background-image: url("./uncle_tony_logo.png"); /* path is relative to THIS css file */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition:
+    transform 0.12s,
+    box-shadow 0.2s,
+    opacity 0.2s;
+  box-shadow: 0 0 20px rgba(178, 29, 26, 0.35);
+  opacity: 0.95;
   margin: 2rem auto 1.5rem; /* center on page */
 }
 /* baseline speaking */
-#audioIcon.speaking{
-  box-shadow:0 0 46px rgba(252, 20, 3, 0.9);
-  opacity:1;
+#audioIcon.speaking {
+  box-shadow: 0 0 46px rgba(252, 20, 3, 0.9);
+  opacity: 1;
   transform: scale(1.06);
 }
 /* short, irregular pulse burst driven by boundary events in speech */
 #audioIcon.pulse-burst {
   transform: scale(1.06);
   box-shadow: 0 0 54px rgba(252, 20, 3, 0.95);
-  transition: transform .12s ease, box-shadow .18s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.18s ease;
 }
-
 
 /* ========== OUTPUT BOX ========== */
 #output {
@@ -82,14 +89,13 @@ input[type="file"] {
 
 h1 {
   font-family: "Brush Script MT", "Brush Script Std", cursive; /* fallback fonts */
-  font-size: 8rem;          /* make it large for emphasis */
-  color: red;           /* deep red color */
-  text-align: center;       /* center the heading */
-  letter-spacing: 1px;      /* space between letters */
+  font-size: 8rem; /* make it large for emphasis */
+  color: red; /* deep red color */
+  text-align: center; /* center the heading */
+  letter-spacing: 1px; /* space between letters */
   margin-top: 1rem;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* optional subtle shadow */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* optional subtle shadow */
 }
-
 
 /* ========== CHECKERED BORDER (2 rows, alternating colors) ========== */
 .checkered-border {
@@ -99,15 +105,17 @@ h1 {
   background:
     /* row 1: starts with red */
     repeating-linear-gradient(90deg, red 0 20px, white 20px 40px),
-    /* row 2: starts with white (shifted down 20px) */
-    repeating-linear-gradient(90deg, white 0 20px, red 20px 40px);
-  
+    /* row 2: starts with white (shifted down 20px) */ repeating-linear-gradient(90deg, white 0 20px, red 20px 40px);
+
   /* size and placement */
-  background-size: 100% 20px, 100% 20px;
-  background-position: 0 0, 0 20px;
+  background-size:
+    100% 20px,
+    100% 20px;
+  background-position:
+    0 0,
+    0 20px;
   background-repeat: repeat-x, repeat-x;
 }
-
 
 .top {
   position: fixed;
@@ -146,12 +154,11 @@ main {
 
 .word-box {
   padding: 1rem 1.5rem;
-  border: 2px solid #FF0000;     /* red border */
+  border: 2px solid #ff0000; /* red border */
   border-radius: 12px;
-  background-color: #FFDAB9;     /* light peach background */
-  color: #b30000;                /* dark red text */
+  background-color: #ffdab9; /* light peach background */
+  color: #b30000; /* dark red text */
   font-family: "Brush Script MT", "Brush Script Std", cursive;
   font-size: 1.5rem;
   min-height: 50px;
 }
-
