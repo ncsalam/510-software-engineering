@@ -1,5 +1,5 @@
 .venv
 page.file
 out.txt
-*/node_modules
-*/coverage
+coverage
+node_modules
