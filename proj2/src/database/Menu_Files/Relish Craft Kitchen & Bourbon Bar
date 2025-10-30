@@ -1,98 +1,100 @@
-Fried Black Eyed Peas,8.00
-Pimento Cheese & Crackers,11.00
-Salsa Flight,11.00
-Fried Pickles,12.50
-House Fried Potato Chips,11.00
-BBQ Nachos,16.00
-Cheese Fries,14.50
-Buffalo Wings,17.00
-Fried Green Tomatoes,12.00
-Pimento Cheese Fritters,10.50
-Fried Brussels Sprouts,10.00
-The Big Cheese,17.00
-The Italian,16.50
-The Parisian,17.00
-The Wisconsin,16.50
-The Carolinian,17.00
-The Mediterranean,17.00
-BL & GREEN T,17.00
-Pastrami Reuben,18.00
-Turkey Reuben,18.00
-Pulled Pork BBQ,17.50
-Tuna Melt,18.50
-Chicken Salad Sandwich,18.00
-California Turkey Wrap,18.00
-Buffalo Wrap,18.00
-Relish Shrimp Burger,19.00
-Black Bean Burger,17.00
-The Classic (Mac & Cheese Skillet),16.50
-Alfredo Mac,17.50
-Italian Mac,17.50
-Mexican Mac,18.00
-Cajun Mac,18.00
-French Mac,18.00
-Southern Mac,17.50
-Chili Mac,17.50
-Steak Fries,5.00
-Potato Chips,5.00
-Southern Slaw,4.50
-Broccoli Salad,5.50
-Mexican Slaw,4.50
-Cheese Grits,5.00
-Sliced Apples,5.50
-Carolina Caviar,5.50
-Bacon Cheese Fries,6.50
-Black Beans,4.50
-Sweet Potato Fries,6.50
-Fresh Green Beans,4.50
-"Broccoli, cauliflower & red pepper mix",4.50
-Fried green tomatoes (side),6.50
-Mashed Potatoes,5.00
-Side House Salad,7.50
-Side Goat Cheese Salad,7.50
-Side Panzanella Salad,7.50
-Shrimp & Grits,19.50
-Fish Tacos,17.50
-BBQ Pork Ribs (1/2 rack),19.00
-BBQ Pork Ribs (full rack),28.00
-Country Fried Steak Platter,19.50
-Grilled OR Blackened Salmon,20.00
-Fish N Chips,19.50
-Fried Shrimp,20.00
-Relish Chicken Grill,18.00
-BBQ Pork Burrito Mojado,18.00
-Veggies for Dinner,17.50
-Three Finger Platter,16.00
-Dressings,0.00
-Creamy Tomato Basil Soup,8.50
-Chili (soup),8.50
-Soup & Salad Combo,15.50
-Scoop Salad,16.50
-Panzanella,16.00
-Mexican Grilled Shrimp Salad,19.50
-Carolina “Caviar” Salad,16.50
-Cobb Salad,17.50
-Kim’s Goat Cheese Salad,16.50
-Strawberry Fields,16.50
-Tuna or Chicken Salad Salad,18.50
-"Add to Any Salad - Chicken (grilled, blackened, or fried)",5.00
-"Add to Any Salad - Cod (grilled, blackened, or fried)",5.00
-Add to Any Salad - Shrimp (grilled or blackened),6.50
-Add to Any Salad - Salmon (grilled or blackened),8.50
-Cheeseburger,17.50
-Old Southern,18.50
-Piedmont,18.50
-Carolina Chili (burger),18.50
-Black & Blue,18.50
-Tony’s Bacon Jam Burger,19.00
-Santa Fe Burger/Chicken,18.00
-Hamburger/Cheeseburger (Kid's),8.50
-Mac & Cheese (Kid's),8.50
-Grilled Cheese (Kid's),8.50
-Grilled Chicken Breast (Kid's),8.50
-Fried Chicken Fingers (Kid's),8.50
-Fried or Grilled Cod (Kid's),8.50
-Doughnuts,8.50
-Chocolate Chess Pie (whole pie),24.00
-Chocolate Chess Pie (per slice),7.50
-Banana Pudding in a Jar,7.50
+Fried Black Eyed Peas,$8.00
+Pimento Cheese & Crackers,$11.00
+Salsa Flight,$11.00
+Fried Pickles,$12.50
+House Fried Potato Chips,$11.00
+BBQ Nachos,$16.00
+Cheese Fries,$14.50
+Buffalo Wings,$17.00
+Fried Green Tomatoes,$12.00
+Pimento Cheese Fritters,$10.50
+Fried Brussels Sprouts,$10.00
+The Big Cheese,$17.00
+The Italian,$16.50
+The Parisian,$17.00
+The Wisconsin,$16.50
+The Carolinian,$17.00
+The Mediterranean,$17.00
+BL & GREEN T,$17.00
+Pastrami Reuben,$18.00
+Turkey Reuben,$18.00
+Pulled Pork BBQ,$17.50
+Tuna Melt,$18.50
+Chicken Salad Sandwich,$18.00
+California Turkey Wrap,$18.00
+Buffalo Wrap,$18.00
+Relish Shrimp Burger,$19.00
+Black Bean Burger,$17.00
+The Classic (Mac & Cheese Skillet),$16.50
+Alfredo Mac,$17.50
+Italian Mac,$17.50
+Mexican Mac,$18.00
+Cajun Mac,$18.00
+French Mac,$18.00
+Southern Mac,$17.50
+Chili Mac,$17.50
+Steak Fries,$5.00
+Potato Chips,$5.00
+Southern Slaw,$4.50
+Broccoli Salad,$5.50
+Mexican Slaw,$4.50
+Cheese Grits,$5.00
+Sliced Apples,$5.50
+Carolina Caviar,$5.50
+Bacon Cheese Fries,$6.50
+Black Beans,$4.50
+Sweet Potato Fries,$6.50
+Fresh Green Beans,$4.50
+"Broccoli, cauliflower & red pepper mix",$4.50
+Fried green tomatoes (side),$6.50
+Mashed Potatoes,$5.00
+Side House Salad,$7.50
+Side Goat Cheese Salad,$7.50
+Side Panzanella Salad,$7.50
+Shrimp & Grits,$19.50
+Fish Tacos,$17.50
+BBQ Pork Ribs (1/2 rack),$19.00
+BBQ Pork Ribs (full rack),$28.00
+Country Fried Steak Platter,$19.50
+Grilled OR Blackened Salmon,$20.00
+Fish N Chips,$19.50
+Fried Shrimp,$20.00
+Relish Chicken Grill,$18.00
+BBQ Pork Burrito Mojado,$18.00
+Veggies for Dinner,$17.50
+Three Finger Platter,$16.00
+Dressings,$0.00
+Creamy Tomato Basil Soup,$8.50
+Chili (soup),$8.50
+Soup & Salad Combo,$15.50
+Scoop Salad,$16.50
+Panzanella,$16.00
+Mexican Grilled Shrimp Salad,$19.50
+Carolina Caviar Salad,$16.50
+Cobb Salad,$17.50
+Kim’s Goat Cheese Salad,$16.50
+Strawberry Fields,$16.50
+Tuna or Chicken Salad Salad,$18.50
+"Chicken (grilled, blackened, or fried) (add to salad)",$5.00
+"Cod (grilled, blackened, or fried) (add to salad)",$5.00
+Shrimp (grilled or blackened) (add to salad),$6.50
+Salmon (grilled or blackened) (add to salad),$8.50
+Cheeseburger (Burger or Bird),$17.50
+Old Southern,$18.50
+Piedmont,$18.50
+Carolina Chili (burger),$18.50
+Black & Blue,$18.50
+Tony’s Bacon Jam Burger,$19.00
+Santa Fe Burger/Chicken,$18.00
+Hamburger (Kid),$8.50
+Cheeseburger (Kid),$8.50
+Mac & Cheese (Kid),$8.50
+Grilled Cheese (Kid),$8.50
+Grilled Chicken Breast (Kid),$8.50
+Fried Chicken Fingers (Kid),$8.50
+Fried Cod (Kid),$8.50
+Grilled Cod (Kid),$8.50
+Doughnuts,$8.50
+Chocolate Chess Pie (whole),$24.00
+Chocolate Chess Pie (slice),$7.50
+Banana Pudding in a Jar,$7.50

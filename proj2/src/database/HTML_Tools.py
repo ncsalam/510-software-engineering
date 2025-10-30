@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def extract_content(url, output_file, min_lines=120):
+def extract_content(url, output_file, min_lines=120, max_lines = 10000):
     try:
         response = requests.get(url)
         response.raise_for_status()  # raises error for bad status codes
@@ -17,7 +17,7 @@ def extract_content(url, output_file, min_lines=120):
         line_count = len(lines)
 
         # Only create the file if it meets the minimum line count
-        if line_count > min_lines:
+        if line_count > min_lines and line_count < max_lines:
             with open(output_file, "w", encoding="utf-8") as file:
                 file.write("\n".join(lines))
             print(f"✅ {output_file} saved ({line_count} lines).")

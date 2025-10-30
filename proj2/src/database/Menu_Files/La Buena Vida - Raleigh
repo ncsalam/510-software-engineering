@@ -5,8 +5,6 @@ Cheese Dip,7.99
 Bigmak Tacos,9.99
 Octopus Aguachile,16.99
 Arrachera Aguachile,17.99
-Chicken Rolls,9.99
-Cheese Dip,7.99
 Chicken wings,12.99
 Corn on the cob,4.99
 Birria rolls,11.99
@@ -20,17 +18,13 @@ Queso Fundido Gobernador,14.99
 Gambas Al Ajillo,17.99
 Chorizo Dip,9.99
 Taquitos Buena Vida,13.99
-Birria Quesadilla,14.99
 Chimichanga,14.99
 Buena Vida Burrito,16.99
-ACP,0.00
-Fajitas,0.00
 Choripollo,14.99
 Quesadilla,14.99
 Fajita Quesadilla,15.99
 Nachos,18.99
 Rib eye Asada Burrito,18.99
-Quesabirrias de Res,14.99
 Steak Tacos,18.99
 Pork Belly Tacos,17.99
 Carnitas Tacos,14.99
@@ -73,30 +67,6 @@ Aguachile Mixto,19.99
 Ceviche Tulum,15.99
 Mojarra Frita,19.99
 SALMON FRESCO (Tropical),25.99
-Coca-Cola,3.25
-Sprite,3.25
-Diet Coke,3.25
-Coca-Cola Zero Sugar,3.25
-Mexican Coke,5.50
-Topo Chico,4.50
-Agua Fresca,4.99
-Pink Lemonade,3.25
-Dr Pepper,3.25
-Fanta,3.25
-Mtn Dew,3.25
-Sweet Tea,3.25
-Unsweet Tea,3.25
-Red Bull,7.00
-Fevertree Ginger Ale,4.00
-Jugo Pina,5.00
-Bottled Water,5.00
-Pina Colada Virgen,11.50
-Fevertree Ginger Beer,4.00
-Cranberry Juice,5.99
-Cafe Americano,3.99
-Orange Juice,5.99
-Cafe Espresso,3.99
-Cafe de Olla,3.99
 Buñuelos,7.99
 Strawberry tres leches,9.99
 Churros,14.99
@@ -137,7 +107,7 @@ Chiles Toreados,2.00
 Side Milanesa,6.00
 Side Grilled Chicken,6.00
 Side De Lechuga,0.85
-Side  De Plantain Chips,3.45
+Side De Plantain Chips,3.45
 Side De Ranch (2 Oz),1.25
 Side De Tomate Picado,1.00
 Side Consome,3.99
@@ -150,4 +120,3 @@ Kids Mac&Cheese & Fries,7.99
 Kids Tacos,7.99
 Kids Cheese Hamburguesa,9.99
 Kids Chicken Sandwich,8.99
-Kids Drink,0.99

@@ -16,6 +16,7 @@ TASK:
 Extract and rebuild the restaurant's menu clearly and concisely.
 - Ignore non-menu content (about us, contact info, etc.)
 - Detect only item names and prices.
+- Only look for food items. Ignore drinks and their prices
 - Give subtypes different items (Pad Thai Chicken 6.99 \n Pad Thai Tofu 5.99)
 - Output in clean CSV format with columns:
   Dish and Price but do not include dish and price as headings. Only the items

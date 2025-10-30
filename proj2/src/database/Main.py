@@ -3,6 +3,7 @@ import google_tools
 import html_tools
 import menu_recreator
 import time
+import sqlite_connection
 
 relative_path = "proj2\\src\\database\\"
 
@@ -11,10 +12,13 @@ if __name__ == "__main__":
     with open(relative_path+"Restaurant_List.txt", "r", encoding="utf-8") as f:
       restaurant_list = f.read().split(",")
   except FileNotFoundError:
-    with open(relative_path+"Cuisine_List.txt", "r", encoding="utf-8") as f:
-      cuisine_list = f.read().split(",")
-    with open(relative_path+"Location.txt", "r", encoding="utf-8") as f:
-      location = f.read()
+    cuisines = input("Enter Cuisines as a Comma-Separated List")
+    # with open(relative_path+"Cuisine_List.txt", "r", encoding="utf-8") as f:
+    #   cuisine_list = f.read().split(",")
+    cuisine_list = cuisines.split(",")
+    # with open(relative_path+"Location.txt", "r", encoding="utf-8") as f:
+    #   location = f.read()
+    location = input("Where would you like to search")
     google_tools.restaurant_search(cuisine_list, location)
     with open(relative_path+"Restaurant_List.txt", "r", encoding="utf-8") as f:
       restaurant_list = f.read().split(",")
@@ -48,7 +52,7 @@ if __name__ == "__main__":
   i = 0
   for url in url_list:
     restaurant_name = restaurant_list[i]
-    html_tools.extract_content(url, f"{content_folder_path}\\{restaurant_name}.txt", 120)
+    html_tools.extract_content(url, f"{content_folder_path}\\{restaurant_name}.txt")
     i+=1
   
   csv_folder_path = relative_path+"Menu_Files\\"
@@ -73,4 +77,6 @@ if __name__ == "__main__":
             
       except Exception as e:
         print(f"Error reading {file_path}: {e}")
+
+  sqlite_connection.upload_data()
 
