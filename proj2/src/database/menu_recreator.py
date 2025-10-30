@@ -5,7 +5,7 @@ import io
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def generate_menu(raw_text, output_file):
+def recreate_menu(raw_text, output_file):
     prompt = f"""
 You are a precise menu reconstruction system.
 
@@ -18,7 +18,7 @@ Extract and rebuild the restaurant's menu clearly and concisely.
 - Detect only item names and prices.
 - Give subtypes different items (Pad Thai Chicken 6.99 \n Pad Thai Tofu 5.99)
 - Output in clean CSV format with columns:
-  Dish and Price
+  Dish and Price but do not include dish and price as headings. Only the items
 Return only the CSV (no commentary).
 """
 
@@ -54,10 +54,3 @@ Return only the CSV (no commentary).
     print(f"✅ Menu successfully saved to {output_file}")
 
 
-# Example usage:
-if __name__ == "__main__":
-    relative_location = "proj2\\src\\database\\"
-    with open("proj2\\src\\database\\Raw Website Content\\Raleigh Soul Kitchen.txt", "r", encoding="utf-8") as f:
-        raw_text = f.read()
-    menu_csv = generate_menu(raw_text, relative_location+"output.csv")
-    print(menu_csv)
