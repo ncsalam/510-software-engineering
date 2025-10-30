@@ -18,7 +18,7 @@ beforeEach(db.init);
 test("static homepage content is served", async () => {
   const res = await request.get("/");
   expect(res.statusCode).toEqual(200);
-  expect(res.text).toMatch(/^<!DOCTYPE html>/);
+  expect(res.text).toMatch(/^<!DOCTYPE html>/i);
 });
 
 describe("POST /api/send ", () => {
