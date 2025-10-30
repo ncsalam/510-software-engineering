@@ -175,7 +175,7 @@ describe("wirePage integration (minimal)", () => {
 
     // We expect the original text to be printed to the word-box
     const out = doc.getElementById("word-box").textContent;
-    expect(out).toContain("Hello world.");
+    expect(out).toContain("Hello wor1ld.");
     expect(out).toContain("Second paragraph.");
 
     // And the Web Speech API to have been called
