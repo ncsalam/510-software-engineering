@@ -10,11 +10,11 @@ import * as db from "./server/chat-db.mjs";
 const { startOllama, send } = await import("./server/ollama-interface.mjs");
 
 dotenv.config({ quiet: true });
-const ollamaStatus = await startOllama(
+const ollamaOk = await startOllama(
   process.env.OLLAMA_MODEL,
   process.env.OLLAMA_KEEP_ALIVE,
 );
-if (!ollamaStatus) process.exit(1);
+if (!ollamaOk) process.exit(1);
 db.init();
 
 export const PORT = process.env.PORT;
@@ -82,16 +82,11 @@ response format (success):
   id: <int>
 }
 */
-app.post(
-  "/api/chat",
-  validateField("message"),
-  handleValidationErrors,
-  async (req, res) => {
-    res.status(201).json({
-      id: await db.newChat(),
-    });
-  },
-);
+app.post("/api/chat", async (req, res) => {
+  res.status(201).json({
+    id: await db.newChat(),
+  });
+});
 
 /*
 generate a chat response from the llm. (aware of previous messages sent to this endpoint)
@@ -111,12 +106,12 @@ response format:
 */
 app.post(
   "/api/chat/:id",
+  validateChatExists,
   validateField("message"),
   handleValidationErrors,
-  validateChatExists,
   async (req, res) => {
     // add user message to chat history
-    db.logMessage(req.params.id, "user", req.body.message);
+    await db.logMessage(req.params.id, "user", req.body.message);
     // generate chat completion
     const llm_res = await send(
       process.env.OLLAMA_MODEL,
@@ -124,7 +119,7 @@ app.post(
       process.env.OLLAMA_KEEP_ALIVE,
     );
     // log assistant response and return it
-    db.logMessage(req.params.id, "assistant", llm_res.message.content);
+    await db.logMessage(req.params.id, "assistant", llm_res.message.content);
     res.json({
       response: llm_res.message.content,
     });

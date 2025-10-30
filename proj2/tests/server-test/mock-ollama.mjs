@@ -14,11 +14,15 @@ export default class Ollama {
   }
 
   async list() {
-    return new Promise((resolve, reject) =>
+    return new Promise((resolve, reject) => {
+      if (!ollamaInstalled) {
+        reject({ error: "ollama not installed" });
+        return;
+      }
       resolve({
         models: [{ name: "llama3.2:latest" }],
-      }),
-    );
+      });
+    });
   }
 
   async chat() {
@@ -36,3 +40,7 @@ export default class Ollama {
 export const factory = () => ({
   Ollama: Ollama,
 });
+
+// set to false for simulating errors
+export let ollamaInstalled = true;
+export let modelDownloadsSuccessfully = true;
