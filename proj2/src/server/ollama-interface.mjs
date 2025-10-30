@@ -43,12 +43,7 @@ async function getInstalledModels() {
       models: (await ollama.list()).models.map((info) => info.name),
     };
   } catch {
-    console.error(
-      color(
-        "Fatal error: Ollama is not installed. See https://ollama.com/download",
-        { fg: COLORS.RED },
-      ),
-    );
+    console.error(color("Fatal error: Ollama is not installed. See https://ollama.com/download", { fg: COLORS.RED }));
   }
   return {
     error: true,
@@ -84,7 +79,7 @@ function writeProgress(msg) {
     console.log(
       color(" ".repeat(progress), { bg: COLORS.GREEN }) +
         color(" ".repeat(barSize - progress), { bg: COLORS.WHITE }) +
-        ` (${scale_round(pct, 100)}%)`,
+        ` (${scale_round(pct, 100)}%)`
     );
   }
 }
@@ -110,7 +105,7 @@ async function installModel(model) {
     console.error(
       color(`Fatal error: failed to install model. (reason: ${e.error})`, {
         fg: COLORS.RED,
-      }),
+      })
     );
   }
   return false;
@@ -124,7 +119,7 @@ async function installModel(model) {
  * @param {number} [minutes] - how long to keep the model loaded in memory between requests
  */
 async function warmUp(model, minutes) {
-  console.log(`Loading model into memory...`);
+  console.log("Loading model into memory...");
   const res = await send(
     model,
     [
@@ -137,7 +132,7 @@ async function warmUp(model, minutes) {
         content: "echo",
       },
     ],
-    minutes,
+    minutes
   );
 }
 

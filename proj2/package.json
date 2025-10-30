@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "src",
   "version": "1.0.0",
   "scripts": {
@@ -8,6 +9,10 @@
     "cloc": "npx cloc . -vcs=git --exclude-lang=HTML,JSON,Text --by-file-by-lang",
     "cloc:src": "npx cloc src -vcs=git --exclude-lang=HTML,JSON,Text",
     "cloc:tests": "npx cloc tests -vcs=git --exclude-lang=HTML,JSON,Text"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "devDependencies": {
     "cloc": "^2.6.0-cloc",
@@ -27,7 +32,8 @@
     "coverageReporters": [
       "text",
       "html",
-      "lcov"
+      "lcov",
+      "json-summary"
     ],
     "coverageThreshold": {
       "global": {
