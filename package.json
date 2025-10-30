@@ -3,8 +3,8 @@
   "name": "src",
   "version": "1.0.0",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:cov": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "test": "node --experimental-vm-modules jest",
+    "test:cov": "node --experimental-vm-modules jest --coverage",
     "start": "node src/server.mjs",
     "cloc": "npx cloc . -vcs=git --exclude-lang=HTML,JSON,Text --by-file-by-lang",
     "cloc:src": "npx cloc src -vcs=git --exclude-lang=HTML,JSON,Text",
