@@ -1,5 +1,5 @@
-[![ESLint Style/Syntax](https://img.shields.io/badge/Style-ESLint-4B32C3?logo=eslint&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badgesV2/proj2/eslint.config.js)
-[![Prettier Format](https://img.shields.io/badge/Format-Prettier-F7B93E?logo=prettier&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badgesV2/proj2/prettier.config.js)
+[![ESLint Style/Syntax](https://img.shields.io/badge/Style-ESLint-4B32C3?logo=eslint&logoColor=white)](https://github.com/ncsalam/510-software-engineering/blob/badgesV2/proj2/eslint.config.js)
+[![Prettier Format](https://img.shields.io/badge/Format-Prettier-F7B93E?logo=prettier&logoColor=white)](https://github.com/ncsalam/510-software-engineering/blob/badgesV2/proj2/prettier.config.js)
 [![codecov](https://codecov.io/gh/ncsalam/510-software-engineering/branch/main/graph/badge.svg?token=6K93NJ8JE6)](https://codecov.io/gh/ncsalam/510-software-engineering)
 [![License: MIT](https://img.shields.io/badge/License-MIT-4B32C3?logo=open-source-initiative&logoColor=white)](LICENSE.md)
 
