@@ -9,6 +9,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: proj2
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,11 +22,10 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'npm'
+          cache-dependency-path: proj2/package-lock.json
 
       - name: Install
         run: npm ci
-        working-directory: ./proj2
-
 
       - name: Run tests with coverage
         run: npm run test:cov
@@ -32,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-html
-          path: coverage
+          path: proj2/coverage
           if-no-files-found: ignore
 
       - name: Post coverage summary to job log
