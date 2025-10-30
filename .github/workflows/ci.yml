@@ -10,10 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: proj2
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,7 +19,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'npm'
-          cache-dependency-path: proj2/package-lock.json
+          cache-dependency-path: ppackage-lock.json
 
       - name: Install dependencies
         run: npm ci
