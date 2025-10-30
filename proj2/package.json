@@ -5,7 +5,9 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:cov": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "start": "node src/server.mjs",
-    "cloc": "cloc . -vcs=git --exclude-lang=HTML,JSON,Text --by-file-by-lang"
+    "cloc": "npx cloc . -vcs=git --exclude-lang=HTML,JSON,Text --by-file-by-lang",
+    "cloc:src": "npx cloc src -vcs=git --exclude-lang=HTML,JSON,Text",
+    "cloc:tests": "npx cloc tests -vcs=git --exclude-lang=HTML,JSON,Text"
   },
   "devDependencies": {
     "cloc": "^2.6.0-cloc",
