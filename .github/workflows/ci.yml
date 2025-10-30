@@ -21,6 +21,8 @@ jobs:
 
       - name: Install
         run: npm ci
+        working-directory: ./proj2
+
 
       - name: Run tests with coverage
         run: npm run test:cov
