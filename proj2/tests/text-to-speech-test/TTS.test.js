@@ -6,11 +6,11 @@
  * Fixed imports
  * --------------*/
 import { jest } from "@jest/globals";
-import * as preprocess from "../../src/public/text-to-speech/preprocess.js";
-import { wirePage } from "../../src/public/text-to-speech/text-to-speech.js";
+import * as preprocess from "../../src/public/text-to-speech/preprocess.mjs";
+import { wirePage }  from "../../src/public/text-to-speech/text-to-speech.mjs";
 
 /* ============================================================
- * Unit tests: helper functions in preprocess.js (no DOM / no speech)
+ * Unit tests: helper functions in preprocess.mjs (no DOM / no speech)
  * ============================================================ */
 describe("preprocess helpers (unit)", () => {
   // Verify time phrases become natural speech (o'clock, am/pm)
@@ -50,7 +50,7 @@ describe("preprocess helpers (unit)", () => {
 });
 
 /* ============================================================
- * Minimal integration test for text-to-speech.js:
+ * Minimal integration test for text-to-speech.mjs:
  *   - Provide the minimal DOM the module expects
  *   - Mock the Web Speech API so nothing actually speaks
  *   - Call wirePage() and exercise speakText()
@@ -77,16 +77,16 @@ describe("wirePage integration (minimal)", () => {
     // Clean any prior definitions to avoid "Cannot redefine property" errors.
     try {
       delete win.speechSynthesis;
-    } catch {}
+    } catch {;}
     try {
       delete global.speechSynthesis;
-    } catch {}
+    } catch {;}
     try {
       delete win.SpeechSynthesisUtterance;
-    } catch {}
+    } catch {;}
     try {
       delete global.SpeechSynthesisUtterance;
-    } catch {}
+    } catch {;}
 
     // Simulate speak() life cycle: trigger onstart/onend so handlers run
     const speakMock = jest.fn((utt) => {

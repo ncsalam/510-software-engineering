@@ -10,7 +10,7 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 global.crypto = crypto;
 
-import { wirePage } from "../../src/public/speech-to-text/speech-to-text.js";
+import { wirePage } from "../../src/public/speech-to-text/speech-to-text.mjs";
 
 expect(wirePage).toBeDefined();
 

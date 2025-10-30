@@ -1,41 +1,29 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Uncle Tony S2T</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header class="checkered-border top"></header>
-    <h1>Uncle Tony</h1>
+<head>
+  <meta charset="UTF-8" />
+  <title>Uncle Tony S2T</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="checkered-border top"></header>
+  <h1>Uncle Tony</h1>
 
-    <div id="audioIcon" class="idle" aria-hidden="true" title="Speaking indicator"></div>
+  <div id="audioIcon" class="idle" aria-hidden="true" title="Speaking indicator"></div>
 
-    <button id="start">Start Listening</button>
-    <button id="done">Done / Save Transcript</button>
+  <button id="start">Start Listening</button>
+  <button id="done">Done / Save Transcript</button>
 
-    <p id="output"></p>
+  <p id="output"></p>
 
-    <!-- Load the app. This defines window.voiceAppSTT and window.voiceAPPTTS in the browser respectively. -->
-    <script type="module">
-      // Wire up once the DOM is ready
-      import { wirePage as wirePageSTT } from "./speech-to-text/speech-to-text.js";
-      import { wirePage as wirePageTTS } from "./text-to-speech/text-to-speech.js";
+  <div class="response-container">
+    <h3 class="response-label">Uncle Tony's Response</h3>
+    <div id="word-box" class="word-box"></div>
+  </div>
 
-      window.addEventListener("load", () => {
-        wirePageSTT?.(window, document);
-        wirePageTTS?.(window, document);
-      });
-    </script>
+  <footer class="checkered-border bottom"></footer>
 
-    <!--Temporary file selection box. DELETE when using LLM responses.-->
-    <label for="txtfile">Choose a .txt file to read aloud (Temporary till LLM respsonses are available):</label>
-    <input id="txtfile" type="file" accept=".txt" />
-
-    <div class="response-container">
-      <h3 class="response-label">Uncle Tony's Response</h3>
-      <div id="word-box" class="word-box"></div>
-    </div>
-    <footer class="checkered-border bottom"></footer>
-  </body>
+  <!-- Single ES module that imports STT, TTS, and preprocess, then wires everything -->
+  <script type="module" src="./llm_response.mjs"></script>
+</body>
 </html>

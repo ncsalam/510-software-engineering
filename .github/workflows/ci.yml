@@ -9,6 +9,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: proj2
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,7 +21,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 'lts/*'
+          cache: 'npm'
+          cache-dependency-path: proj2/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -27,11 +34,11 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-    
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          files: ./coverage/lcov.info
-          flags: unittests
-          name: codecov-report
+          name: coverage-html
+          path: proj2/coverage
+          if-no-files-found: ignore
+
+      - name: Post coverage summary to job log
+        if: always()
+        run: |
+          node -e "console.log(require('./coverage/coverage-summary.json').total)"
