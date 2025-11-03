@@ -1,8 +1,15 @@
 import sqlite3 from "sqlite3";
-import { allAsync, getAsync, execAsync } from "./sqlite3-async.mjs";
+import fs from "node:fs";
+import path from "node:path";
+import { allAsync, getAsync, execAsync, runAsync } from "./sqlite3-async.mjs";
 
-export const db = new sqlite3.Database(":memory:");
+const DB_PATH = path.resolve("data/chat.sqlite");  // <-- change to your absolute path
 
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+
+export const db = new sqlite3.Database(DB_PATH, (err) => {
+  if (err) console.error("Failed to open DB:", err);
+});
 // we have to synchronously track chat ID creation
 // to enable concurrent chat creation requests
 var idCounter = 1;
@@ -101,19 +108,26 @@ export async function getHistory(id) {
  * @param {string} content - text contents of the message.
  */
 export async function logMessage(id, role, content) {
+  if (role === "assistant") {
+    console.log(`[LLM][chat ${id}] ${content}`);
+  }
+
   const role_info = await getAsync(
     db,
-    `SELECT id from roles WHERE name="${role}"`,
+    `SELECT id FROM roles WHERE name = ?`,
+    [role]
   );
   if (role_info === undefined)
     throw new RangeError(
-      `"${role}" is not a valid role (must be one of "system", "user", or "assistant")`,
+      `"${role}" is not a valid role (must be one of "system", "user", or "assistant")`
     );
+  
   await validateId(id);
 
-  await execAsync(
+  await runAsync(
     db,
-    `INSERT INTO messages (chat_id, role_id, content) VALUES (${id}, ${role_info.id}, "${content}")`,
+    `INSERT INTO messages (chat_id, role_id, content) VALUES (?, ?, ?)`,
+    [Number(id), role_info.id, String(content)]
   );
 }
 
