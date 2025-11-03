@@ -282,4 +282,14 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
   test("_getRecognition returns same instance", () => {
     expect(app._getRecognition()).toBe(recognitionInstance);
   });
+
+  /** @test Ensures errors log properly and don't crash. */
+  test("onerror does not throw exceptions", () => {
+    const errSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    // Call the actual onerror assigned by wirePage
+    const actualOnError = app._getRecognition().onerror;
+
+    expect(() => actualOnError({ error: "network" })).not.toThrow();
+    expect(errSpy).toHaveBeenCalledWith("Speech recognition error:", "network");
+  });
 });
