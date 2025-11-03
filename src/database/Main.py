@@ -51,7 +51,6 @@ def open_url_list():
       return url_list
 
 def make_website_content_folder():
-  content_folder_path = relative_path+"Raw Website Content"
   try:
     os.mkdir(content_folder_path)
     print(f"Folder '{content_folder_path}' created successfully.")
@@ -89,8 +88,8 @@ def create_menu_csv():
         print(f"Error reading {file_path}: {e}")
 
 if __name__ == "__main__":
-  relative_path = "proj2\\src\\database\\"
-  content_folder_path = relative_path+"Raw Website Content"
+  relative_path = "src\\database\\"
+  content_folder_path = relative_path+"Raw_Website_Content"
   csv_folder_path = relative_path+"Menu_CSVs\\"
 
   restaurant_list = open_restaurant_list()
@@ -99,4 +98,4 @@ if __name__ == "__main__":
   extract_website_content()
   make_csv_folder()
   create_menu_csv()
-  sqlite_connection.upload_data()
+  sqlite_connection.upload_data(relative_path)

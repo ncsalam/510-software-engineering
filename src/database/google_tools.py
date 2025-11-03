@@ -28,7 +28,7 @@ def restaurant_search(cuisine_list, location):
       if place['displayName']['text'] not in restaurant_list:
         restaurant_list.append(place['displayName']['text'])
 
-  with open("proj2\\src\\database\\Restaurant_List.txt", "w", encoding="utf-8") as file:
+  with open("src\\database\\Restaurant_List.txt", "w", encoding="utf-8") as file:
     file.write(",".join(restaurant_list))
 
 def build_payload(query, start=1, num=1, **params):

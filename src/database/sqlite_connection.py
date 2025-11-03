@@ -67,9 +67,9 @@ def process_all_files(conn, folder_path: str):
         print(f"✅ {inserted} rows inserted from {filename} (restaurant='{restaurant}')")
 
 
-def upload_data():
-    folder = "proj2/src/database/Menu_CSVs"  # change to your actual folder
-    db_path = "proj2/src/database/restaurants_raleigh.db"
+def upload_data(relative_path):
+    folder = f"{relative_path}Menu_CSVs"  # change to your actual folder
+    db_path = f"{relative_path}restaurants_raleigh.db"
 
     conn = connect_db(db_path)
     create_table(conn)
