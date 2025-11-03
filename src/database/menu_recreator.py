@@ -15,11 +15,12 @@ INPUT TEXT:
 TASK:
 Extract and rebuild the restaurant's menu clearly and concisely.
 - Ignore non-menu content (about us, contact info, etc.)
-- Detect only item names and prices.
+- Detect only item names, prices, and descriptions
+- If there is no description for an item. Make one but make it no more than 10 words
 - Only look for food items. Ignore drinks and their prices
 - Give subtypes different items (Pad Thai Chicken 6.99 \n Pad Thai Tofu 5.99)
 - Output in clean CSV format with columns:
-  Dish and Price but do not include dish and price as headings. Only the items
+  Dish, Price, and Description but do not include dish and price as headings. Only the items
 Return only the CSV (no commentary).
 """
 
@@ -53,5 +54,3 @@ Return only the CSV (no commentary).
                 writer.writerow(clean_row)
 
     print(f"✅ Menu successfully saved to {output_file}")
-
-
