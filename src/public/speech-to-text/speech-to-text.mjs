@@ -1,25 +1,28 @@
 /**
- * Wire up SpeechRecognition and the page controls.
- * Expects the following elements (by id) if present:
- *   - #start  : button to toggle start/stop listening
- *   - #done   : button to stop and download transcript
- *   - #output : <p>/<div> to show live transcript
+ * Initializes and wires up SpeechRecognition with page controls.
  *
- * @param {Window}  win
- * @param {Document} doc
- * @returns
- *   startListening: Function,
- *   stopListening: Function,
- *   downloadTranscript: Function,
- *   getTranscript: Function,
- *   _getRecognition: Function
+ * Expects the following DOM elements (by ID) if present:
+ *   - `#start`  : Button to toggle start/stop listening
+ *   - `#done`   : Button to stop listening and download transcript
+ *   - `#output` : Element (<p> or <div>) to display live transcript
+ *
+ * This function sets up a continuous SpeechRecognition instance, manages
+ * listening state, silence detection, and allows downloading the transcript
+ * as a text file. It also attaches event listeners to the `start` and `done`
+ * buttons if present.
+ *
+ * @param {Window} [win=window] - The global window object; defaults to current window.
+ * @param {Document} [doc=document] - The document object; defaults to current document.
+ * @returns {Object} An object containing helper functions:
+ * @returns {function(): void} return.startListening - Starts speech recognition.
+ * @returns {function(): void} return.stopListening - Stops speech recognition.
+ * @returns {function(): void} return.downloadTranscript - Downloads the recognized transcript as a text file.
+ * @returns {function(): string} return.getTranscript - Returns the current transcript as a string.
+ * @returns {function(): SpeechRecognition} return._getRecognition - Returns the underlying SpeechRecognition instance (useful for advanced testing/mocking).
+ *
+ * @throws {Error} Throws if the browser does not support SpeechRecognition (though in this implementation, it fails silently and returns no-op functions).
  */
 
-/**
- * Wires the page: attaches event listeners and sets up SpeechRecognition.
- * @param {Window} win
- * @param {Document} doc
- */
 export function wirePage(win = window, doc = document) {
   // === DOM ELEMENTS ===
   const startBtn = doc.getElementById("start");
@@ -50,7 +53,10 @@ export function wirePage(win = window, doc = document) {
   let fullTranscript = ""; // Holds the entire recognized text
 
   /**
-   * Resets silence detection timer (10 seconds of inactivity stops listening)
+   * Resets the silence detection timer.
+   * If no speech is detected for 10 seconds, automatically stops listening.
+   * @private
+   * @function
    */
   function resetSilenceTimer() {
     if (silenceTimer) clearTimeout(silenceTimer);
@@ -61,7 +67,11 @@ export function wirePage(win = window, doc = document) {
   }
 
   /**
-   * Starts the speech recognition process
+   * Starts the speech recognition process.
+   * Updates the start button text and output element, and resets silence timer.
+   * Calling this when already listening is safe (idempotent).
+   * @function
+   * @returns {void}
    */
   function startListening() {
     try {
@@ -70,13 +80,16 @@ export function wirePage(win = window, doc = document) {
       if (startBtn) startBtn.textContent = "Stop Listening";
       if (output) output.textContent = "Listening...";
       resetSilenceTimer();
-    } catch (e) {
+    } catch {
       // Some engines throw if already started; ignore for idempotence.
     }
   }
 
   /**
-   * Stops the speech recognition process
+   * Stops the speech recognition process.
+   * Updates the start button text and clears silence timer.
+   * @function
+   * @returns {void}
    */
   function stopListening() {
     try {
@@ -92,7 +105,12 @@ export function wirePage(win = window, doc = document) {
   }
 
   /**
-   * Handles recognized speech input (both interim and final)
+   * Handles speech recognition results.
+   * Updates the full transcript and the output element.
+   * Automatically stops listening if the user says "done".
+   * @private
+   * @function
+   * @param {SpeechRecognitionEvent} event - The speech recognition result event.
    */
   recognition.onresult = (event) => {
     const transcript = Array.from(event.results)
@@ -113,26 +131,36 @@ export function wirePage(win = window, doc = document) {
   };
 
   /**
-   * Called when recognition ends (manually or automatically)
+   * Called when speech recognition ends.
+   * Restarts recognition if listening was active; otherwise, marks stopped state in output.
+   * @private
+   * @function
    */
   recognition.onend = () => {
     if (isListening) {
       // Restart if ended unexpectedly
-      try {
-        recognition.start();
-      } catch {}
+      recognition.start();
     } else {
       // console.log("Stopped listening.");
       if (output) output.textContent += " [Stopped]";
     }
   };
-
+  /**
+   * Handles speech recognition errors.
+   * Logs the error to the console.
+   * @private
+   * @function
+   * @param {SpeechRecognitionError} event - The speech recognition error event.
+   */
   recognition.onerror = (event) => {
-    // console.error("Speech recognition error:", event.error);
+    console.error("Speech recognition error:", event.error);
   };
 
   /**
-   * Downloads the transcript as a text (.txt) file
+   * Downloads the current transcript as a text file.
+   * If the transcript is empty, shows an alert instead.
+   * @function
+   * @returns {void}
    */
   function downloadTranscript() {
     if (!fullTranscript.trim()) {
