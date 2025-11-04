@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { allAsync, getAsync, execAsync } from "./sqlite3-async.mjs";
+import { allAsync, getAsync, execAsync, runAsync } from "./sqlite3-async.mjs";
 
 export const db = new sqlite3.Database(":memory:");
 
@@ -103,17 +103,20 @@ export async function getHistory(id) {
 export async function logMessage(id, role, content) {
   const role_info = await getAsync(
     db,
-    `SELECT id from roles WHERE name="${role}"`,
+    `SELECT id FROM roles WHERE name = ?`,
+    [role]
   );
   if (role_info === undefined)
     throw new RangeError(
-      `"${role}" is not a valid role (must be one of "system", "user", or "assistant")`,
+      `"${role}" is not a valid role (must be one of "system", "user", or "assistant")`
     );
+  
   await validateId(id);
 
-  await execAsync(
+  await runAsync(
     db,
-    `INSERT INTO messages (chat_id, role_id, content) VALUES (${id}, ${role_info.id}, "${content}")`,
+    `INSERT INTO messages (chat_id, role_id, content) VALUES (?, ?, ?)`,
+    [Number(id), role_info.id, String(content)]
   );
 }
 
