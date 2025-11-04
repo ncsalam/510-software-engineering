@@ -42,7 +42,8 @@ User → Browser UI → STT Module → Server → Ollama LLM → Database → Ol
 ### Components
 
 #### Frontend
-- **`index.html`**: Main interface with buttons, output, and file upload.  
+- **`index.html`**: Main interface with buttons, output, and file upload.
+- **`llm_response.mjs`**: Serves as a pipeline for speech-to-text to LLM to text-to-speech components.
 - **`speech-to-text.mjs`**: Captures and transcribes speech.  
 - **`text-to-speech.mjs`**: Converts text to spoken audio.  
 - **`style.css`**: Styles buttons, output, and audio icons.  
