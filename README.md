@@ -18,9 +18,9 @@ A web application that allows users to speak, transcribes their speech to text, 
 1. [Project Overview](#project-overview)
 2. [Architecture](#architecture)
 3. [Setup & Installation](#setup--installation)
-4. [Quick Start](#quick-start)
-5. [Testing](#testing)
-6. [Troubleshooting](#troubleshooting)
+4. [Testing](#testing)
+5. [Troubleshooting](#troubleshooting)
+6. [Contributing & Code of Conduct](#contributing--code-of-conduct)
 
 ---
 
@@ -44,66 +44,47 @@ User → Browser UI → STT Module → Server → Ollama LLM → Server → Brow
 #### Frontend
 
 - **`index.html`**: Main interface with buttons, output, and temporary file upload.
-- **`speech-to-text.js`**: Captures and processes speech.
-- **`text-to-speech.js`**: Converts text into spoken audio.
-- **`voice.js`**: Helper functions for starting/stopping recognition, updating transcripts, and downloading them.
+- **`speech-to-text.mjs`**: Captures and processes speech.
+- **`text-to-speech.mjs`**: Converts text into spoken audio.
 - **`style.css`**: Styles buttons, output boxes, and audio icon.
+- **`preprocess.mjs`**: Handles preprocessing from text to natural spoken language.
 
-#### Backend
+#### Backend Server
 
 - **`server.js`**: Express server serving static files and handling `/api/send`.
 - **`ollama-interface.mjs`**: Interacts with Ollama models (installation, chat requests, warm-up).
 - **`terminal-helper.mjs`**: Optional terminal styling for server logs.
+- **`chat-db.mjs`**:
+- **`sqlite3-async-mjs`**:
+- **`validation.mjs`**:
 
-#### Testing
+#### Backend Database
 
-- **`voice.test.js`**: Unit tests for voice helpers.
-- **`stt.test.js`**: DOM + STT integration tests.
+- **`Main.py`**:
+- **`files_tools.py`**:
+- **`html_tools.py`**:
+- **`google_tools.py`**:
+- **`menu_recreator.py`**:
+- **`restaurants_raleigh.db`**:
+- **`sqlite_connection.py`**:
+
+- #### Testing
+
+- **`TTS.test.js`**: DOM + TTS integration tests.
+- **`STT.test.js`**: DOM + STT integration tests.
+- **`api.test.mjs`**:
+- **`chat-db.test.mjs`**:
+- **`mock-ollama.mjs`**:
+- **`ollama-interface.mjs`**:
+- **`sqlite3-async.test.mjs`**:
+- **`terminal-helper.mjs`**:
+- **`llm_response.test.js`**:
 
 ---
 
 ## Setup & Installation
 
-See `INSTALL.md` for detailed installation steps.
-
-## Quick Start
-
-**Frontend**
-
-- Start Listening: Begin capturing voice input
-- Done / Save Trascript: Stop Listening and optionally download trascript
-- Read Text: Temporarily upload a .txt file for Text-To-Speech
-
-**Flow Diagram**
-
-flowchart LR
-A[User speaks] --> B[STT Module (speech-to-text.js)]
-B --> C[Server /api/send]
-C --> D[Ollama LLM]
-D --> C
-C --> E[Browser UI: display response]
-E --> F[TTS Module (text-to-speech.js)]
-F --> A
-
-### Development
-
-**File Structure**
-
-src/
-└─ public/
-├─ index.html
-├─ style.css
-├─ speech-to-text/
-│ └─ speech-to-text.js
-└─ text-to-speech/
-└─ text-to-speech.js
-server/
-├─ server.js
-├─ ollama-interface.mjs
-└─ terminal-helper.mjs
-tests/
-├─ voice.test.js
-└─ stt.test.js
+See [INSTALL.md](INSTALL.md) for detailed installation steps.
 
 ## Testing
 
@@ -113,13 +94,6 @@ Run all tests with Jest:
 npm run test
 ```
 
-Test coverage includes:
-
-- STT module behavior (start/stop listening, updating transcript)
-- Transcript download
-- Button state changes and silence timer behavior
-- DOM integration for speech recognition
-
 ## Troubleshooting
 
 - Ollama errors: Ensure Ollama is installed and the specified model is available.
@@ -127,3 +101,9 @@ Test coverage includes:
 - Transcript download fails: Ensure the transcript is not empty.
 
 Please fill out form to request help or report a bug https://forms.gle/UN1Nj76CAN9gSitY6
+
+## Contributing & Code of Conduct
+
+See [CONTRIBUTING](CONTRIBUTING.md) before contributing to this project.
+See [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) when contributing to this project.
+
