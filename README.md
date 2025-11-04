@@ -9,7 +9,7 @@
 
 # Uncle Tony Voice App
 
-A web application that allows users to speak, transcribes their speech to text, sends prompts to an Ollama LLM, and optionally reads text aloud using Text-to-Speech (TTS).
+A web application that allows users to speak, transcribes their speech to text, sends prompts to an Ollama LLM, and reads text aloud using Text-to-Speech (TTS).
 
 ---
 
@@ -37,7 +37,7 @@ A web application that allows users to speak, transcribes their speech to text, 
 
 ## Architecture
 
-User → Browser UI → STT Module → Server → Ollama LLM → Server → Browser UI → TTS Module
+User → Browser UI → STT Module → Server → Ollama LLM → Database → Ollama LLM → Server →TTT Module → Browser UI
 
 ### Components
 
