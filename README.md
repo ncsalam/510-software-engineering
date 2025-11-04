@@ -42,43 +42,40 @@ User → Browser UI → STT Module → Server → Ollama LLM → Server → Brow
 ### Components
 
 #### Frontend
-
-- **`index.html`**: Main interface with buttons, output, and temporary file upload.
-- **`speech-to-text.mjs`**: Captures and processes speech.
-- **`text-to-speech.mjs`**: Converts text into spoken audio.
-- **`style.css`**: Styles buttons, output boxes, and audio icon.
-- **`preprocess.mjs`**: Handles preprocessing from text to natural spoken language.
+- **`index.html`**: Main interface with buttons, output, and file upload.  
+- **`speech-to-text.mjs`**: Captures and transcribes speech.  
+- **`text-to-speech.mjs`**: Converts text to spoken audio.  
+- **`style.css`**: Styles buttons, output, and audio icons.  
+- **`preprocess.mjs`**: Prepares text for natural speech output.  
 
 #### Backend Server
-
-- **`server.js`**: Express server serving static files and handling `/api/send`.
-- **`ollama-interface.mjs`**: Interacts with Ollama models (installation, chat requests, warm-up).
-- **`terminal-helper.mjs`**: Optional terminal styling for server logs.
-- **`chat-db.mjs`**:
-- **`sqlite3-async-mjs`**:
-- **`validation.mjs`**:
+- **`server.js`**: Express server serving frontend and `/api/send`.  
+- **`ollama-interface.mjs`**: Handles Ollama AI requests.  
+- **`terminal-helper.mjs`**: Terminal logging utilities.  
+- **`chat-db.mjs`**: Manages chat storage.  
+- **`sqlite3-async-mjs`**: Async SQLite wrapper.  
+- **`validation.mjs`**: Input and data validation utilities.  
 
 #### Backend Database
+- **`Main.py`**: Main backend orchestration.  
+- **`files_tools.py`**: File operations.  
+- **`html_tools.py`**: HTML parsing/generation.  
+- **`google_tools.py`**: Google API integration.  
+- **`menu_recreator.py`**: Recreates restaurant menus.  
+- **`restaurants_raleigh.db`**: Restaurant database.  
+- **`sqlite_connection.py`**: SQLite connection management.  
 
-- **`Main.py`**:
-- **`files_tools.py`**:
-- **`html_tools.py`**:
-- **`google_tools.py`**:
-- **`menu_recreator.py`**:
-- **`restaurants_raleigh.db`**:
-- **`sqlite_connection.py`**:
+#### Testing
+- **`TTS.test.js`**: Text-to-Speech tests.  
+- **`STT.test.js`**: Speech-to-Text tests.  
+- **`api.test.mjs`**: API endpoint tests.  
+- **`chat-db.test.mjs`**: Chat DB tests.  
+- **`mock-ollama.mjs`**: Ollama mock for tests.  
+- **`ollama-interface.mjs`**: Ollama interface tests.  
+- **`sqlite3-async.test.mjs`**: Async SQLite tests.  
+- **`terminal-helper.mjs`**: Terminal helper tests.  
+- **`llm_response.test.js`**: Language model response tests.  
 
-- #### Testing
-
-- **`TTS.test.js`**: DOM + TTS integration tests.
-- **`STT.test.js`**: DOM + STT integration tests.
-- **`api.test.mjs`**:
-- **`chat-db.test.mjs`**:
-- **`mock-ollama.mjs`**:
-- **`ollama-interface.mjs`**:
-- **`sqlite3-async.test.mjs`**:
-- **`terminal-helper.mjs`**:
-- **`llm_response.test.js`**:
 
 ---
 
