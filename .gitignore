@@ -3,3 +3,5 @@ page.file
 out.txt
 coverage
 node_modules
+.venv
+__pycache__
