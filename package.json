@@ -15,6 +15,7 @@
     "format:fix": "prettier --write ."
   },
   "devDependencies": {
+    "@jest/globals": "^30.2.0",
     "cloc": "^2.6.0-cloc",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
