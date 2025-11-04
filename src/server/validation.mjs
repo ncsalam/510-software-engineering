@@ -1,3 +1,9 @@
+/**
+ * a set of functions for validating inputs to the API.
+ *
+ * @module server/validation
+ */
+
 import express from "express";
 import { body, validationResult } from "express-validator";
 import { chatExists } from "./chat-db.mjs";
@@ -9,8 +15,7 @@ import { chatExists } from "./chat-db.mjs";
  * @param {string} field - field name
  * @returns validation chain
  */
-export const validateField = (field) =>
-  body(field).notEmpty().withMessage(`'${field}' field is missing.`);
+export const validateField = (field) => body(field).notEmpty().withMessage(`'${field}' field is missing.`);
 
 /**
  * express middleware for handling express-validator errors
@@ -39,9 +44,7 @@ export const handleValidationErrors = (req, res, next) => {
  */
 export const validateChatExists = async (req, res, next) => {
   if (!(await chatExists(req.params.id))) {
-    res
-      .status(404)
-      .json({ errors: [`chat "${req.params.id}" does not exist.`] });
+    res.status(404).json({ errors: [`chat "${req.params.id}" does not exist.`] });
     return;
   }
   next();

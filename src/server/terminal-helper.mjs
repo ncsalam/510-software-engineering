@@ -1,8 +1,9 @@
-/*
-a set of functions for prettifying terminal output.
-
-this is entirely unnecessary, but I like pretty terminal output :)
-*/
+/**
+ * a set of functions for prettifying terminal output.
+ * this is entirely unnecessary, but I like pretty terminal output :)
+ *
+ * @module server/terminal-helper
+ */
 
 /**
  * enum for color codes.
@@ -23,7 +24,7 @@ export const COLORS = {
  * use ANSI codes to alter the color of a string for printing to the terminal.
  * for a list of codes, see https://gist.github.com/ConnerWill/d4b6c776b509add763e17f9f113fd25b
  * @param {string} s - string to apply color to
- * @param {{fg?: number = 9, bg?: number = 9, bold?: bool = true}} [options] - colors to apply
+ * @param {Object} [options] - colors to apply
  * @returns {string}
  */
 export function color(s, options = {}) {
