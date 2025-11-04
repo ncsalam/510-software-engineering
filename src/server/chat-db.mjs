@@ -1,6 +1,4 @@
 import sqlite3 from "sqlite3";
-import fs from "node:fs";
-import path from "node:path";
 import { allAsync, getAsync, execAsync, runAsync } from "./sqlite3-async.mjs";
 
 export const db = new sqlite3.Database(":memory:");
