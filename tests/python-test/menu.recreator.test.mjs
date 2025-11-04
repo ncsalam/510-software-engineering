@@ -24,15 +24,13 @@ menu_recreator.client = _Client(base64.b64decode("${b64}").decode("utf-8"))
 `;
 }
 
-function csvLinesOnly(out) {
-  // filter out log lines (e.g., "✅ Menu successfully saved to ...")
-  return out.replace(/\r/g, '').split('\n').filter(l => l.includes(',') && !/successfully saved/i.test(l));
-}
+const csvLinesOnly = (out) =>
+  out.replace(/\r/g, '').split('\n').filter(l => l.includes(',') && !/successfully saved/i.test(l));
 
 test('[core] recreate_menu writes simple CSV', async () => {
   const { dir } = workspace();
   const code = `
-${stubClientCSV('Burger,$10,Juicy patty\\nFries,$4,Crispy')}
+${stubClientCSV('Burger,$10,Juicy patty\nFries,$4,Crispy')}
 import menu_recreator
 out="menu.csv"
 menu_recreator.recreate_menu("RAW", out)
@@ -45,7 +43,7 @@ print(open(out,"r",encoding="utf-8").read())
 test('[edge] recreate_menu skips blank lines in model output', async () => {
   const { dir } = workspace();
   const code = `
-${stubClientCSV('Burger,$10,Good\\n\\nFries,$4,Ok\\n')}
+${stubClientCSV('Burger,$10,Good\n\nFries,$4,Ok\n')}
 import menu_recreator, json
 out="m.csv"
 menu_recreator.recreate_menu("RAW", out)
@@ -67,5 +65,18 @@ menu_recreator.recreate_menu("RAW", out)
 print(open(out,"r",encoding="utf-8").read().strip())
 `;
   const out = await runPy(['-c', code], { cwd: dir });
-  expect(out.trim().split('\n').pop()).toBe('"Fish, and Chips","$12","Crispy, flaky"');
+  expect(out.trim().split('\n').pop()).toBe('"Fish, and Chips",$12,"Crispy, flaky"');
+});
+
+test('[csv] description with quotes is escaped correctly', async () => {
+  const { dir } = workspace();
+  const code = `
+${stubClientCSV('Sauce,$5,Delicious "house" sauce')}
+import menu_recreator
+out="menu.csv"
+menu_recreator.recreate_menu("RAW", out)
+print(open(out,"r",encoding="utf-8").read().strip())
+`;
+  const out = await runPy(['-c', code], { cwd: dir });
+  expect(out.trim().split('\n').pop()).toBe('Sauce,$5,"Delicious ""house"" sauce"');
 });

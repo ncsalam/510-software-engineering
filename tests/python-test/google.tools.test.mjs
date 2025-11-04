@@ -59,7 +59,6 @@ except Exception:
   print("YES")
 `;
   const out = await runPy(['-c', code], { cwd: dir });
-// code prints status code first; assert suffix
   expect(out.trim().endsWith('YES')).toBe(true);
 });
 
@@ -93,9 +92,27 @@ def post(url, headers=None, data=None):
   return types.SimpleNamespace(json=lambda: {"places":[]})
 google_tools.requests = types.SimpleNamespace(post=post)
 google_tools.restaurant_search(["Sushi","BBQ"], "Raleigh")
-print("\\n".join(seen))
+print("\\n".join(seen).replace("\\\\n","\\n"))
 `;
   const out = await runPy(['-c', code], { cwd: dir });
-  const lines = out.replace(/\\r/g, '').split('\n').filter(Boolean);
+  const lines = out.replace(/\r/g, '').split('\n').filter(Boolean);
   expect(lines).toEqual(['Sushi Restaurants in Raleigh', 'BBQ Restaurants in Raleigh']);
+});
+
+test('[edge] send_payload returns NONE when items missing', async () => {
+  const { dir } = workspace();
+  const code = `
+import google_tools, types
+class R:
+  def __init__(self): self.status_code=200
+  def json(self): return {}            # no "items" key
+google_tools.requests = types.SimpleNamespace(get=lambda url, params: R())
+try:
+    link = google_tools.send_payload({"q":"x"})
+    print("NONE" if not link else "HAS")
+except Exception:
+    print("NONE")
+`;
+  const out = await runPy(['-c', code], { cwd: dir });
+  expect(out.trim().split('\n').pop()).toBe('NONE');
 });
