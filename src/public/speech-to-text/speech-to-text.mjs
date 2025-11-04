@@ -1,16 +1,16 @@
 /**
  * Initializes and wires up SpeechRecognition with page controls.
- *
+ * 
  * Expects the following DOM elements (by ID) if present:
  *   - `#start`  : Button to toggle start/stop listening
  *   - `#done`   : Button to stop listening and download transcript
  *   - `#output` : Element (<p> or <div>) to display live transcript
- *
+ * 
  * This function sets up a continuous SpeechRecognition instance, manages
  * listening state, silence detection, and allows downloading the transcript
  * as a text file. It also attaches event listeners to the `start` and `done`
  * buttons if present.
- *
+ * 
  * @param {Window} [win=window] - The global window object; defaults to current window.
  * @param {Document} [doc=document] - The document object; defaults to current document.
  * @returns {Object} An object containing helper functions:
@@ -19,9 +19,10 @@
  * @returns {function(): void} return.downloadTranscript - Downloads the recognized transcript as a text file.
  * @returns {function(): string} return.getTranscript - Returns the current transcript as a string.
  * @returns {function(): SpeechRecognition} return._getRecognition - Returns the underlying SpeechRecognition instance (useful for advanced testing/mocking).
- *
+ * 
  * @throws {Error} Throws if the browser does not support SpeechRecognition (though in this implementation, it fails silently and returns no-op functions).
  */
+
 
 export function wirePage(win = window, doc = document) {
   // === DOM ELEMENTS ===
