@@ -13,7 +13,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "jsdoc": "node_modules/.bin/jsdoc -c jsdoc.json"
+    "jsdoc": "npx jsdoc -c jsdoc.json"
   },
   "devDependencies": {
     "@jest/globals": "^30.2.0",
