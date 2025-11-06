@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>menu_recreator module &#8212; Local Restaurant Meun Database  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="run_tests module" href="run_tests.html" />
+    <link rel="prev" title="html_tools module" href="html_tools.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-menu_recreator">
+<span id="menu-recreator-module"></span><h1>menu_recreator module<a class="headerlink" href="#module-menu_recreator" title="Link to this heading">¶</a></h1>
+<p>LLM-powered menu reconstruction utilities.</p>
+<p>This module asks an OpenAI chat model to extract structured menu items (Dish, Price, Description)
+from raw text snapshots and writes a clean CSV with exactly three columns (no header).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="menu_recreator.recreate_menu">
+<span class="sig-prename descclassname"><span class="pre">menu_recreator.</span></span><span class="sig-name descname"><span class="pre">recreate_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#menu_recreator.recreate_menu" title="Link to this definition">¶</a></dt>
+<dd><p>Extract a CSV of menu items from raw page text using an LLM.</p>
+<p>Under the hood:
+- Builds a carefully-scoped prompt instructing the model to return CSV only,</p>
+<blockquote>
+<div><p>with three columns in each row: Dish, Price, Description (no header).</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Calls the OpenAI Chat Completions API and captures the first message content.</p></li>
+<li><p>Normalizes line-endings and streams rows through <cite>csv.reader</cite>.</p></li>
+<li><p>Drops obvious “section” and accidental “header” lines to keep the CSV clean.</p></li>
+<li><p>Ensures each written row has exactly 3 cells.</p></li>
+<li><p>Writes the result to <cite>output_file</cite> and prints a success message.</p></li>
+</ul>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>raw_text<span class="classifier">str</span></dt><dd><p>The cleaned text snapshot harvested from a restaurant webpage.</p>
+</dd>
+<dt>output_file<span class="classifier">str | os.PathLike</span></dt><dd><p>Target path (typically under <cite>Menu_CSVs/</cite>).</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>Writes a CSV file to disk.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Local Restaurant Meun Database</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">database</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Main.html">Main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_query.html">database_query module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="google_tools.html">google_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html_tools.html">html_tools module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">menu_recreator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_tests.html">run_tests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html">sqlite_connection module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">database</a><ul>
+      <li>Previous: <a href="html_tools.html" title="previous chapter">html_tools module</a></li>
+      <li>Next: <a href="run_tests.html" title="next chapter">run_tests module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, ejrezek.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/menu_recreator.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

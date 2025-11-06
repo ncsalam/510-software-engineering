@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>database &#8212; Local Restaurant Meun Database  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Main module" href="Main.html" />
+    <link rel="prev" title="Database documentation" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="database">
+<h1>database<a class="headerlink" href="#database" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Main.html">Main module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Main.html#Main.create_menu"><code class="docutils literal notranslate"><span class="pre">create_menu()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Main.html#Main.create_restaurant_list"><code class="docutils literal notranslate"><span class="pre">create_restaurant_list()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Main.html#Main.create_url_list"><code class="docutils literal notranslate"><span class="pre">create_url_list()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Main.html#Main.extract_website_content"><code class="docutils literal notranslate"><span class="pre">extract_website_content()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Main.html#Main.make_csv_folder"><code class="docutils literal notranslate"><span class="pre">make_csv_folder()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Main.html#Main.make_website_content_folder"><code class="docutils literal notranslate"><span class="pre">make_website_content_folder()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Main.html#Main.open_restaurant_list"><code class="docutils literal notranslate"><span class="pre">open_restaurant_list()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Main.html#Main.open_url_list"><code class="docutils literal notranslate"><span class="pre">open_url_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database_query.html">database_query module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database_query.html#database_query.local_search"><code class="docutils literal notranslate"><span class="pre">local_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_query.html#database_query.query"><code class="docutils literal notranslate"><span class="pre">query()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="google_tools.html">google_tools module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="google_tools.html#google_tools.build_payload"><code class="docutils literal notranslate"><span class="pre">build_payload()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="google_tools.html#google_tools.restaurant_search"><code class="docutils literal notranslate"><span class="pre">restaurant_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="google_tools.html#google_tools.send_payload"><code class="docutils literal notranslate"><span class="pre">send_payload()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="html_tools.html">html_tools module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="html_tools.html#html_tools.extract_content"><code class="docutils literal notranslate"><span class="pre">extract_content()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="menu_recreator.html">menu_recreator module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="menu_recreator.html#menu_recreator.recreate_menu"><code class="docutils literal notranslate"><span class="pre">recreate_menu()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="run_tests.html">run_tests module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sqlite_connection.html">sqlite_connection module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html#sqlite_connection.connect_db"><code class="docutils literal notranslate"><span class="pre">connect_db()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html#sqlite_connection.create_table"><code class="docutils literal notranslate"><span class="pre">create_table()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html#sqlite_connection.insert_data"><code class="docutils literal notranslate"><span class="pre">insert_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html#sqlite_connection.process_all_files"><code class="docutils literal notranslate"><span class="pre">process_all_files()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html#sqlite_connection.read_file_lines"><code class="docutils literal notranslate"><span class="pre">read_file_lines()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html#sqlite_connection.upload_data"><code class="docutils literal notranslate"><span class="pre">upload_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Local Restaurant Meun Database</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Main.html">Main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_query.html">database_query module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="google_tools.html">google_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html_tools.html">html_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu_recreator.html">menu_recreator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_tests.html">run_tests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html">sqlite_connection module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Database documentation</a></li>
+      <li>Next: <a href="Main.html" title="next chapter">Main module</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, ejrezek.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/modules.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

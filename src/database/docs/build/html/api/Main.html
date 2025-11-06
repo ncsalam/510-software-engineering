@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Main module &#8212; Local Restaurant Meun Database  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="database_query module" href="database_query.html" />
+    <link rel="prev" title="database" href="modules.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-Main">
+<span id="main-module"></span><h1>Main module<a class="headerlink" href="#module-Main" title="Link to this heading">¶</a></h1>
+<p>Pipeline entry point for rebuilding local restaurant menus.</p>
+<p>This script orchestrates the end-to-end flow:
+1) Ensure <cite>Restaurant_List.txt</cite> exists (or prompt the user and create it).
+2) Ensure <cite>URL_List.txt</cite> exists (or query and create it).
+3) Fetch and store cleaned text snapshots for each restaurant page.
+4) Ask the LLM to reconstruct menus from snapshots and write CSVs.
+5) Load all CSVs into a local SQLite database via <cite>sqlite_connection.upload_data</cite>.</p>
+<p>Folders &amp; files under <cite>relative_path</cite> (default <a href="#id1"><span class="problematic" id="id2">`</span></a>srcdatabase`):
+- Raw_Website_Content: text snapshots per restaurant
+- Menu_CSVs          : LLM-recreated menu rows as CSV (no header)
+- Restaurant_List.txt   : comma-separated restaurant names
+- URL_List.txt          : comma-separated source URLs</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="Main.create_menu">
+<span class="sig-prename descclassname"><span class="pre">Main.</span></span><span class="sig-name descname"><span class="pre">create_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Main.create_menu" title="Link to this definition">¶</a></dt>
+<dd><p>Convert each text snapshot into a structured CSV via the LLM.</p>
+<p>Under the hood:
+- Iterates <cite>content_folder_path</cite> for <cite>.txt</cite> files.
+- Reads the snapshot text and calls <a class="reference internal" href="menu_recreator.html#menu_recreator.recreate_menu" title="menu_recreator.recreate_menu"><code class="xref py py-func docutils literal notranslate"><span class="pre">menu_recreator.recreate_menu()</span></code></a>.
+- Sleeps briefly to be polite and to avoid hammering the API.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Main.create_restaurant_list">
+<span class="sig-prename descclassname"><span class="pre">Main.</span></span><span class="sig-name descname"><span class="pre">create_restaurant_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Main.create_restaurant_list" title="Link to this definition">¶</a></dt>
+<dd><p>Prompt for cuisines &amp; location and generate <cite>Restaurant_List.txt</cite>.</p>
+<p>Uses <a class="reference internal" href="google_tools.html#google_tools.restaurant_search" title="google_tools.restaurant_search"><code class="xref py py-func docutils literal notranslate"><span class="pre">google_tools.restaurant_search()</span></code></a> to build a de-duplicated list of
+restaurant names and saves it under <cite>relative_path</cite>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Main.create_url_list">
+<span class="sig-prename descclassname"><span class="pre">Main.</span></span><span class="sig-name descname"><span class="pre">create_url_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Main.create_url_list" title="Link to this definition">¶</a></dt>
+<dd><p>Resolve each restaurant into a likely menu URL and save <cite>URL_List.txt</cite>.</p>
+<p>Under the hood:
+- For each restaurant name, calls Google Custom Search for a <cite>{name}-Raleigh Menu</cite> query.
+- Keeps only the top link for speed/cost.
+- Writes a comma-separated list of URLs for later reuse.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Main.extract_website_content">
+<span class="sig-prename descclassname"><span class="pre">Main.</span></span><span class="sig-name descname"><span class="pre">extract_website_content</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Main.extract_website_content" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch, clean, and save text snapshots for each URL in <cite>url_list</cite>.</p>
+<p>Writes files named after the corresponding restaurant under <cite>content_folder_path</cite>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Main.make_csv_folder">
+<span class="sig-prename descclassname"><span class="pre">Main.</span></span><span class="sig-name descname"><span class="pre">make_csv_folder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Main.make_csv_folder" title="Link to this definition">¶</a></dt>
+<dd><p>Create the output CSV folder if needed (<cite>csv_folder_path</cite>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Main.make_website_content_folder">
+<span class="sig-prename descclassname"><span class="pre">Main.</span></span><span class="sig-name descname"><span class="pre">make_website_content_folder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Main.make_website_content_folder" title="Link to this definition">¶</a></dt>
+<dd><p>Create the snapshot folder for raw website content if needed.</p>
+<p>Uses the path configured in <cite>content_folder_path</cite>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Main.open_restaurant_list">
+<span class="sig-prename descclassname"><span class="pre">Main.</span></span><span class="sig-name descname"><span class="pre">open_restaurant_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Main.open_restaurant_list" title="Link to this definition">¶</a></dt>
+<dd><p>Load <cite>Restaurant_List.txt</cite>, creating it on demand if missing.</p>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>list[str]</dt><dd><p>The restaurant names parsed from the file.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Main.open_url_list">
+<span class="sig-prename descclassname"><span class="pre">Main.</span></span><span class="sig-name descname"><span class="pre">open_url_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Main.open_url_list" title="Link to this definition">¶</a></dt>
+<dd><p>Load <cite>URL_List.txt</cite>, creating it on demand if missing.</p>
+<section id="id3">
+<h2>Returns<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>list[str]</dt><dd><p>A list of candidate menu-page URLs (comma separated in the file).</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Local Restaurant Meun Database</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">database</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_query.html">database_query module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="google_tools.html">google_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html_tools.html">html_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu_recreator.html">menu_recreator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_tests.html">run_tests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html">sqlite_connection module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">database</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">database</a></li>
+      <li>Next: <a href="database_query.html" title="next chapter">database_query module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, ejrezek.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/Main.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

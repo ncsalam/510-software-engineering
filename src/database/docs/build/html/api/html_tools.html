@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>html_tools module &#8212; Local Restaurant Meun Database  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="menu_recreator module" href="menu_recreator.html" />
+    <link rel="prev" title="google_tools module" href="google_tools.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-html_tools">
+<span id="html-tools-module"></span><h1>html_tools module<a class="headerlink" href="#module-html_tools" title="Link to this heading">¶</a></h1>
+<p>Minimal HTML-to-text extraction utilities for menu rebuilding.</p>
+<p>This module fetches a page, strips non-content tags, and writes a plain-text
+snapshot to disk for later downstream parsing.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="html_tools.extract_content">
+<span class="sig-prename descclassname"><span class="pre">html_tools.</span></span><span class="sig-name descname"><span class="pre">extract_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#html_tools.extract_content" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch and save a cleaned, plain-text snapshot of a web page.</p>
+<p>Under the hood:
+- Downloads the URL and raises on HTTP errors.
+- Parses HTML with BeautifulSoup and removes <cite>script</cite>, <cite>style</cite>, and <cite>noscript</cite> tags.
+- Extracts visible text, normalizes whitespace, and splits on line breaks.
+- Writes the text to <cite>output_file</cite> <strong>only</strong> if <cite>min_lines &lt; line_count &lt; max_lines</cite> to avoid</p>
+<blockquote>
+<div><p>extremely short or extremely noisy pages.</p>
+</div></blockquote>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>url<span class="classifier">str</span></dt><dd><p>The target page to fetch.</p>
+</dd>
+<dt>output_file<span class="classifier">str | os.PathLike</span></dt><dd><p>Path for the text snapshot to write.</p>
+</dd>
+<dt>min_lines<span class="classifier">int, optional</span></dt><dd><p>Minimum number of non-empty lines required to write the file, by default 120.</p>
+</dd>
+<dt>max_lines<span class="classifier">int, optional</span></dt><dd><p>Maximum number of lines allowed, by default 10000.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>Writes a file and prints a short status message.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Local Restaurant Meun Database</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">database</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Main.html">Main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_query.html">database_query module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="google_tools.html">google_tools module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">html_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu_recreator.html">menu_recreator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_tests.html">run_tests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html">sqlite_connection module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">database</a><ul>
+      <li>Previous: <a href="google_tools.html" title="previous chapter">google_tools module</a></li>
+      <li>Next: <a href="menu_recreator.html" title="next chapter">menu_recreator module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, ejrezek.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/html_tools.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

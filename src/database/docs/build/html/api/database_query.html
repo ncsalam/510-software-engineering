@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>database_query module &#8212; Local Restaurant Meun Database  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="google_tools module" href="google_tools.html" />
+    <link rel="prev" title="Main module" href="Main.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-database_query">
+<span id="database-query-module"></span><h1>database_query module<a class="headerlink" href="#module-database_query" title="Link to this heading">¶</a></h1>
+<p>Database querying helpers for the restaurant menu pipeline.</p>
+<p>This module provides:
+- A thin wrapper around the Google Places Text Search API to collect restaurant names.
+- A helper to query the local SQLite database for menu rows matching a list of restaurants.</p>
+<p>Environment:
+- PLACES_API_KEY must be set for Google Places API access.
+- The SQLite database is expected at <cite>src/database/restaurants_raleigh.db</cite> (preferred)</p>
+<blockquote>
+<div><p>or <cite>./restaurants_raleigh.db</cite> as a fallback.</p>
+</div></blockquote>
+<dl class="py function">
+<dt class="sig sig-object py" id="database_query.local_search">
+<span class="sig-prename descclassname"><span class="pre">database_query.</span></span><span class="sig-name descname"><span class="pre">local_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#database_query.local_search" title="Link to this definition">¶</a></dt>
+<dd><p>Look up restaurant names via the Google Places Text Search API.</p>
+<p>Under the hood:
+- Builds a POST request to <cite>https://places.googleapis.com/v1/places:searchText</cite></p>
+<blockquote>
+<div><p>with the provided free-form query string.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Requests only the <cite>places.displayName</cite> field to reduce payload size.</p></li>
+<li><p>Parses the response and collects the visible place names.</p></li>
+<li><p>Delegates to <a class="reference internal" href="#database_query.query" title="database_query.query"><code class="xref py py-func docutils literal notranslate"><span class="pre">query()</span></code></a> to fetch matching menu rows from SQLite.</p></li>
+</ul>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>query_string<span class="classifier">str</span></dt><dd><p>A human-readable search like “Chinese food in Raleigh”.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>list[tuple]</dt><dd><p>Rows from the <cite>local_menu</cite> table for any matching restaurant names.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="database_query.query">
+<span class="sig-prename descclassname"><span class="pre">database_query.</span></span><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#database_query.query" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch menu rows for the given list of restaurants from SQLite.</p>
+<p>Under the hood:
+- Chooses the database path preferring <cite>src/database/restaurants_raleigh.db</cite></p>
+<blockquote>
+<div><p>when present, otherwise falls back to <cite>./restaurants_raleigh.db</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Uses a single parameterized <cite>SELECT</cite> with an IN-clause to fetch all rows.</p></li>
+<li><p>Closes the connection reliably via a <cite>try/finally</cite> block.</p></li>
+</ul>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>search_list<span class="classifier">list[str]</span></dt><dd><p>Restaurant names to match against the <cite>restaurant</cite> column.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>list[tuple]</dt><dd><p>Result rows from the <cite>local_menu</cite> table. Empty list if <cite>search_list</cite> is empty.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Local Restaurant Meun Database</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">database</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Main.html">Main module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">database_query module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="google_tools.html">google_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html_tools.html">html_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu_recreator.html">menu_recreator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_tests.html">run_tests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html">sqlite_connection module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">database</a><ul>
+      <li>Previous: <a href="Main.html" title="previous chapter">Main module</a></li>
+      <li>Next: <a href="google_tools.html" title="next chapter">google_tools module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, ejrezek.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/database_query.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
