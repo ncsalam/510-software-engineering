@@ -71,7 +71,7 @@ def make_csv_folder():
   except FileExistsError:
     print(f"Folder '{csv_folder_path}' already exists.")
 
-def create_menu_csv():
+def create_menu():
   for filename in os.listdir(content_folder_path):
     if filename.endswith(".txt"):
       file_path = os.path.join(content_folder_path, filename)       
@@ -81,7 +81,7 @@ def create_menu_csv():
           csv_name = filename.removesuffix(".txt")
           menu_recreator.recreate_menu(content, csv_folder_path+csv_name)
           print("Chat has returned")
-          time.sleep(10)
+          time.sleep(3)
           
             
       except Exception as e:
@@ -97,5 +97,5 @@ if __name__ == "__main__":
   make_website_content_folder()
   extract_website_content()
   make_csv_folder()
-  create_menu_csv()
+  create_menu()
   sqlite_connection.upload_data(relative_path)
