@@ -10,7 +10,7 @@ import sqlite_connection
 # Local search takes the query (ex. "Chinese food in Raleigh")
 # and uses the google places API which will look for places
 # that meet that description, and return their names
-def local_search(query):
+def local_search(query_string):
   search_list = []
   url = "https://places.googleapis.com/v1/places:searchText"
   headers = {
@@ -20,7 +20,7 @@ def local_search(query):
   }
 
   payload = {
-    "textQuery": f"{query}"
+    "textQuery": f"{query_string}"
   }
 
   r = requests.post(url, headers=headers, data=json.dumps(payload))
@@ -35,17 +35,20 @@ def local_search(query):
 # Used the database created through main.py to retieve menu items
 # for the restaurants found in local_search
 def query(search_list):
-  db_path = "src\\database\\restaurants_raleigh.db"
-  conn = sqlite_connection.connect_db(db_path)
-  cur = conn.cursor()
-  results = cur.execute(f"""
-    SELECT * FROM local_menu
-    WHERE restaurant IN {search_list}
-  """)
-  conn.close()
-  return results
+    # Prefer the test location (cwd/src/database/...), then fall back to ./restaurants_raleigh.db
+    primary = os.path.join("src", "database", "restaurants_raleigh.db")
+    db_path = primary if os.path.exists(primary) else "restaurants_raleigh.db"
 
-
-
-
-
+    conn = sqlite_connection.connect_db(db_path)
+    try:
+        if not search_list:
+            return []
+        cur = conn.cursor()
+        placeholders = ",".join("?" for _ in search_list)
+        rows = cur.execute(
+            f"SELECT * FROM local_menu WHERE restaurant IN ({placeholders})",
+            tuple(search_list)
+        ).fetchall()
+        return rows
+    finally:
+        conn.close()

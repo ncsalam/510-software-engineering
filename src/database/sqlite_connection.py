@@ -2,10 +2,6 @@ import os
 import csv
 import sqlite3
 
-def _log(msg, verbose=False):
-    if verbose:
-        print(msg)
-
 # ---------- Database Setup ----------
 
 def connect_db(db_path: str):
