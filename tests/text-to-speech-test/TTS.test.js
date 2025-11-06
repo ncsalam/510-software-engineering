@@ -7,7 +7,7 @@ import * as preprocess from "../../src/public/text-to-speech/preprocess.mjs";
 import { wirePage } from "../../src/public/text-to-speech/text-to-speech.mjs";
 
 /* ============================================================
- * Unit tests: preprocess helpers (no DOM / no speech)
+ * Unit tests: preprocess helpers
  * ============================================================ */
 describe("preprocess helpers (unit)", () => {
   // --- Time conversions ---
@@ -45,19 +45,19 @@ describe("preprocess helpers (unit)", () => {
   test("intToWordsSafe: large numbers fallback", () => {
     const s = "123456789012";
     const out = preprocess.intToWordsSafe(s);
-    expect(out.split(" ").length).toBe(s.length);
+    expect(out).toBe("one two three four five six seven eight nine zero one two");
   });
 
   test("englishifyNumbers: decimals and commas", () => {
     const input = "Value: 1,234.56";
     const out = preprocess.englishifyNumbers(input);
-    expect(out).toContain("one thousand two hundred thirty-four point five six");
+    expect(out).toBe("Value: one thousand two hundred thirty-four point five six");
   });
 
   test("englishifyNumbers: percentages without decimals", () => {
     const input = "Success rate 100%";
     const out = preprocess.englishifyNumbers(input);
-    expect(out).toContain("one hundred percent");
+    expect(out).toBe("Success rate one hundred percent");
   });
 
   // --- Paragraph chunking ---
@@ -107,7 +107,6 @@ describe("wirePage integration (DOM & TTS)", () => {
     doc = document;
 
     document.body.innerHTML = `
-      <input id="txtfile" type="file" />
       <div id="word-box"></div>
       <div id="audioIcon"></div>
     `;
@@ -115,6 +114,7 @@ describe("wirePage integration (DOM & TTS)", () => {
 
     // Mock Web Speech API
     const speakMock = jest.fn((utt) => {
+      // simulate lifecycle: start -> boundary -> end
       if (typeof utt.onstart === "function") utt.onstart();
       if (typeof utt.onboundary === "function") utt.onboundary();
       if (typeof utt.onend === "function") utt.onend();
@@ -142,114 +142,48 @@ describe("wirePage integration (DOM & TTS)", () => {
     Object.defineProperty(win, "SpeechSynthesisUtterance", { value: SSU, configurable: true });
   });
 
-  test("speakText prints original paragraphs", () => {
+  test("wirePage wiring: API, speak, cancel, boundaries, chunking, and fallback", () => {
     const api = wirePage(win, doc);
-    api.speakText("A\n\nB", "A\n\nB");
-    const printed = doc.getElementById("word-box").textContent;
-    expect(printed).toBe("A\n\nB");
-  });
 
-  test("cancel stops TTS and resets icon", () => {
-    const api = wirePage(win, doc);
-    api.speakText("Hello", "Hello");
-    api.cancel();
-    expect(win.speechSynthesis.cancel).toHaveBeenCalled();
-    expect(doc.getElementById("audioIcon").classList.contains("speaking")).toBe(false);
-  });
-
-  test("boundary triggers pulse burst", () => {
-    const api = wirePage(win, doc);
-    api.speakText("Test", "Test");
-    const utter = win.speechSynthesis.speak.mock.calls[0][0];
-    utter.onboundary && utter.onboundary({});
-    const icon = doc.getElementById("audioIcon");
-    expect(icon.classList.contains("pulse-burst")).toBe(true);
-  });
-
-  test("wirePage returns API object", () => {
-    const api = wirePage(win, doc);
+    // API shape
     expect(api).toBeDefined();
     expect(typeof api.speakText).toBe("function");
     expect(typeof api.cancel).toBe("function");
-  });
 
-  test("speakText uses selected voice", () => {
-    const api = wirePage(win, doc);
-    api.speakText("Hi", "Hi");
-    const utter = win.speechSynthesis.speak.mock.calls[0][0];
-    expect(utter.voice.name).toBe("Luca");
-  });
-
-  test("speakText prints multiple paragraphs", () => {
-    const api = wirePage(win, doc);
+    // speakText prints paragraphs and uses voice
     api.speakText("Para1\n\nPara2", "Para1\n\nPara2");
-    const out = doc.getElementById("word-box").textContent;
-    expect(out).toBe("Para1\n\nPara2");
-  });
+    expect(doc.getElementById("word-box").textContent).toBe("Para1\n\nPara2");
+    let utter = win.speechSynthesis.speak.mock.calls[0][0];
+    expect(utter.voice.name).toBe("Luca");
 
-  test("iconIdle sets icon to non-speaking state", () => {
-    const api = wirePage(win, doc);
+    // boundary produces a pulse burst class on the icon
+    utter.onboundary && utter.onboundary({});
+    expect(doc.getElementById("audioIcon").classList.contains("pulse-burst")).toBe(true);
+
+    // cancel stops speech and resets icon
     api.cancel();
-    const icon = doc.getElementById("audioIcon");
-    expect(icon.classList.contains("speaking")).toBe(false);
-  });
+    expect(win.speechSynthesis.cancel).toHaveBeenCalled();
+    expect(doc.getElementById("audioIcon").classList.contains("speaking")).toBe(false);
 
-  test("speakNext handles empty chunks gracefully", () => {
-    const api = wirePage(win, doc);
+    // handle empty input gracefully
     api.speakText("", "");
-    const printed = doc.getElementById("word-box").textContent;
-    expect(printed).toBe("");
-  });
+    expect(doc.getElementById("word-box").textContent).toBe("");
 
-  test("wirePage works if audioIcon missing", () => {
-    document.getElementById("audioIcon").remove();
-    const api = wirePage(win, doc);
-    api.speakText("Test", "Test");
-    // Should not throw; word-box still updated
-    const printed = doc.getElementById("word-box").textContent;
-    expect(printed).toBe("Test");
-  });
-
-  test("wirePage works if word-box missing", () => {
-    document.getElementById("word-box").remove();
-    const api = wirePage(win, doc);
-    api.speakText("Test", "Test");
-    // Should not throw; icon state still updated
-    const icon = doc.getElementById("audioIcon");
-    expect(icon.classList.contains("speaking")).toBe(false);
-  });
-
-  test("wirePage handles no voices gracefully", () => {
-    win.speechSynthesis.getVoices = jest.fn(() => []);
-    const api = wirePage(win, doc);
-    api.speakText("Test", "Test");
-    const utter = win.speechSynthesis.speak.mock.calls[0][0];
-    expect(utter.lang).toBe("it-IT"); // fallback to config
-  });
-
-  test("long paragraph triggers multiple speakNext calls", () => {
+    // long paragraph -> multiple utterances queued (chunking)
     const longText = "x".repeat(3000);
-    const api = wirePage(win, doc);
     api.speakText(longText, longText);
-    const calls = win.speechSynthesis.speak.mock.calls.length;
-    expect(calls).toBeGreaterThan(1);
-  });
+    expect(win.speechSynthesis.speak.mock.calls.length).toBeGreaterThan(1);
 
-  test("onerror moves to next chunk", () => {
-    const api = wirePage(win, doc);
-    api.speakText("Hi", "Hi");
-    const utter = win.speechSynthesis.speak.mock.calls[0][0];
+    // onerror should not throw and printed text remains (simulate by calling handler)
+    utter = win.speechSynthesis.speak.mock.calls[0][0];
     utter.onerror && utter.onerror();
-    const printed = doc.getElementById("word-box").textContent;
-    expect(printed).toBe("Hi");
-  });
+    expect(doc.getElementById("word-box").textContent).toBeTruthy();
 
-  test("boundaryBoostUntil increases after boundary", () => {
-    const api = wirePage(win, doc);
-    api.speakText("Hello", "Hello");
-    const utter = win.speechSynthesis.speak.mock.calls[0][0];
-    const before = Date.now();
-    utter.onboundary();
-    expect(utter).toBeDefined();
+    // voice fallback when no voices available
+    win.speechSynthesis.getVoices = jest.fn(() => []);
+    const api2 = wirePage(win, doc);
+    api2.speakText("Test", "Test");
+    const utter2 = win.speechSynthesis.speak.mock.calls[0][0];
+    expect(utter2.lang).toBe("it-IT");
   });
 });

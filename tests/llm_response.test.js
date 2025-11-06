@@ -127,11 +127,11 @@ describe("llm_response (ESM), STT → LLM → preprocess → TTS", () => {
     const doneBtn = document.getElementById("done");
     const wordBox = document.getElementById("word-box");
 
-  expect(wordBox.textContent).toContain("Failed to initialize chat. Please refresh.");
-  // Init should only have attempted the chat creation; no further LLM POSTs should be made
-  // (don't assert on button.disabled because DOM event listeners from other imports can make this flaky)
-  const madeLLMPosts = fetch.mock.calls.some((c) => typeof c[0] === "string" && /\/api\/chat\/\d+/.test(c[0]));
-  expect(madeLLMPosts).toBe(false);
+    expect(wordBox.textContent).toContain("Failed to initialize chat. Please refresh.");
+    // Init should only have attempted the chat creation; no further LLM POSTs should be made
+    // (don't assert on button.disabled because DOM event listeners from other imports can make this flaky)
+    const madeLLMPosts = fetch.mock.calls.some((c) => typeof c[0] === "string" && /\/api\/chat\/\d+/.test(c[0]));
+    expect(madeLLMPosts).toBe(false);
   });
 
   test("does nothing when transcript is empty (no fetch/TTS calls)", async () => {

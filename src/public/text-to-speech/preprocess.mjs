@@ -1,7 +1,32 @@
-/* 
-  TTS Preprocessing helper functions
-*/
-// Convert clock times into natural spoken English (e.g., "10:00 PM" -> "ten o'clock pm")
+/**
+ * Preprocessing utilities used by the Text-To-Speech layer.
+ *
+ * This module provides helpers that convert timestamps, numbers, currency
+ * amounts and long text into forms that are easier and more natural for
+ * speech synthesis engines to speak. Functions are written defensively and
+ * operate on plain strings.
+ *
+ * @module src/public/text-to-speech/preprocesss
+ */
+
+
+/**
+ * Replace clock/time patterns in `s` with natural spoken equivalents.
+ *
+ * This function finds common time formats in the input string ("HH:MM AM/PM"
+ * and "HH AM/PM", case-insensitive, with optional punctuation like "a.m.")
+ * and converts each match into a short phrase suitable for TTS. It leaves
+ * other text in `s` unchanged.
+ *
+ * Examples:
+ * - "10:00 PM" -> "ten o'clock pm"
+ * - "3:05 a.m." -> "three oh five am"
+ * - "7 PM" -> "seven pm"
+ *
+ * @export
+ * @param {string} s - input text
+ * @returns {string} transformed text with times expanded for speech
+ */
 export function englishifyTimes(s) {
   let out = s;
 
@@ -14,7 +39,19 @@ export function englishifyTimes(s) {
   return out;
 }
 
-// Build the spoken string for a parsed time (handles “o'clock” and “oh five”)
+/**
+ * Convert parsed hour/minute tokens into a spoken time phrase.
+ *
+ * This internal helper expects strings captured by the regexes in
+ * `englishifyTimes` (hour string, minute string or null, and an AM/PM
+ * letter). It normalizes the hour into 12-hour form and produces phrases
+ * like "seven pm", "ten o'clock pm", or "three oh five am".
+ *
+ * @param {string} hStr - hour token as matched by the regex (e.g. "3", "10")
+ * @param {string|null} mStr - minute token (e.g. "05") or null when absent
+ * @param {string} apLetter - single-letter AM/PM marker (case-insensitive)
+ * @returns {string} spoken representation suitable for TTS
+ */
 function timeToWords(hStr, mStr, apLetter) {
   let h = Number(hStr);
   let m = mStr == null ? null : Number(mStr);
@@ -30,7 +67,25 @@ function timeToWords(hStr, mStr, apLetter) {
   return `${hourWords} ${numberToWordsUnderBillion(m)} ${ap}`; // "12:30 pm"
 }
 
-// Expand numbers/currency/percentages so TTS pronounces them naturally in English
+/**
+ * Expand numeric tokens, currencies and percentages into words for speech.
+ *
+ * This function performs three main transformations (in order):
+ * 1) Dollar amounts (e.g. "$19.99", "-$123.45") are converted to words
+ *    with dollars and cents spelled out.
+ * 2) Percentages (e.g. "12.5%", "7%") are expanded to "percent" with
+ *    decimal digits read as point-separated digits.
+ * 3) Remaining standalone numbers (integers and decimals) are converted
+ *    to words. For decimals, the fractional part is read digit-by-digit
+ *    after the word "point".
+ *
+ * The function preserves leading whitespace for dollar/percent matches so
+ * the surrounding sentence spacing remains correct.
+ *
+ * @export
+ * @param {string} s - input text
+ * @returns {string} transformed text with numeric tokens expanded
+ */
 export function englishifyNumbers(s) {
   let out = s;
 
@@ -87,7 +142,18 @@ export function englishifyNumbers(s) {
   return out;
 }
 
-// "$123.45" -> "one hundred twenty-three dollars and forty five cents"
+/**
+ * Convert a numeric dollar amount (no leading "$") into a spoken phrase.
+ *
+ * The function accepts strings like "123.45" or "0.50" and returns
+ * speech-friendly text such as "one hundred twenty-three dollars and
+ * forty five cents" or "fifty cents". It handles rounding of fractional
+ * cents (e.g., ".999" rounds to the next dollar when appropriate).
+ *
+ * @export
+ * @param {string} numeric - numeric dollar value (no currency symbol)
+ * @returns {string} spoken dollar amount
+ */
 export function dollarsToWords(numeric) {
   const [intPartRaw, fracRaw] = numeric.split(".");
   const intPart = (intPartRaw || "0").replace(/^0+(?!$)/, "");
@@ -110,7 +176,18 @@ export function dollarsToWords(numeric) {
   return `${dWords} ${dUnit}`;
 }
 
-// Integer to words; fall back to digit-by-digit for very large inputs
+/**
+ * Convert an integer string to English words for numbers up to 999,999,999.
+ *
+ * For numeric strings longer than 9 digits or non-finite values this
+ * function falls back to spelling each digit individually (e.g. "1234567890"
+ * -> "one two three ..."). This keeps pronunciations predictable for
+ * extremely large inputs.
+ *
+ * @export
+ * @param {string|number} intStr - integer value
+ * @returns {string} English words for the integer or digit-spelled fallback
+ */
 export function intToWordsSafe(intStr) {
   intStr = String(intStr).replace(/^0+(?!$)/, "");
   if (intStr.length > 9) return intStr.split("").map(digitWord).join(" ");
@@ -119,12 +196,29 @@ export function intToWordsSafe(intStr) {
   return numberToWordsUnderBillion(n);
 }
 
-// 0–9 -> word
+/**
+ * Return the English word for a single digit character.
+ *
+ * If input is not a numeric digit this function returns the original
+ * character so callers can safely map over mixed input.
+ *
+ * @param {string|number} d - single digit (e.g. '0'..'9')
+ * @returns {string} word for the digit (e.g. 'zero') or the original input
+ */
 function digitWord(d) {
   return ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"][Number(d)] || d;
 }
 
-// 1..999,999,999 -> words (English)
+/**
+ * Convert an integer 0..999,999,999 into English words.
+ *
+ * This is a helper used by `intToWordsSafe` and `dollarsToWords`. It
+ * produces compact phrases like "one hundred twenty-three million four
+ * hundred fifty-six thousand seven hundred eighty-nine".
+ *
+ * @param {number} n - integer in range 0..999,999,999
+ * @returns {string} English words for `n`
+ */
 function numberToWordsUnderBillion(n) {
   if (n === 0) return "zero";
   const ones = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
@@ -169,7 +263,20 @@ function numberToWordsUnderBillion(n) {
   return parts.join(" ");
 }
 
-// Split text into paragraphs at blank lines; only split within a paragraph if absolutely necessary
+/**
+ * Split text into paragraph-sized chunks for TTS playback.
+ *
+ * The function first splits the text at blank lines into paragraphs and
+ * trims them. Paragraphs shorter than or equal to `maxLen` are returned
+ * unchanged. Longer paragraphs are broken into smaller chunks by
+ * `splitByLen`, which prefers natural word/punctuation boundaries.
+ *
+ * @export
+ * @param {string} text - input text
+ * @param {number} maxLen - maximum allowed chunk length
+ * @returns {string[]} array of chunks, each no longer than maxLen (unless a
+ * single token exceeds maxLen in which case it will be cut)
+ */
 export function chunkText(text, maxLen) {
   const paras = text
     .replace(/\r\n/g, "\n")
@@ -185,7 +292,17 @@ export function chunkText(text, maxLen) {
   return out;
 }
 
-// Break a long paragraph into chunks below maxLen, preferring whitespace/punctuation boundaries
+/**
+ * Heuristically split a long string into pieces under `maxLen`.
+ *
+ * The splitter tokenizes on whitespace and common punctuation then builds
+ * chunks by appending tokens until the limit is reached. Very long tokens
+ * (longer than `maxLen`) are sliced into `maxLen`-sized pieces.
+ *
+ * @param {string} s - paragraph to split
+ * @param {number} maxLen - maximum chunk length
+ * @returns {string[]} array of chunks
+ */
 function splitByLen(s, maxLen) {
   const parts = [];
   let cur = "";
