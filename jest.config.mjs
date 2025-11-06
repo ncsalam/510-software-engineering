@@ -4,7 +4,6 @@ export default {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "/src/database/docs/",
-    "/docs/",
     "/_build/",
     "/_static/",
   ],
