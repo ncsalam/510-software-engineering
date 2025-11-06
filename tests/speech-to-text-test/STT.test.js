@@ -3,36 +3,31 @@
  */
 
 /**
- * Voice-to-Text Module Tests
- * 
+ * @file Voice-to-Text Module Tests (No Transcript, 20 Tests)
+ *
  * This suite tests the `wirePage` function from the `speech-to-text` module.
  * It validates core functionality, DOM interactions, silence detection,
- * error handling, and download behavior using a mocked `SpeechRecognition`.
- * 
- * @module texts/speech-to-text-test/STT.test
+ * automatic stop when saying "done", error handling, and the `onStop` callback.
+ *
+ * Transcript functionality has been removed.
+ *
+ * @module tests/speech-to-text-test/STT-no-transcript-20.test
  */
 
 import { jest } from "@jest/globals";
-import { TextEncoder, TextDecoder } from "node:util";
-import { webcrypto as crypto } from "node:crypto";
-
-/** @global */
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-global.crypto = crypto;
-
 import { wirePage } from "../../src/public/speech-to-text/speech-to-text.mjs";
 
-expect(wirePage).toBeDefined();
-
-/**
- * Voice-to-Text DOM Test Suite
- * 
- * Contains tests that simulate user interactions, SpeechRecognition events,
- * silence detection, transcript download, and error handling.
- */
-describe("Voice-to-Text DOM Tests (speech.js module)", () => {
-  let startBtn, doneBtn, output, app, recognitionInstance;
+describe("Voice-to-Text DOM Tests (No Transcript, 20 Tests)", () => {
+  /** @type {HTMLElement} */
+  let startBtn;
+  /** @type {HTMLElement} */
+  let doneBtn;
+  /** @type {ReturnType<typeof wirePage>} */
+  let app;
+  /** @type {any} */
+  let recognitionInstance;
+  /** @type {jest.Mock} */
+  let onStopCallback;
 
   /**
    * Minimal mock of SpeechRecognition for testing.
@@ -43,7 +38,7 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
     constructor() {
       recognitionInstance = this;
       this.continuous = true;
-      this.interimResults = true;
+      this.interimResults = false;
       this.lang = "en-US";
       this.onresult = null;
       this.onend = null;
@@ -56,52 +51,41 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
   }
 
   /**
-   * Reset DOM and mocks before each test
-   * - Creates start/done buttons and output element
-   * - Mocks URL, alert, and SpeechRecognition
-   * - Initializes `wirePage` app instance
+   * Sets up DOM, mocks, and initializes `wirePage` before each test.
+   * @function
    */
   beforeEach(() => {
     document.body.innerHTML = `
       <button id="start">Start Listening</button>
-      <button id="done">Done / Save Transcript</button>
-      <p id="output"></p>
+      <button id="done">Done</button>
     `;
     startBtn = document.getElementById("start");
     doneBtn = document.getElementById("done");
-    output = document.getElementById("output");
-
-    global.URL.createObjectURL = jest.fn(() => "blob:fake");
-    global.URL.revokeObjectURL = jest.fn();
-    jest.spyOn(window, "alert").mockImplementation(() => {});
 
     window.SpeechRecognition = SRMock;
     window.webkitSpeechRecognition = SRMock;
 
     jest.useFakeTimers();
 
-    app = wirePage(window, document);
+    onStopCallback = jest.fn();
+    app = wirePage({ win: window, doc: document, onStop: onStopCallback });
   });
 
   /**
-   * Cleanup after each test
-   * - Run pending timers
-   * - Restore real timers and mocks
-   * - Reset recognition instance
+   * Cleans up timers, mocks, and resets recognition instance after each test.
+   * @function
    */
   afterEach(() => {
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
     jest.restoreAllMocks();
     recognitionInstance = null;
+    onStopCallback.mockReset();
   });
 
   /**
-   * Simulates a SpeechRecognition `onresult` event.
-   * Updates the transcript as if speech was recognized.
-   * 
-   * @function fireResult
-   * @param {string} text - The recognized speech text to simulate
+   * Helper to simulate a SpeechRecognition `onresult` event.
+   * @param {string} text - The simulated recognized speech text
    */
   function fireResult(text) {
     recognitionInstance?.onresult?.({
@@ -113,135 +97,67 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
   // === CORE BEHAVIOR ====
   // ======================
 
-  /**
-   * @test Ensures that startListening updates DOM and sets timer.
-   */
-  test("startListening updates state and button text", () => {
+  /** @test startListening should call recognition.start and update button text */
+  test("startListening calls recognition.start and updates button text", () => {
     const setTimeoutSpy = jest.spyOn(window, "setTimeout");
     app.startListening();
     expect(recognitionInstance.start).toHaveBeenCalled();
     expect(startBtn.textContent).toBe("Stop Listening");
-    expect(output.textContent).toBe("Listening...");
     expect(setTimeoutSpy).toHaveBeenCalled();
   });
 
-  /**
-   * @test Ensures stopListening updates DOM and clears timer.
-   */
-  test("stopListening updates state and button text", () => {
+  /** @test stopListening should call recognition.stop, update button, and trigger onStop */
+  test("stopListening calls recognition.stop, updates button, and triggers onStop", () => {
     app.startListening();
-    const clearTimeoutSpy = jest.spyOn(window, "clearTimeout");
+    const clearSpy = jest.spyOn(window, "clearTimeout");
     app.stopListening();
     expect(recognitionInstance.stop).toHaveBeenCalled();
     expect(startBtn.textContent).toBe("Start Listening");
-    expect(clearTimeoutSpy).toHaveBeenCalled();
-  });
-
-  /**
-   * @test Ensures transcript is updated after recognition event.
-   */
-  test("updateTranscript updates DOM and returns transcript", () => {
-    app.startListening();
-    const transcript = "Hello world";
-    fireResult(transcript);
-    expect(output.textContent).toBe(transcript);
-    expect(app.getTranscript()).toBe(transcript);
-  });
-
-  /**
-   * @test Ensures alert shows when downloading empty transcript.
-   */
-  test("downloadTranscript alerts when empty", () => {
-    app.downloadTranscript();
-    expect(window.alert).toHaveBeenCalled();
-    expect(URL.createObjectURL).not.toHaveBeenCalled();
-  });
-
-  /**
-   * @test Ensures transcript downloads correctly when available.
-   */
-  test("downloadTranscript creates and revokes Blob URL", () => {
-    app.startListening();
-    fireResult("Test transcript");
-    const appendSpy = jest.spyOn(document.body, "appendChild");
-    const removeSpy = jest.spyOn(document.body, "removeChild");
-    app.downloadTranscript();
-    expect(URL.createObjectURL).toHaveBeenCalled();
-    expect(appendSpy).toHaveBeenCalled();
-    expect(removeSpy).toHaveBeenCalled();
-    expect(URL.revokeObjectURL).toHaveBeenCalled();
+    expect(clearSpy).toHaveBeenCalled();
+    expect(onStopCallback).toHaveBeenCalledTimes(1);
   });
 
   // ==========================
-  // === BUTTON INTERACTION ===
+  // === BUTTON INTERACTIONS ===
   // ==========================
 
-  /**
-   * @test Ensures the start button toggles listening state.
-   */
+  /** @test Start button toggles listening correctly */
   test("start button toggles listening", () => {
-    startBtn.click(); // start
+    startBtn.click();
     expect(recognitionInstance.start).toHaveBeenCalled();
-    startBtn.click(); // stop
+    startBtn.click();
     expect(recognitionInstance.stop).toHaveBeenCalled();
   });
 
-  /**
-   * @test Ensures the done button stops and downloads transcript.
-   */
-  test("done button stops and downloads", () => {
+  /** @test Done button stops listening and triggers onStop callback */
+  test("done button stops listening and triggers onStop", () => {
     app.startListening();
-    fireResult("This is a test transcript");
-    const blobSpy = jest.spyOn(URL, "createObjectURL");
     doneBtn.click();
     expect(recognitionInstance.stop).toHaveBeenCalled();
-    expect(blobSpy).toHaveBeenCalled();
+    expect(onStopCallback).toHaveBeenCalledTimes(1);
   });
 
   // ==========================
   // === SILENCE DETECTION ====
   // ==========================
 
-  /**
-   * @test Ensures silence timer stops listening after 10s.
-   */
+  /** @test Silence timer stops listening after 10 seconds and triggers onStop */
   test("silence timer stops listening after 10s", () => {
     app.startListening();
     jest.advanceTimersByTime(10000);
     expect(startBtn.textContent).toBe("Start Listening");
+    expect(onStopCallback).toHaveBeenCalledTimes(1);
   });
 
-  /**
-   * @test Ensures hearing 'done' in transcript stops listening automatically.
-   */
-  test("hearing 'done' stops listening automatically", () => {
+  /** @test Saying 'done' stops listening automatically and triggers onStop */
+  test("hearing 'done' stops listening automatically and calls onStop", () => {
     app.startListening();
-    fireResult("this is done now");
+    fireResult("please stop done now");
     expect(startBtn.textContent).toBe("Start Listening");
+    expect(onStopCallback).toHaveBeenCalledTimes(1);
   });
 
-  /**
-   * @test Ensures recognition restarts if ended unexpectedly.
-   */
-  test("recognition restarts if unexpectedly stopped", () => {
-    app.startListening();
-    recognitionInstance.onend();
-    expect(recognitionInstance.start).toHaveBeenCalledTimes(2);
-  });
-
-  /**
-   * @test Ensures recognition does not restart after manual stop.
-   */
-  test("recognition does not restart after manual stop", () => {
-    app.startListening();
-    recognitionInstance.onend = null;
-    app.stopListening();
-    expect(recognitionInstance.start).toHaveBeenCalledTimes(1);
-  });
-
-  /**
-   * @test Ensures silence timer resets after every result.
-   */
+  /** @test Silence timer resets after each speech event */
   test("silence timer resets after each speech event", () => {
     app.startListening();
     const setTimeoutSpy = jest.spyOn(window, "setTimeout");
@@ -251,61 +167,42 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
   });
 
   // ==========================
-  // === ERROR HANDLING =======
+  // === RECOGNITION LIFECYCLE ===
   // ==========================
 
-  /**
-   * @test Ensures errors log properly and don't crash.
-   */
-  test("onerror does not throw exceptions", () => {
-    const errSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => recognitionInstance.onerror({ error: "network" })).not.toThrow();
-    expect(errSpy).toHaveBeenCalledWith("Speech recognition error:", "network");
-  });
-
-  /**
-   * @test Ensures module handles unsupported browsers gracefully.
-   */
-  test("returns no-op functions if SpeechRecognition missing", () => {
-    document.body.innerHTML = `<p id="output"></p>`;
-    const outputEl = document.getElementById("output");
-    delete window.SpeechRecognition;
-    delete window.webkitSpeechRecognition;
-
-    const result = wirePage(window, document);
-    expect(outputEl.textContent).toMatch(/not support/i);
-    expect(result.getTranscript()).toBe("");
-  });
-
-  // ==========================
-  // === NON-STANDARD CASES ===
-  // ==========================
-
-  /**
-   * @test Ensures getTranscript persists across start/stop cycles.
-   */
-  test("getTranscript remains accurate after stop/start", () => {
+  /** @test Recognition restarts automatically if ended unexpectedly */
+  test("recognition restarts automatically if ended unexpectedly", () => {
     app.startListening();
-    fireResult("hello");
+    recognitionInstance.onend();
+    expect(recognitionInstance.start).toHaveBeenCalledTimes(2);
+  });
+
+  /** @test Recognition does not restart after manual stop */
+  test("recognition does not restart after manual stop", () => {
+    app.startListening();
+    recognitionInstance.onend = null;
     app.stopListening();
-    app.startListening();
-    fireResult("world");
-    expect(app.getTranscript()).toContain("world");
+    expect(recognitionInstance.start).toHaveBeenCalledTimes(1);
   });
 
-  /**
-   * @test Ensures interim results are appended not lost.
-   */
-  test("interim results update continuously", () => {
-    app.startListening();
-    fireResult("this is");
-    fireResult("this is a test");
-    expect(app.getTranscript()).toBe("this is a test");
+  /** @test Multiple start calls do not throw errors */
+  test("multiple start calls do not throw errors", () => {
+    expect(() => {
+      app.startListening();
+      app.startListening();
+    }).not.toThrow();
   });
 
-  /**
-   * @test Ensures stopListening clears the silence timer.
-   */
+  /** @test Multiple stop calls do not throw errors */
+  test("multiple stop calls do not throw errors", () => {
+    app.startListening();
+    expect(() => {
+      app.stopListening();
+      app.stopListening();
+    }).not.toThrow();
+  });
+
+  /** @test stopListening clears the silence timer */
   test("stopListening clears silence timer", () => {
     app.startListening();
     const clearSpy = jest.spyOn(window, "clearTimeout");
@@ -313,45 +210,75 @@ describe("Voice-to-Text DOM Tests (speech.js module)", () => {
     expect(clearSpy).toHaveBeenCalled();
   });
 
-  /**
-   * @test Ensures downloadTranscript does nothing without transcript.
-   */
-  test("downloadTranscript no-op when transcript empty", () => {
-    const blobSpy = jest.spyOn(window.URL, "createObjectURL");
-    app.downloadTranscript();
-    expect(blobSpy).not.toHaveBeenCalled();
+  // ==========================
+  // === ERROR HANDLING =======
+  // ==========================
+
+  /** @test Errors are logged and do not throw exceptions */
+  test("onerror logs the error correctly", () => {
+    const errSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    expect(() => recognitionInstance.onerror({ error: "network" })).not.toThrow();
+    expect(errSpy).toHaveBeenCalledWith("Speech recognition error:", "network");
   });
 
-  /**
-   * @test Ensures clicking start multiple times does not throw.
-   */
-  test("multiple start clicks do not throw errors", () => {
-    expect(() => {
-      app.startListening();
-      app.startListening();
-    }).not.toThrow();
+  /** @test Unsupported browser returns no-op functions */
+  test("unsupported browser returns no-op functions", () => {
+    delete window.SpeechRecognition;
+    delete window.webkitSpeechRecognition;
+    const result = wirePage({ win: window, doc: document });
+    expect(result.startListening).toBeDefined();
+    expect(result.stopListening).toBeDefined();
+    expect(result._getRecognition()).toBeNull();
   });
 
-  /**
-   * @test Ensures onend appends '[Stopped]' to output.
-   */
-  test("onend appends [Stopped] text", () => {
+  // ==========================
+  // === CALLBACK EDGE CASES ===
+  // ==========================
+
+  /** @test onStop callback works even if not provided */
+  test("onStop callback works even if not provided", () => {
+    const app2 = wirePage({ win: window, doc: document });
+    expect(() => app2.stopListening()).not.toThrow();
+  });
+
+  /** @test onStop fires exactly once on manual stop */
+  test("onStop fires exactly once on manual stop", () => {
     app.startListening();
     app.stopListening();
-    recognitionInstance.onend();
-    expect(output.textContent).toMatch(/\[Stopped\]/);
+    expect(onStopCallback).toHaveBeenCalledTimes(1);
   });
 
-  /**
-   * @test Ensures recognition language defaults to en-US.
-   */
+  /** @test onStop fires exactly once when done button clicked */
+  test("onStop fires exactly once when done button clicked", () => {
+    app.startListening();
+    doneBtn.click();
+    expect(onStopCallback).toHaveBeenCalledTimes(1);
+  });
+
+  /** @test onStop fires exactly once when silence triggers */
+  test("onStop fires exactly once when silence triggers", () => {
+    app.startListening();
+    jest.advanceTimersByTime(10000);
+    expect(onStopCallback).toHaveBeenCalledTimes(1);
+  });
+
+  /** @test onStop fires exactly once when 'done' detected in speech */
+  test("onStop fires exactly once when 'done' detected in speech", () => {
+    app.startListening();
+    fireResult("this is done");
+    expect(onStopCallback).toHaveBeenCalledTimes(1);
+  });
+
+  // ==========================
+  // === MISC BEHAVIORS ======
+  // ==========================
+
+  /** @test Recognition language defaults to 'en-US' */
   test("recognition language defaults to en-US", () => {
     expect(recognitionInstance.lang).toBe("en-US");
   });
 
-  /**
-   * @test Ensures _getRecognition exposes instance for testing.
-   */
+  /** @test _getRecognition exposes the underlying recognition instance */
   test("_getRecognition returns same instance", () => {
     expect(app._getRecognition()).toBe(recognitionInstance);
   });
