@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>google_tools module &#8212; Local Restaurant Meun Database  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="html_tools module" href="html_tools.html" />
+    <link rel="prev" title="database_query module" href="database_query.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-google_tools">
+<span id="google-tools-module"></span><h1>google_tools module<a class="headerlink" href="#module-google_tools" title="Link to this heading">¶</a></h1>
+<p>Google API helpers for discovering restaurants and their menus.</p>
+<p>This module provides:
+- <cite>restaurant_search</cite>: uses Google Places Text Search to compile a restaurant list</p>
+<blockquote>
+<div><p>for a set of cuisines in a given location and writes it to <cite>srcdatabaseRestaurant_List.txt</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><cite>build_payload</cite> and <cite>send_payload</cite>: small helpers to call Google Custom Search and
+retrieve the first result link for a given query.</p></li>
+</ul>
+<p>Environment:
+- PLACES_API_KEY (Places API) for <cite>restaurant_search</cite>.
+- SEARCH_API_KEY and CX_ID (Custom Search JSON API) for <cite>send_payload</cite>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="google_tools.build_payload">
+<span class="sig-prename descclassname"><span class="pre">google_tools.</span></span><span class="sig-name descname"><span class="pre">build_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#google_tools.build_payload" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a Google Custom Search JSON API request payload.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>query<span class="classifier">str</span></dt><dd><p>The search string (e.g., <cite>‘Sushi Raleigh menu’</cite>).</p>
+</dd>
+<dt>start<span class="classifier">int, optional</span></dt><dd><p>Starting index for results (1-based as per API), by default 1.</p>
+</dd>
+<dt>num<span class="classifier">int, optional</span></dt><dd><p>Number of results to return, by default 1.</p>
+</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>params :</dt><dd><p>Additional query parameters to merge into the payload.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>dict</dt><dd><p>A dictionary suitable for <cite>requests.get(…, params=payload)</cite>.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_tools.restaurant_search">
+<span class="sig-prename descclassname"><span class="pre">google_tools.</span></span><span class="sig-name descname"><span class="pre">restaurant_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cuisine_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#google_tools.restaurant_search" title="Link to this definition">¶</a></dt>
+<dd><p>Build a de-duplicated list of restaurants for the given cuisines and location.</p>
+<p>Under the hood:
+- Calls Google Places Text Search for each cuisine string combined with the <cite>location</cite>.
+- Requests the <cite>places.id</cite> and <cite>places.displayName</cite> fields.
+- Collects unique restaurant display names in memory.
+- Writes the final comma-separated list to <cite>srcdatabaseRestaurant_List.txt</cite>.</p>
+<section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>cuisine_list<span class="classifier">list[str]</span></dt><dd><p>Example: <cite>[“Chinese”, “Indian”]</cite>.</p>
+</dd>
+<dt>location<span class="classifier">str</span></dt><dd><p>Example: <cite>“Raleigh”</cite>.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h2>Returns<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>This function writes to disk for subsequent pipeline steps.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_tools.send_payload">
+<span class="sig-prename descclassname"><span class="pre">google_tools.</span></span><span class="sig-name descname"><span class="pre">send_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#google_tools.send_payload" title="Link to this definition">¶</a></dt>
+<dd><p>Execute a Google Custom Search request and return the first result link.</p>
+<section id="id5">
+<h2>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>payload<span class="classifier">dict</span></dt><dd><p>The query parameters built by <a class="reference internal" href="#google_tools.build_payload" title="google_tools.build_payload"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_payload()</span></code></a>.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h2>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>str</dt><dd><p>The <cite>link</cite> of the first search result.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>Exception</dt><dd><p>If the HTTP request fails (non-200 status code).</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Local Restaurant Meun Database</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">database</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Main.html">Main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_query.html">database_query module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">google_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html_tools.html">html_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu_recreator.html">menu_recreator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_tests.html">run_tests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite_connection.html">sqlite_connection module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">database</a><ul>
+      <li>Previous: <a href="database_query.html" title="previous chapter">database_query module</a></li>
+      <li>Next: <a href="html_tools.html" title="next chapter">html_tools module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, ejrezek.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/google_tools.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
