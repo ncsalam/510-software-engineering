@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: server/validation</title>
+    <title>JSDoc: Module: server/restaurant-data</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: server/validation</h1>
+    <h1 class="page-title">Module: server/restaurant-data</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>a set of functions for validating inputs to the API.</p></div>
+            <div class="description"><p>pulls relevant restaurant data from the database and prepares it as an ollama system prompt</p></div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_validation.mjs.html">server/validation.mjs</a>, <a href="server_validation.mjs.html#line1">line 1</a>
+        <a href="server_restaurant-data.mjs.html">server/restaurant-data.mjs</a>, <a href="server_restaurant-data.mjs.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -134,19 +134,94 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<h4 class="name" id=".handleValidationErrors"><span class="type-signature">(static, constant) </span>handleValidationErrors<span class="type-signature"></span></h4>
 
+    
+
+    
+    <h4 class="name" id=".getRestaurantData"><span class="type-signature">(static) </span>getRestaurantData<span class="signature">(userMessage<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    
+
+    
 
 
 
 <div class="description">
-    <p>express middleware for handling express-validator errors</p>
+    <p>get relevant menu items from the database as stringified JSON.</p>
 </div>
 
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userMessage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the user message to use when filtering for relevance (not implemented)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -182,7 +257,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_validation.mjs.html">server/validation.mjs</a>, <a href="server_validation.mjs.html#line27">line 27</a>
+        <a href="server_restaurant-data.mjs.html">server/restaurant-data.mjs</a>, <a href="server_restaurant-data.mjs.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -198,135 +273,39 @@
 
 
 
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
         
-            
-<h4 class="name" id=".validateChatExists"><span class="type-signature">(static, constant) </span>validateChatExists<span class="type-signature"></span></h4>
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
 
 
-<div class="description">
-    <p>express middleware for ensuring that a resource actually exists with the given
-id (from the URL parameter.)</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_validation.mjs.html">server/validation.mjs</a>, <a href="server_validation.mjs.html#line45">line 45</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+    </dd>
 </dl>
 
+    
 
 
 
 
 
         
-            
-<h4 class="name" id=".validateField"><span class="type-signature">(static, constant) </span>validateField<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>returns an express-validatior chain that ensures that {field} exists
-in the request body.</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_validation.mjs.html">server/validation.mjs</a>, <a href="server_validation.mjs.html#line18">line 18</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
     
 
     
