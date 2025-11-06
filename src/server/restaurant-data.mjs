@@ -8,7 +8,7 @@ import sqlite3 from "sqlite3";
 import { allAsync } from "./sqlite3-async.mjs";
 
 const db = new sqlite3.Database(new URL("../database/restaurants_raleigh.db", import.meta.url).pathname);
-const N_ITEMS = 300;
+export const N_ITEMS = 300;
 
 /**
  * pick n random items from list l.
@@ -16,8 +16,8 @@ const N_ITEMS = 300;
  * @param {array} l
  * @param {number} n
  */
-function randomSublist(l, n) {
-  if (n > l.length) return l;
+export function randomSublist(l, n) {
+  if (n >= l.length) return l;
   const src = [...l];
   const out = [];
   for (let i = 0; i < n; i++) {

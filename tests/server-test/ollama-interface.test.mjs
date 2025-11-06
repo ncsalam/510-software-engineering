@@ -4,9 +4,7 @@ import { factory } from "./mock-ollama.mjs";
 // mock ollama to avoid long API calls
 jest.unstable_mockModule("ollama", factory);
 
-const { startOllama, send } = await import(
-  "../../src/server/ollama-interface.mjs"
-);
+const { startOllama, send } = await import("../../src/server/ollama-interface.mjs");
 
 describe("startOllama function", () => {
   test("returns true on success", async () => {
@@ -21,15 +19,13 @@ describe("startOllama function", () => {
     expect(mockConsole.mock.calls[1][0]).toMatch(/^Installing model/);
   });
 
-  test.todo("throws an error if ollama is not installed");
-
-  test.todo("throws an error if the model fails to install");
+  // hard to test because they would require much more complicated mocking.
+  // test.todo("throws an error if ollama is not installed");
+  // test.todo("throws an error if the model fails to install");
 });
 
 describe("send function", () => {
   test("returns a chat response from ollama", async () => {
-    expect(
-      await send("llama3.2:latest", [{ role: "user", message: "hello" }], 15),
-    ).toHaveProperty("message.role");
+    expect(await send("llama3.2:latest", [{ role: "user", message: "hello" }], 15)).toHaveProperty("message.role");
   });
 });
