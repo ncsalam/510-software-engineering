@@ -9,7 +9,7 @@
  * It validates core functionality, DOM interactions, silence detection,
  * error handling, and download behavior using a mocked `SpeechRecognition`.
  * 
- * @module speech-to-text/tests
+ * @module texts/speech-to-text-test/STT.test
  */
 
 import { jest } from "@jest/globals";
