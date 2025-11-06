@@ -36,8 +36,11 @@ import dotenv from "dotenv";
 import { validateField, handleValidationErrors, validateChatExists } from "./server/validation.mjs";
 import express from "express";
 import * as db from "./server/chat-db.mjs";
+import { getRestaurantData } from "./server/restaurant-data.mjs";
 
 const { startOllama, send } = await import("./server/ollama-interface.mjs");
+
+await getRestaurantData();
 
 dotenv.config({ quiet: true });
 const ollamaOk = await startOllama(process.env.OLLAMA_MODEL, process.env.OLLAMA_KEEP_ALIVE);
@@ -134,12 +137,21 @@ response format:
 app.post("/api/chat/:id", validateChatExists, validateField("message"), handleValidationErrors, async (req, res) => {
   // add user message to chat history
   await db.logMessage(req.params.id, "user", req.body.message);
+  // build message array out of chat history and system prompts
+  const chat = [
+    {
+      role: "system",
+      content: process.env.OLLAMA_SYS_PROMPT,
+    },
+    {
+      role: "system",
+      content: process.env.OLLAMA_DATA_PROMPT + (await getRestaurantData()),
+    },
+    // TODO: inject another system prompt with relevant restaurant data for the LLM to use.
+    ...(await db.getHistory(req.params.id)),
+  ];
   // generate chat completion
-  const llm_res = await send(
-    process.env.OLLAMA_MODEL,
-    await db.getHistory(req.params.id),
-    process.env.OLLAMA_KEEP_ALIVE
-  );
+  const llm_res = await send(process.env.OLLAMA_MODEL, chat, process.env.OLLAMA_KEEP_ALIVE);
   // log assistant response and return it
   await db.logMessage(req.params.id, "assistant", llm_res.message.content);
   res.json({
