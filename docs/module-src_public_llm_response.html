@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: src/public/llm_response</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: src/public/llm_response</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>LLM response wiring for the demo page.</p>
+<p>This module wires Speech-To-Text (STT) and Text-To-Speech (TTS) helpers
+together with a small server API. Flow summary:</p>
+<ul>
+<li>wire STT/TTS page helpers (they expose small APIs like <code>getTranscript</code>,
+<code>speakText</code> and <code>cancel</code>)</li>
+<li>initialize a server-side chat with POST /api/chat (receives <code>{id}</code>)</li>
+<li>Posts transcripts on 'done' button click event to POST /api/chat/:id and speak the returned
+reply after running light preprocessing (times/numbers)</li>
+</ul></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="public_llm_response.mjs.html">public/llm_response.mjs</a>, <a href="public_llm_response.mjs.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~chatId"><span class="type-signature">(inner) </span>chatId<span class="type-signature"> :number|null</span></h4>
+
+
+
+
+<div class="description">
+    <p>Chat id for the current browser tab.</p>
+<p>Set after POST /api/chat returns <code>{ id }</code>. <code>null</code> indicates init has not
+completed or failed.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+|
+
+<span class="param-type">null</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="public_llm_response.mjs.html">public/llm_response.mjs</a>, <a href="public_llm_response.mjs.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~sendTranscriptToLLM"><span class="type-signature">(async, inner) </span>sendTranscriptToLLM<span class="signature">(transcript, doc)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Post a transcript to the server LLM endpoint and return the raw reply.</p>
+<p>Behavior:</p>
+<ul>
+<li>updates the <code>#word-box</code> element to show a temporary &quot;You said...\n\nThinking...&quot;</li>
+<li>POSTs JSON { message: transcript } to <code>/api/chat/{chatId}</code> and expects
+a JSON response of shape <code>{ response: string }</code>.</li>
+<li>on network or server errors it logs the error and returns the
+fallback string &quot;[Error] Could not reach the server.&quot; and updates the UI.</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>transcript</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>user transcript text to send</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>doc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Document</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>document used to look up the <code>#word-box</code> element</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="public_llm_response.mjs.html">public/llm_response.mjs</a>, <a href="public_llm_response.mjs.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>resolved LLM reply (or error placeholder)</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-server_chat-db.html">server/chat-db</a></li><li><a href="module-server_ollama-interface.html">server/ollama-interface</a></li><li><a href="module-server_sqlite3-async.html">server/sqlite3-async</a></li><li><a href="module-server_terminal-helper.html">server/terminal-helper</a></li><li><a href="module-server_validation.html">server/validation</a></li><li><a href="module-src_public_llm_response.html">src/public/llm_response</a></li><li><a href="module-src_public_text-to-speech_preprocesss.html">src/public/text-to-speech/preprocesss</a></li><li><a href="module-src_public_text-to-speech_text-to-speech.html">src/public/text-to-speech/text-to-speech</a></li></ul><h3>Global</h3><ul><li><a href="global.html#wirePage">wirePage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Nov 05 2025 21:38:56 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

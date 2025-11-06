@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: src/public/text-to-speech/text-to-speech</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: src/public/text-to-speech/text-to-speech</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Text-to-Speech (TTS) browser component and helpers.</p>
+<p>This module wires a lightweight TTS experience into a page by hooking
+two DOM elements: <code>#word-box</code> (where original (unprocessed) text paragraphs
+are shown while spoken), and <code>#audioIcon</code> (a small visual icon that pulses while speaking).</p>
+<p>The implementation focuses on producing natural spoken output by:</p>
+<ul>
+<li>expanding numbers, currencies and times via <code>preprocess</code> helpers;</li>
+<li>picking a suitable voice (preference list + heuristics);</li>
+<li>chunking text into paragraph-sized pieces for readable TTS playback;</li>
+<li>providing a small, test-friendly public API: <code>{ speakText, cancel }</code>.</li>
+</ul></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="public_text-to-speech_text-to-speech.mjs.html">public/text-to-speech/text-to-speech.mjs</a>, <a href="public_text-to-speech_text-to-speech.mjs.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~CONFIG"><span class="type-signature">(inner, constant) </span>CONFIG<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Runtime configuration for TTS behaviour and voice preference ordering.</p>
+<p>These values control language, playback parameters and heuristics used to
+select a preferred voice.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>LANG</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>default language tag used when a voice is not set</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>RATE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>speech rate multiplier</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>PITCH</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>speech pitch multiplier</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>VOLUME</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>speech volume (0..1)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>CHUNK_LEN</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>maximum paragraph character length to send to TTS at a time.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>VOICE_PREFER</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>preferred voice names (in order)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MALE_ITALIAN_NAME_HINTS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>tokens used to detect male Italian voices</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="public_text-to-speech_text-to-speech.mjs.html">public/text-to-speech/text-to-speech.mjs</a>, <a href="public_text-to-speech_text-to-speech.mjs.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".wirePage"><span class="type-signature">(static) </span>wirePage<span class="signature">(win<span class="signature-attributes">opt</span>, doc<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Wire the page with TTS behavior and return a minimal, testable API.</p>
+<p>This function looks up the expected DOM elements (if present), detects
+browser TTS support, selects an appropriate voice, and exposes two
+functions: <code>speakText(spokenText, originalText)</code> which begins a TTS
+session, and <code>cancel()</code> which immediately stops any ongoing speech.</p>
+<p>The returned API is intentionally small to make unit testing easy: the
+implementation performs DOM updates and calls into the Web Speech API
+but tests can call <code>speakText</code> directly to exercise the chunking and
+output behavior.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>win</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Window</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    window
+                
+                </td>
+            
+
+            <td class="description last"><p>window-like object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>doc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Document</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    document
+                
+                </td>
+            
+
+            <td class="description last"><p>document-like object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="public_text-to-speech_text-to-speech.mjs.html">public/text-to-speech/text-to-speech.mjs</a>, <a href="public_text-to-speech_text-to-speech.mjs.html#line71">line 71</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>public API</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-server_chat-db.html">server/chat-db</a></li><li><a href="module-server_ollama-interface.html">server/ollama-interface</a></li><li><a href="module-server_sqlite3-async.html">server/sqlite3-async</a></li><li><a href="module-server_terminal-helper.html">server/terminal-helper</a></li><li><a href="module-server_validation.html">server/validation</a></li><li><a href="module-src_public_llm_response.html">src/public/llm_response</a></li><li><a href="module-src_public_text-to-speech_preprocesss.html">src/public/text-to-speech/preprocesss</a></li><li><a href="module-src_public_text-to-speech_text-to-speech.html">src/public/text-to-speech/text-to-speech</a></li></ul><h3>Global</h3><ul><li><a href="global.html#wirePage">wirePage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Nov 05 2025 21:38:56 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
