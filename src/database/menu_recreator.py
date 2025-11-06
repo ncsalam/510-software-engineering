@@ -1,3 +1,8 @@
+"""LLM-powered menu reconstruction utilities.
+
+This module asks an OpenAI chat model to extract structured menu items (Dish, Price, Description)
+from raw text snapshots and writes a clean CSV with exactly three columns (no header).
+"""
 import os
 from openai import OpenAI
 import csv
@@ -5,7 +10,31 @@ import io
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+
 def recreate_menu(raw_text, output_file):
+    """Extract a CSV of menu items from raw page text using an LLM.
+
+    Under the hood:
+    - Builds a carefully-scoped prompt instructing the model to return CSV only,
+      with three columns in each row: Dish, Price, Description (no header).
+    - Calls the OpenAI Chat Completions API and captures the first message content.
+    - Normalizes line-endings and streams rows through `csv.reader`.
+    - Drops obvious "section" and accidental "header" lines to keep the CSV clean.
+    - Ensures each written row has exactly 3 cells.
+    - Writes the result to `output_file` and prints a success message.
+
+    Parameters
+    ----------
+    raw_text : str
+        The cleaned text snapshot harvested from a restaurant webpage.
+    output_file : str | os.PathLike
+        Target path (typically under `Menu_CSVs/`).
+
+    Returns
+    -------
+    None
+        Writes a CSV file to disk.
+    """
     prompt = f"""
 You are a precise menu reconstruction system.
 
@@ -18,7 +47,7 @@ Extract and rebuild the restaurant's menu clearly and concisely.
 - Detect only item names, prices, and descriptions
 - If there is no description for an item. Make one but make it no more than 10 words
 - Only look for food items. Ignore drinks and their prices
-- Give subtypes different items (Pad Thai Chicken 6.99 \\n Pad Thai Tofu 5.99)
+- Give subtypes different items (Pad Thai Chicken 6.99 \n Pad Thai Tofu 5.99)
 - Output in clean CSV format with columns:
   Dish, Price, and Description but do not include dish and price as headings. Only the items
 Return only the CSV (no commentary).
@@ -46,7 +75,7 @@ Return only the CSV (no commentary).
                 continue
 
             # Normalize cells once (trim quotes & whitespace)
-            cells = [ (c or "").strip().strip('"').strip("'").strip() for c in row ]
+            cells = [(c or "").strip().strip('"').strip("'").strip() for c in row]
 
             # Skip again if it turned blank after cleaning
             if not any(cells):
