@@ -21,6 +21,7 @@
  * @returns {function(): SpeechRecognition} return._getRecognition - Returns the underlying SpeechRecognition instance (useful for advanced testing/mocking).
  * 
  * @throws {Error} Throws if the browser does not support SpeechRecognition (though in this implementation, it fails silently and returns no-op functions).
+ * @module public/speech-to-text/speech-to-text
  */
 
 
