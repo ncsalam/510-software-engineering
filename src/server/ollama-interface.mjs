@@ -147,7 +147,6 @@ async function warmUp(model, minutes) {
  * @returns {Promise<ollama.ChatResponse>} - llm response
  */
 export async function send(model, messages, minutes) {
-  console.log(messages);
   return await ollama.chat({
     model: model,
     messages: messages,

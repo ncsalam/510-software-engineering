@@ -6,10 +6,9 @@
 
 import sqlite3 from "sqlite3";
 import { allAsync } from "./sqlite3-async.mjs";
-import path from "node:path";
 
 const db = new sqlite3.Database(new URL("../database/restaurants_raleigh.db", import.meta.url).pathname);
-const N_ITEMS = 1000;
+const N_ITEMS = 300;
 
 /**
  * pick n random items from list l.
