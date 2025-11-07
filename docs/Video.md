@@ -19,8 +19,6 @@ Follow these simple steps to run the application successfully for our singular U
 
 ### **Step 3: Speak into your microphone your query for Uncle Tony**
 
-*(No image for this step — just talk to Uncle Tony!)*
-
 ---
 
 ### **Step 4: Click the "Done" button**
