@@ -2,6 +2,10 @@
 [![Prettier Format](https://img.shields.io/badge/Format-Prettier-F7B93E?logo=prettier&logoColor=white)](https://github.com/ejrezek/510-software-engineering/blob/badgesV2/proj2/prettier.config.js)
 [![codecov](https://codecov.io/gh/ncsalam/510-software-engineering/branch/main/graph/badge.svg?token=6K93NJ8JE6)](https://codecov.io/gh/ncsalam/510-software-engineering)
 [![License: MIT](https://img.shields.io/badge/License-MIT-4B32C3?logo=open-source-initiative&logoColor=white)](LICENSE.md)
+[![DOI](https://zenodo.org/badge/1044506900.svg)](https://doi.org/10.5281/zenodo.17488987)
+[![JSDoc](https://img.shields.io/badge/Documentation-JSDoc-brightgreen?logo=jsdoc&logoColor=white)](https://jsdoc.app/)
+
+
 
 <p align="center">
   <img src="./src/public/uncle_tony_logo.png" alt="Uncle Tony Logo" width="400"/>
