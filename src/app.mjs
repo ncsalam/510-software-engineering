@@ -119,7 +119,6 @@ app.post("/api/chat/:id", validateChatExists, validateField("message"), handleVa
       role: "system",
       content: process.env.OLLAMA_DATA_PROMPT + (await getRestaurantData()),
     },
-    // TODO: inject another system prompt with relevant restaurant data for the LLM to use.
     ...(await db.getHistory(req.params.id)),
   ];
   // generate chat completion
