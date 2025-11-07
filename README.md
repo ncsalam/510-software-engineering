@@ -11,6 +11,8 @@
 
 A web application that allows users to speak, transcribes their speech to text, sends prompts to an Ollama LLM, and reads text aloud using Text-to-Speech (TTS).
 
+https://github.com/user-attachments/assets/0bcb50e4-92a9-4164-a4c5-4b07b89ca2d2
+
 ---
 
 ## Table of Contents
