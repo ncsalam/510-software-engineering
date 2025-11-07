@@ -6,162 +6,132 @@ This document summarizes all **closed and open issues** in the repository, inclu
 
 ## 📁 Repository: `ncsalam/510-software-engineering`
 
-- **Closed Issues:** 24  
-- **Open Issues:** 12  
-
----
+- **Closed Issues:** 26  
+- **Open Issues:** 4  
 
 ---
 
 # ✅ Closed Issues (Completed)
 
+### #55 — Nuked the code coverage with the python auto documentation  
+**Status:** Closed (completed)  
+**Discussion:** Automated Python documentation interfered with coverage reporting; resolved to preserve code quality insights.
+
+### #52 — Test pipeline from STT → LLM → TTS  
+**Status:** Closed (completed)  
+**Discussion:** Validated the pipeline flow of speech input → LLM processing → speech synthesis.
+
+### #51 — Add tests for TTS module & preprocessing helper functions  
+**Status:** Closed (completed)  
+**Discussion:** Increased test coverage to support recent TTS enhancements.
+
+### #50 — Create TTS module  
+**Status:** Closed (completed)  
+**Discussion:** Implemented full text-to-speech functionality.
+
 ### #49 — Add jsdoc header for auto generation  
 **Status:** Closed (completed)  
-**Discussion:** Added JSDoc headers to support automated documentation generation, improving maintainability.
+**Discussion:** Enabled automated documentation generation via JSDoc headers.
+
+### #48 — Integrate API/chat endpoints into `llm_response.mjs`  
+**Status:** Closed (completed)  
+**Discussion:** Consolidated API/chat interaction logic into one module.
 
 ### #46 — Put python test suite in the database repository  
 **Status:** Closed (completed)  
-**Discussion:** Moved tests to the correct repository to improve organization and traceability.
+**Discussion:** Improved repository organization by relocating test suites.
 
 ### #45 — Rewrite the database tests in Python  
 **Status:** Closed (completed)  
-**Discussion:** Standardized test language to Python, simplifying maintenance.
+**Discussion:** Standardized testing to Python for easier maintenance.
 
 ### #43 — Tests failing after restaurant database added *(bug)*  
 **Status:** Closed (completed)  
-**Discussion:** Fixed failing tests caused by recent database changes to restore reliability.
+**Discussion:** Resolved failing tests caused by new database integration.
 
-### #42 — Add UV for python dependency management  
+### #42 — Add UV for Python dependency management  
 **Status:** Closed (completed)  
-**Discussion:** Added Python dependency manager to improve environment setup.
+**Discussion:** Added modern dependency tooling for easier Python environment setup.
 
 ### #40 — Change font on front end to be more readable *(Browser Front End)*  
 **Status:** Closed (completed)  
-**Discussion:** Improved readability and accessibility through better font selection.
+**Discussion:** Improved UI readability and accessibility.
 
 ### #37 — Add more tests to TTS to increase code coverage *(Text To Speech)*  
 **Status:** Closed (completed)  
-**Discussion:** Increased test coverage, improving reliability.
+**Discussion:** Increased robustness and validation of TTS operations.
 
 ### #36 — Create tests for preprocessor in TTS *(Text To Speech)*  
 **Status:** Closed (completed)  
-**Discussion:** Added preprocessing tests to validate text cleanup logic.
+**Discussion:** Validated preprocessing logic to ensure correct TTS input formatting.
 
 ### #26 — Add markers in README for contributing, code of conduct, and style  
 **Status:** Closed (completed)  
-**Discussion:** Improved README structure for better contributor guidance.
+**Discussion:** Improved documentation navigation and readability.
 
-### #24 — Add codecov to this repo *(General)*  
+### #25 — Add Zendo to GitHub *(General)*  
 **Status:** Closed (completed)  
-**Discussion:** Enabled test coverage reporting to track quality metrics.
+**Discussion:** Added repository quality automation support.
+
+### #24 — Add Codecov to this repo *(General)*  
+**Status:** Closed (completed)  
+**Discussion:** Enabled continuous code coverage reporting.
 
 ### #21 — Add CODE-OF-CONDUCT *(General)*  
 **Status:** Closed (completed)  
-**Discussion:** Added contributor behavior guidelines.
+**Discussion:** Established collaboration and behavior standards.
 
 ### #20 — Add LICENSE.md *(General)*  
 **Status:** Closed (completed)  
-**Discussion:** Ensured proper licensing for open-source distribution.
+**Discussion:** Added official open-source licensing.
 
 ### #19 — Add 15 new test cases to `voice.test.js` *(Browser Front End)*  
 **Status:** Closed (completed)  
-**Discussion:** Increased test coverage to improve validation of voice module.
+**Discussion:** Improved automated testing of frontend voice controls.
 
 ### #18 — Add 15 test cases to `STT.test.js` *(Text To Speech)*  
 **Status:** Closed (completed)  
-**Discussion:** Strengthened validation of STT module with expanded test suite.
+**Discussion:** Enhanced STT reliability through expanded tests.
 
 ### #17 — CONTRIBUTING.md *(General)*  
 **Status:** Closed (completed)  
-**Discussion:** Added contributor documentation to streamline onboarding.
+**Discussion:** Added contribution guidelines to onboard new developers efficiently.
 
 ### #16 — INSTALL.md *(General)*  
 **Status:** Closed (completed)  
-**Discussion:** Documented installation steps to improve accessibility.
+**Discussion:** Improved onboarding with structured installation documentation.
+
+### #15 — Badges showing other automated analysis tools *(General)*  
+**Status:** Closed (completed)  
+**Discussion:** Increased transparency by showing additional code quality metrics.
 
 ### #14 — Badges showing code coverage tools *(General)*  
 **Status:** Closed (completed)  
-**Discussion:** Displayed coverage badges for visibility and CI transparency.
+**Discussion:** Displayed live coverage tracking in README.
 
 ### #13 — Badges showing syntax coverage *(General)*  
 **Status:** Closed (completed)  
-**Discussion:** Enabled syntax coverage visibility in documentation.
-
-### #12 — Badges showing code formatters *(General)*  
-**Status:** Closed (completed)  
-**Discussion:** Showed formatter badge to highlight style enforcement.
-
-### #11 — Add style checker and badge *(General)*  
-**Status:** Closed (completed)  
-**Discussion:** Enforced consistent code style via automated tooling.
-
-### #4 — Write tests for server *(Server Creation — enhancement)*  
-**Status:** Closed (completed)  
-**Discussion:** Added tests to ensure server reliability.
-
-### #3 — API endpoint to generate responses *(Server Creation — enhancement)*  
-**Status:** Closed (completed)  
-**Discussion:** Built a new API endpoint to support model response generation.
-
-### #2 — Start Ollama through Node *(Server Creation — enhancement)*  
-**Status:** Closed (completed)  
-**Discussion:** Automated Ollama startup to streamline workflow.
-
-### #1 — Static file server *(Server Creation — enhancement)*  
-**Status:** Closed (completed)  
-**Discussion:** Implemented static hosting capability for application assets.
-
----
+**Discussion:** Surface syntax coverage insights directly in README.
 
 ---
 
 # 🚧 Open Issues (In Progress)
 
-### #52 — Test pipeline from STT → LLM → TTS  
-**Status:** Open  
-**Discussion:** Develop end-to-end pipeline testing to validate full speech → processing → speech workflow.
+### #58 — Responses from the LLM are egregiously Italian  
+**Status:** Open**  
+**Discussion:** Investigate and adjust prompt tuning or system instructions to prevent unintended language output responses.
 
-### #51 — Add tests for TTS module & preprocessing helper functions  
+### #47 — Modify the poster to include new milestones  
 **Status:** Open  
-**Discussion:** Expand test coverage for TTS module to improve reliability and validation.
+**Discussion:** Update visual documentation to reflect recent completed deliverables.
 
-### #50 — Create TTS module  
+### #44 — Python Documentation Generator  
 **Status:** Open  
-**Discussion:** Initial implementation required to support text-to-speech functionality.
-
-### #48 — Integrate API/chat endpoints into `llm_response.mjs`  
-**Status:** Open  
-**Discussion:** Weld backend endpoints into main response handler to unify architecture.
-
-### #47 — Modify poster to include new milestones  
-**Status:** Open  
-**Discussion:** Update project poster to communicate progress and deliverables.
-
-### #44 — Python documentation generator  
-**Status:** Open  
-**Discussion:** Create automated documentation system for Python modules.
+**Discussion:** Automate documentation generation for Python modules to match JS JSDoc tooling.
 
 ### #41 — Badge showing test pass/fail?  
 **Status:** Open  
-**Discussion:** Add CI badge to show build pass/fail status on README.
-
-### #25 — Add Zendo to GitHub (needs admin)  
-**Status:** Open  
-**Discussion:** Integrate automated analysis tool into repo for improved insights.
-
-### #15 — Badges showing other automated analysis tools *(General)*  
-**Status:** Open  
-**Discussion:** Expand badge coverage to include additional code quality tools.
-
-### #10 — DOI badges *(General)*  
-**Status:** Open  
-**Discussion:** Add Digital Object Identifier badge to formalize academic reference.
-
-### #9 — Add video to README.md *(General)*  
-**Status:** Open  
-**Discussion:** Add project demo video to README to improve visibility and deliverable presentation.
-
----
+**Discussion:** Add CI badge to indicate build status and improve visibility of testing pipeline.
 
 ---
 
@@ -169,14 +139,11 @@ This document summarizes all **closed and open issues** in the repository, inclu
 
 | Category | Count |
 |----------|-------|
-| ✅ Completed Issues | 24 |
-| 🚧 Open Issues | 12 |
-| 🧪 Major themes | Testing, Documentation, CI/CD, Frontend/Backend enhancements |
+| ✅ Completed Issues | 26 |
+| 🚧 Open Issues | 4 |
+| 🧪 Major themes | Testing, Documentation, CI/CD, LLM Output Control |
 
-The project shows strong progress with a focus on:
-- Increasing test coverage,
-- Improving tooling and documentation,
-- Building backend + TTS functionality.
+The project demonstrates strong completion velocity and increasing refinement in automation and testing.
 
 ---
 
