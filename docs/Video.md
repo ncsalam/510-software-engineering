@@ -3,12 +3,12 @@
 
 # How to Utilize the Uncle Tony App
 
-Follow these simple steps to run the application successfully. As of now there is only one use case.
+Follow these simple steps to run the application successfully for our singular Use Case.
 
 ---
 
 ### **Step 1: Click on the "Start Listening" button**
-![Step 1 – Start Listening](step1.png)
+![Step 1 – Start Listening](Step_1.png)
 
 ---
 
@@ -24,16 +24,16 @@ Follow these simple steps to run the application successfully. As of now there i
 ---
 
 ### **Step 4: Click the "Done" button**
-![Step 4 – Done Button](step4.png)
+![Step 4 – Done Button](Step_3.png)
 
 ---
 
 ### **Step 5: Await a response from Uncle Tony**
-![Step 5 – Waiting for Response](step5.png)
+![Step 5 – Waiting for Response](Step_4.png)
 
 ---
 
 ### **Step 6: Listen to or read Uncle Tony’s response**
-![Step 6 – Response](step6.png)
+![Step 6 – Response](Step_5.png)
 
 ---
