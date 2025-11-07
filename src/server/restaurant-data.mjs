@@ -1,5 +1,6 @@
 /**
- * pulls relevant restaurant data from the database and prepares it as an ollama system prompt
+ * pulls relevant restaurant data from the database and prepares it as an ollama system prompt.
+ * Right now, this is pretty unsophisticated and just picks a few random menu items each query.
  *
  * @module server/restaurant-data
  */
@@ -36,6 +37,6 @@ export function randomSublist(l, n) {
 export async function getRestaurantData(userMessage) {
   // the most basic implementation: gets the entire database.
   const res = await allAsync(db, `SELECT name, price, description, restaurant FROM local_menu`);
-  // todo: filter by relevance, somehow?
+  // todo: filter by relevance instead of randomly?
   return JSON.stringify(randomSublist(res, N_ITEMS), null, 2);
 }
