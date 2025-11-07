@@ -13,7 +13,7 @@ Follow these simple steps to run the application successfully for our singular U
 ---
 
 ### **Step 2: If a pop-up appears asking for permission to access your microphone, click "Allow"**
-![Step 2 – Allow Microphone Access](step2.png)
+![Step 2 – Allow Microphone Access](Step_2.png)
 
 ---
 
