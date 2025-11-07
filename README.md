@@ -95,8 +95,9 @@ npm run test
 ## Troubleshooting
 
 - Ollama errors: Ensure Ollama is installed and the specified model is available.
+- Ollama needs more GPU to load full model: Retart VSCode or other IDE and re-run.
 - No voices for TTS: Confirm browser supports Web Speech API.
-- Transcript download fails: Ensure the transcript is not empty.
+  
 
 Please fill out form to request help or report a bug https://forms.gle/UN1Nj76CAN9gSitY6
 
