@@ -1,7 +1,7 @@
 [https://github.com/ncsalam/510-software-engineering/blob/c7fcf6618b125e2b2b919ae8f4f74a4849020947/docs/UncleTonyPersuasionVid.mp4
 ](https://github.com/user-attachments/assets/c6640209-18da-4c00-aef4-ad54fdd7cf5f)
 
-# How to Utilize the Uncle Tony App
+# How to Utilize the Uncle Tony App (USE CASE EXAMPLES)
 
 Follow these simple steps to run the application successfully for our singular Use Case.
 
