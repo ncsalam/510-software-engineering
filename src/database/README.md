@@ -11,7 +11,6 @@ A lightweight pipeline that discovers local restaurants for specified cuisines a
 - [API requirements](#api-requirements)
 - [Usage](#usage)
 - [Database schema](#database-schema)
-- [Documentation](#documentation)
 
 ---
 
@@ -98,8 +97,3 @@ High-level flow (modules in `src/database/`):
 | `price`       | TEXT    | YES  | —   | `NULL`  | Menu item price (kept as text for flexibility). |
 | `description` | TEXT    | YES  | —   | —       | Short description of the item.                  |
 | `restaurant`  | TEXT    | YES  | —   | —       | Source restaurant name (from filename).         |
-
----
-
-## Documentation
-- See [Python Documentation](src/database/docs/build/html/index.html)
